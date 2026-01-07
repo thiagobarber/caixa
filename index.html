@@ -1,0 +1,1345 @@
+<!doctype html>
+<html lang="pt-BR" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestão - Barbearia</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&amp;family=Rajdhani:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      font-family: 'Rajdhani', sans-serif;
+    }
+    
+    .logo-font {
+      font-family: 'Orbitron', sans-serif;
+    }
+    
+    .tab-button.active {
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+      color: #1a1a1a;
+    }
+    
+    .gold-gradient {
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    }
+    
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(255, 215, 0, 0.2);
+    }
+    
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .modal-backdrop {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+    }
+    
+    .spinner {
+      border: 3px solid rgba(255, 215, 0, 0.3);
+      border-top-color: #ffd700;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body class="h-full bg-zinc-900 text-gray-100">
+  <div id="app-wrapper" class="h-full w-full overflow-auto"><!-- Header -->
+   <header class="bg-zinc-950 border-b-2 border-yellow-500 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+     <div>
+      <h1 id="shop-name" class="logo-font text-3xl font-black text-transparent bg-clip-text gold-gradient">CAIXA BARBEIRO</h1>
+      <p id="cnpj" class="text-sm text-gray-400 mt-1">CNPJ: 32.554.785/0001-30</p>
+     </div>
+     <div class="text-right">
+      <p class="text-sm text-gray-400">Sistema de Gestão</p>
+      <p id="current-date" class="text-yellow-500 font-semibold"></p>
+     </div>
+    </div>
+   </header><!-- Tabs -->
+   <nav class="bg-zinc-950 border-b border-zinc-800 px-6">
+    <div class="max-w-7xl mx-auto flex gap-2 overflow-x-auto"><button class="tab-button active px-6 py-3 font-bold text-sm transition-all whitespace-nowrap" data-tab="caixa">CAIXA</button> <button class="tab-button px-6 py-3 font-bold text-sm transition-all whitespace-nowrap text-gray-400 hover:text-yellow-500" data-tab="historico">HISTÓRICO</button> <button class="tab-button px-6 py-3 font-bold text-sm transition-all whitespace-nowrap text-gray-400 hover:text-yellow-500" data-tab="relatorios">RELATÓRIOS</button> <button class="tab-button px-6 py-3 font-bold text-sm transition-all whitespace-nowrap text-gray-400 hover:text-yellow-500" data-tab="extrato">EXTRATO</button> <button class="tab-button px-6 py-3 font-bold text-sm transition-all whitespace-nowrap text-gray-400 hover:text-yellow-500" data-tab="custos">CUSTOS</button> <button class="tab-button px-6 py-3 font-bold text-sm transition-all whitespace-nowrap text-gray-400 hover:text-yellow-500" data-tab="servicos">SERVIÇOS</button>
+    </div>
+   </nav><!-- Content -->
+   <main class="max-w-7xl mx-auto px-6 py-8"><!-- Aba Caixa -->
+    <div id="tab-caixa" class="tab-content"><!-- Registro Manual -->
+     <div class="bg-zinc-800 rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-bold text-yellow-500 mb-4">Registro Manual</h2>
+      <form id="manual-form" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+       <div><label class="block text-sm font-semibold mb-2">Profissional</label> <select id="manual-professional" required class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="">Selecione</option> </select>
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Serviço</label> <select id="manual-service" required class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="">Selecione</option> </select>
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Valor (R$)</label> <input type="number" id="manual-value" step="0.01" required readonly class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 text-gray-400">
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Data</label> <input type="date" id="manual-date" required class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Hora</label> <input type="time" id="manual-time" required class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Status</label> <select id="manual-status" required class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="Pago">Pago</option> <option value="Pendente">Pendente</option> </select>
+       </div>
+       <div class="md:col-span-6"><button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold py-3 rounded transition"> SALVAR ATENDIMENTO </button>
+       </div>
+      </form>
+     </div><!-- Registro Rápido -->
+     <div class="bg-zinc-800 rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-bold text-yellow-500 mb-4">Registro Rápido (Data/Hora Atual)</h2><!-- Botões de Salvar -->
+      <div class="flex gap-2 mb-6"><button class="save-btn bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold px-6 py-2 rounded transition" data-lines="1">1</button> <button class="save-btn bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold px-6 py-2 rounded transition" data-lines="2">2</button> <button class="save-btn bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold px-6 py-2 rounded transition" data-lines="3">3</button> <button class="save-btn bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold px-6 py-2 rounded transition" data-lines="4">4</button> <button class="save-btn bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold px-6 py-2 rounded transition" data-lines="5">5</button>
+      </div><!-- Linhas de Atendimento -->
+      <div id="service-lines" class="space-y-4"></div>
+     </div>
+    </div><!-- Aba Histórico -->
+    <div id="tab-historico" class="tab-content hidden">
+     <div class="bg-zinc-800 rounded-lg p-6">
+      <h2 class="text-2xl font-bold text-yellow-500 mb-4">Histórico de Atendimentos</h2><!-- Filtros -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+       <div><label class="block text-sm font-semibold mb-2">Profissional</label> <select id="filter-professional" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="">Todos</option> </select>
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Status</label> <select id="filter-status" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="">Todos</option> <option value="Pago">Pago</option> <option value="Pendente">Pendente</option> </select>
+       </div>
+      </div><!-- Lista de Atendimentos -->
+      <div id="history-list" class="space-y-3"></div>
+     </div>
+    </div><!-- Aba Relatórios -->
+    <div id="tab-relatorios" class="tab-content hidden">
+     <div class="bg-zinc-800 rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-bold text-yellow-500 mb-6">Relatórios</h2><!-- Filtro de Data -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div><label class="block text-sm font-semibold mb-2">Data para Relatório do Dia</label> <input type="date" id="report-date" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Mês/Ano para Relatório Mensal</label>
+        <div class="grid grid-cols-2 gap-2"><select id="report-month" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select> <input type="number" id="report-year" placeholder="2024" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+        </div>
+       </div>
+      </div>
+     </div><!-- Gráficos de Desempenho -->
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6"><!-- Gráfico de Desempenho Mensal -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h3 class="text-xl font-bold text-yellow-500 mb-4">📊 Desempenho do Mês</h3>
+       <div id="performance-chart" class="space-y-3">
+        <div class="flex items-center justify-between"><span class="text-sm text-gray-400">Faturamento:</span> <span id="perf-faturamento" class="font-bold text-green-400">R$ 0,00</span>
+        </div>
+        <div class="flex items-center justify-between"><span class="text-sm text-gray-400">Custos:</span> <span id="perf-custos" class="font-bold text-red-400">R$ 0,00</span>
+        </div>
+        <div class="flex items-center justify-between"><span class="text-sm text-gray-400">Lucro:</span> <span id="perf-lucro" class="font-bold text-yellow-500">R$ 0,00</span>
+        </div>
+        <div class="mt-4 pt-4 border-t border-zinc-700">
+         <div class="flex items-center justify-between mb-2"><span class="text-sm font-semibold">Status do Mês:</span> <span id="month-status" class="px-3 py-1 rounded-full text-xs font-bold">-</span>
+         </div>
+         <div class="w-full bg-zinc-700 rounded-full h-6 overflow-hidden">
+          <div id="profit-bar" class="h-full transition-all duration-500 flex items-center justify-center text-xs font-bold" style="width: 0%">
+           0%
+          </div>
+         </div>
+         <p id="performance-message" class="text-xs text-gray-400 mt-2 text-center"></p>
+        </div>
+       </div>
+      </div><!-- Top 5 Serviços Mais Vendidos -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h3 class="text-xl font-bold text-yellow-500 mb-4">🏆 Top 5 Serviços Mais Vendidos</h3>
+       <div id="top-services-chart" class="space-y-3"></div>
+      </div>
+     </div><!-- Média de Serviços por Mês -->
+     <div class="bg-zinc-800 rounded-lg p-6 mb-6">
+      <h3 class="text-xl font-bold text-yellow-500 mb-4">📈 Estatísticas Mensais</h3>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+       <div class="bg-zinc-700 rounded-lg p-4">
+        <p class="text-xs text-gray-400 mb-1">Total de Serviços</p>
+        <p id="total-services-month" class="text-2xl font-bold text-blue-400">0</p>
+       </div>
+       <div class="bg-zinc-700 rounded-lg p-4">
+        <p class="text-xs text-gray-400 mb-1">Média por Dia</p>
+        <p id="avg-services-day" class="text-2xl font-bold text-purple-400">0</p>
+       </div>
+       <div class="bg-zinc-700 rounded-lg p-4">
+        <p class="text-xs text-gray-400 mb-1">Ticket Médio</p>
+        <p id="avg-ticket" class="text-2xl font-bold text-green-400">R$ 0,00</p>
+       </div>
+       <div class="bg-zinc-700 rounded-lg p-4">
+        <p class="text-xs text-gray-400 mb-1">Dias Trabalhados</p>
+        <p id="days-worked" class="text-2xl font-bold text-yellow-500">0</p>
+       </div>
+      </div>
+     </div><!-- Resultados do Relatório -->
+     <div id="report-results" class="space-y-6"><!-- Thiago - Proprietário -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h3 class="text-2xl font-bold text-yellow-500 mb-4 flex items-center gap-2">👑 Thiago (Proprietário)</h3>
+       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-zinc-700 rounded-lg p-4 card-hover">
+         <p class="text-sm text-gray-400 mb-2">Lucro Líquido do Dia</p>
+         <p id="thiago-liquido-dia" class="text-2xl font-bold text-green-400">R$ 0,00</p>
+        </div>
+        <div class="bg-zinc-700 rounded-lg p-4 card-hover">
+         <p class="text-sm text-gray-400 mb-2">Lucro Bruto do Dia</p>
+         <p id="thiago-bruto-dia" class="text-2xl font-bold text-green-400">R$ 0,00</p>
+        </div>
+        <div class="bg-zinc-700 rounded-lg p-4 card-hover">
+         <p class="text-sm text-gray-400 mb-2">Lucro Líquido Mensal</p>
+         <p id="thiago-liquido-mensal" class="text-2xl font-bold text-blue-400">R$ 0,00</p>
+        </div>
+        <div class="bg-zinc-700 rounded-lg p-4 card-hover">
+         <p class="text-sm text-gray-400 mb-2">Lucro Bruto Mensal</p>
+         <p id="thiago-bruto-mensal" class="text-2xl font-bold text-blue-400">R$ 0,00</p>
+        </div>
+       </div>
+      </div><!-- Colaboradores -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h3 class="text-2xl font-bold text-yellow-500 mb-4">Colaboradores</h3>
+       <div id="collaborators-report" class="space-y-4"></div>
+      </div>
+     </div>
+    </div><!-- Aba Extrato -->
+    <div id="tab-extrato" class="tab-content hidden">
+     <div class="bg-zinc-800 rounded-lg p-6 mb-6">
+      <h2 class="text-2xl font-bold text-yellow-500 mb-4">Extrato Anual</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+       <div class="bg-zinc-700 rounded-lg p-4 card-hover">
+        <p class="text-sm text-gray-400 mb-1">Total</p>
+        <p id="extrato-total" class="text-2xl font-bold text-green-400">R$ 0,00</p>
+       </div>
+       <div class="bg-zinc-700 rounded-lg p-4 card-hover">
+        <p class="text-sm text-gray-400 mb-1">Custos</p>
+        <p id="extrato-custos" class="text-2xl font-bold text-red-400">R$ 0,00</p>
+       </div>
+       <div class="bg-zinc-700 rounded-lg p-4 card-hover">
+        <p class="text-sm text-gray-400 mb-1">Lucro</p>
+        <p id="extrato-lucro" class="text-2xl font-bold text-yellow-500">R$ 0,00</p>
+       </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+       <div><label class="block text-sm font-semibold mb-2">Mês</label> <select id="extrato-month" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="">Selecione</option> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Ano</label> <input type="number" id="extrato-year" placeholder="2024" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+       </div>
+      </div><button id="filter-extrato-btn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold py-3 rounded transition mb-6"> FILTRAR PERÍODO </button>
+      <div id="extrato-detail" class="hidden">
+       <h3 class="text-xl font-bold text-yellow-500 mb-4">Detalhamento</h3>
+       <div id="extrato-list" class="space-y-2"></div>
+      </div>
+     </div>
+    </div><!-- Aba Custos -->
+    <div id="tab-custos" class="tab-content hidden">
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Registrar Custo -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h2 class="text-2xl font-bold text-yellow-500 mb-4">Registrar Custo</h2>
+       <form id="cost-form" class="space-y-4">
+        <div><label class="block text-sm font-semibold mb-2">Data</label> <input type="date" id="cost-date" required class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+        </div>
+        <div><label class="block text-sm font-semibold mb-2">Categoria</label> <select id="cost-category" required class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none"> <option value="">Selecione</option> <option value="Aluguel">Aluguel</option> <option value="Energia">Energia</option> <option value="Água">Água</option> <option value="Internet">Internet</option> <option value="Produtos">Produtos</option> <option value="Equipamentos">Equipamentos</option> <option value="Manutenção">Manutenção</option> <option value="Marketing">Marketing</option> <option value="Outros">Outros</option> </select>
+        </div>
+        <div><label class="block text-sm font-semibold mb-2">Descrição</label> <input type="text" id="cost-description" required placeholder="Descreva o custo" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+        </div>
+        <div><label class="block text-sm font-semibold mb-2">Valor (R$)</label> <input type="number" id="cost-value" step="0.01" required placeholder="0,00" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+        </div><button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold py-3 rounded transition"> ADICIONAR CUSTO </button>
+       </form>
+      </div><!-- Lista de Custos -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h2 class="text-2xl font-bold text-yellow-500 mb-4">Custos Recentes</h2>
+       <div id="costs-list" class="space-y-2 max-h-96 overflow-y-auto"></div>
+      </div>
+     </div><!-- Gerenciar Profissionais -->
+     <div class="bg-zinc-800 rounded-lg p-6 mt-6">
+      <h2 class="text-2xl font-bold text-yellow-500 mb-4">Gerenciar Profissionais</h2>
+      <form id="professional-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+       <div><label class="block text-sm font-semibold mb-2">Nome</label> <input type="text" id="professional-name" required placeholder="Nome do profissional" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+       </div>
+       <div><label class="block text-sm font-semibold mb-2">Comissão (%)</label> <input type="number" id="professional-commission" step="1" min="0" max="100" required placeholder="50" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+       </div>
+       <div class="flex items-end"><button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold py-2 rounded transition"> ADICIONAR </button>
+       </div>
+      </form>
+      <div id="professionals-list" class="space-y-2"></div>
+     </div>
+    </div><!-- Aba Serviços -->
+    <div id="tab-servicos" class="tab-content hidden">
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Cadastrar Serviço -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h2 class="text-2xl font-bold text-yellow-500 mb-4">Cadastrar Serviço</h2>
+       <form id="service-form" class="space-y-4">
+        <div><label class="block text-sm font-semibold mb-2">Nome do Serviço</label> <input type="text" id="service-name" required placeholder="Ex: Corte Masculino" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+        </div>
+        <div><label class="block text-sm font-semibold mb-2">Valor (R$)</label> <input type="number" id="service-value" step="0.01" required placeholder="0,00" class="w-full bg-zinc-700 border border-zinc-600 rounded px-4 py-2 focus:border-yellow-500 focus:outline-none">
+        </div><button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-zinc-900 font-bold py-3 rounded transition"> CADASTRAR SERVIÇO </button>
+       </form>
+      </div><!-- Lista de Serviços -->
+      <div class="bg-zinc-800 rounded-lg p-6">
+       <h2 class="text-2xl font-bold text-yellow-500 mb-4">Serviços Cadastrados</h2>
+       <div id="services-list" class="space-y-2"></div>
+      </div>
+     </div>
+    </div>
+   </main><!-- Modal de Confirmação -->
+   <div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center modal-backdrop">
+    <div class="bg-zinc-800 rounded-lg p-6 max-w-md w-full mx-4 border-2 border-yellow-500">
+     <h3 class="text-xl font-bold text-yellow-500 mb-4">Confirmar Exclusão</h3>
+     <p id="confirm-message" class="text-gray-300 mb-6"></p>
+     <div class="flex gap-4"><button id="confirm-cancel" class="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-2 rounded transition"> CANCELAR </button> <button id="confirm-delete" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded transition"> EXCLUIR </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      shop_name: "CAIXA BARBEIRO",
+      cnpj: "32.554.785/0001-30"
+    };
+
+    let allData = {
+      services: [],
+      professionals: [],
+      costs: [],
+      appointments: []
+    };
+
+    let deleteCallback = null;
+
+    // Configuração de data atual
+    const today = new Date().toISOString().split('T')[0];
+    const currentYear = new Date().getFullYear();
+    const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    const currentTime = new Date().toTimeString().slice(0, 5);
+    
+    document.getElementById('cost-date').value = today;
+    document.getElementById('report-date').value = today;
+    document.getElementById('report-month').value = currentMonth;
+    document.getElementById('report-year').value = currentYear;
+    document.getElementById('extrato-year').value = currentYear;
+    document.getElementById('manual-date').value = today;
+    document.getElementById('manual-time').value = currentTime;
+    
+    const dateStr = new Date().toLocaleDateString('pt-BR', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    document.getElementById('current-date').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+
+    // Atualizar valor quando serviço manual é selecionado
+    document.getElementById('manual-service').addEventListener('change', (e) => {
+      const selectedOption = e.target.options[e.target.selectedIndex];
+      const value = selectedOption.dataset.value || '';
+      document.getElementById('manual-value').value = value;
+    });
+
+    // Toast
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Modal
+    function showConfirmModal(message, callback) {
+      document.getElementById('confirm-message').textContent = message;
+      document.getElementById('confirm-modal').classList.remove('hidden');
+      deleteCallback = callback;
+    }
+
+    document.getElementById('confirm-cancel').addEventListener('click', () => {
+      document.getElementById('confirm-modal').classList.add('hidden');
+      deleteCallback = null;
+    });
+
+    document.getElementById('confirm-delete').addEventListener('click', () => {
+      if (deleteCallback) {
+        deleteCallback();
+        deleteCallback = null;
+      }
+      document.getElementById('confirm-modal').classList.add('hidden');
+    });
+
+    // Tabs
+    document.querySelectorAll('.tab-button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-button').forEach(b => {
+          b.classList.remove('active');
+          b.classList.add('text-gray-400', 'hover:text-yellow-500');
+        });
+        btn.classList.add('active');
+        btn.classList.remove('text-gray-400', 'hover:text-yellow-500');
+        
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.add('hidden');
+        });
+        document.getElementById(`tab-${tab}`).classList.remove('hidden');
+
+        if (tab === 'historico') {
+          renderHistory();
+        } else if (tab === 'extrato') {
+          calculateExtrato();
+        } else if (tab === 'relatorios') {
+          updateReport();
+        }
+      });
+    });
+
+    // Funções de renderização
+    function renderServiceLines() {
+      const container = document.getElementById('service-lines');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= 5; i++) {
+        const line = document.createElement('div');
+        line.className = 'grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-zinc-700 rounded-lg';
+        line.innerHTML = `
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-400">Profissional</label>
+            <select class="professional-select w-full bg-zinc-600 border border-zinc-500 rounded px-3 py-2 text-sm focus:border-yellow-500 focus:outline-none" data-line="${i}">
+              <option value="">Selecione</option>
+              ${allData.professionals.map(p => `<option value="${p.name}">${p.name}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-400">Serviço</label>
+            <select class="service-select w-full bg-zinc-600 border border-zinc-500 rounded px-3 py-2 text-sm focus:border-yellow-500 focus:outline-none" data-line="${i}">
+              <option value="">Selecione</option>
+              ${allData.services.map(s => `<option value="${s.name}" data-value="${s.value}">${s.name}</option>`).join('')}
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-400">Valor (R$)</label>
+            <input type="number" readonly class="value-input w-full bg-zinc-600 border border-zinc-500 rounded px-3 py-2 text-sm text-gray-400" data-line="${i}" placeholder="0,00">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold mb-1 text-gray-400">Status</label>
+            <select class="status-select w-full bg-zinc-600 border border-zinc-500 rounded px-3 py-2 text-sm focus:border-yellow-500 focus:outline-none" data-line="${i}">
+              <option value="Pago">Pago</option>
+              <option value="Pendente">Pendente</option>
+            </select>
+          </div>
+        `;
+        container.appendChild(line);
+      }
+
+      // Event listener para sincronizar profissionais
+      document.querySelectorAll('.professional-select').forEach(select => {
+        select.addEventListener('change', (e) => {
+          const selectedValue = e.target.value;
+          document.querySelectorAll('.professional-select').forEach(s => {
+            s.value = selectedValue;
+          });
+        });
+      });
+
+      // Event listener para atualizar valor
+      document.querySelectorAll('.service-select').forEach(select => {
+        select.addEventListener('change', (e) => {
+          const line = e.target.dataset.line;
+          const selectedOption = e.target.options[e.target.selectedIndex];
+          const value = selectedOption.dataset.value || '';
+          document.querySelector(`.value-input[data-line="${line}"]`).value = value;
+        });
+      });
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('history-list');
+      const filterPro = document.getElementById('filter-professional').value;
+      const filterStatus = document.getElementById('filter-status').value;
+
+      let filtered = allData.appointments;
+      if (filterPro) filtered = filtered.filter(a => a.professionalName === filterPro);
+      if (filterStatus) filtered = filtered.filter(a => a.status === filterStatus);
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhum atendimento encontrado</p>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(appt => `
+        <div class="bg-zinc-700 rounded-lg p-4 flex items-center justify-between">
+          <div class="flex-1 grid grid-cols-2 md:grid-cols-6 gap-4 text-sm">
+            <div>
+              <p class="text-gray-400 text-xs">Serviço</p>
+              <p class="font-semibold">${appt.serviceName}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Profissional</p>
+              <p class="font-semibold">${appt.professionalName}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Data</p>
+              <p class="font-semibold">${new Date(appt.date).toLocaleDateString('pt-BR')}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Hora</p>
+              <p class="font-semibold">${appt.time}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Valor</p>
+              <p class="font-semibold text-green-400">R$ ${parseFloat(appt.value).toFixed(2)}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Status</p>
+              <p class="font-semibold ${appt.status === 'Pago' ? 'text-green-400' : 'text-yellow-400'}">${appt.status}</p>
+            </div>
+          </div>
+          <button class="delete-appt-btn ml-4 bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${appt.__backendId}">
+            Excluir
+          </button>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.delete-appt-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const appt = allData.appointments.find(a => a.__backendId === id);
+          showConfirmModal(`Deseja excluir o atendimento de ${appt.serviceName}?`, async () => {
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner mx-auto"></div>';
+            const record = allData.appointments.find(a => a.__backendId === id);
+            const result = await window.dataSdk.delete(record);
+            if (result.isOk) {
+              showToast('Atendimento excluído com sucesso!');
+            } else {
+              showToast('Erro ao excluir atendimento', 'error');
+              btn.disabled = false;
+              btn.textContent = 'Excluir';
+            }
+          });
+        });
+      });
+    }
+
+    function renderProfessionalsList() {
+      const container = document.getElementById('professionals-list');
+      if (allData.professionals.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum profissional cadastrado</p>';
+        return;
+      }
+
+      container.innerHTML = allData.professionals.map(pro => `
+        <div class="bg-zinc-700 rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <p class="font-semibold">${pro.name}</p>
+            <p class="text-sm text-gray-400">Comissão: ${pro.commission}%</p>
+          </div>
+          ${pro.name !== 'Thiago' ? `
+            <button class="delete-pro-btn bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${pro.__backendId}">
+              Excluir
+            </button>
+          ` : '<span class="text-yellow-500 text-sm font-semibold">Proprietário</span>'}
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.delete-pro-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const pro = allData.professionals.find(p => p.__backendId === id);
+          showConfirmModal(`Deseja excluir o profissional ${pro.name}?`, async () => {
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner mx-auto"></div>';
+            const record = allData.professionals.find(p => p.__backendId === id);
+            const result = await window.dataSdk.delete(record);
+            if (result.isOk) {
+              showToast('Profissional excluído com sucesso!');
+            } else {
+              showToast('Erro ao excluir profissional', 'error');
+              btn.disabled = false;
+              btn.textContent = 'Excluir';
+            }
+          });
+        });
+      });
+    }
+
+    function renderServicesList() {
+      const container = document.getElementById('services-list');
+      if (allData.services.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum serviço cadastrado</p>';
+        return;
+      }
+
+      container.innerHTML = allData.services.map(service => `
+        <div class="bg-zinc-700 rounded-lg p-4 flex items-center justify-between">
+          <div>
+            <p class="font-semibold">${service.name}</p>
+            <p class="text-sm text-gray-400">R$ ${parseFloat(service.value).toFixed(2)}</p>
+          </div>
+          <button class="delete-service-btn bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${service.__backendId}">
+            Excluir
+          </button>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.delete-service-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const service = allData.services.find(s => s.__backendId === id);
+          showConfirmModal(`Deseja excluir o serviço ${service.name}?`, async () => {
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner mx-auto"></div>';
+            const record = allData.services.find(s => s.__backendId === id);
+            const result = await window.dataSdk.delete(record);
+            if (result.isOk) {
+              showToast('Serviço excluído com sucesso!');
+            } else {
+              showToast('Erro ao excluir serviço', 'error');
+              btn.disabled = false;
+              btn.textContent = 'Excluir';
+            }
+          });
+        });
+      });
+    }
+
+    function renderCostsList() {
+      const container = document.getElementById('costs-list');
+      const recentCosts = allData.costs.slice(-20).reverse();
+      
+      if (recentCosts.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum custo registrado</p>';
+        return;
+      }
+
+      container.innerHTML = recentCosts.map(cost => `
+        <div class="bg-zinc-700 rounded-lg p-3 flex items-center justify-between">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs font-semibold text-yellow-500">${cost.category}</span>
+              <span class="text-xs text-gray-400">${new Date(cost.date).toLocaleDateString('pt-BR')}</span>
+            </div>
+            <p class="text-sm">${cost.description}</p>
+            <p class="text-sm font-bold text-red-400 mt-1">R$ ${parseFloat(cost.value).toFixed(2)}</p>
+          </div>
+          <button class="delete-cost-btn ml-4 bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 rounded transition text-xs" data-id="${cost.__backendId}">
+            Excluir
+          </button>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.delete-cost-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const cost = allData.costs.find(c => c.__backendId === id);
+          showConfirmModal(`Deseja excluir o custo ${cost.description}?`, async () => {
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner mx-auto"></div>';
+            const record = allData.costs.find(c => c.__backendId === id);
+            const result = await window.dataSdk.delete(record);
+            if (result.isOk) {
+              showToast('Custo excluído com sucesso!');
+            } else {
+              showToast('Erro ao excluir custo', 'error');
+              btn.disabled = false;
+              btn.textContent = 'Excluir';
+            }
+          });
+        });
+      });
+    }
+
+    function updateFilterProfessionals() {
+      const select = document.getElementById('filter-professional');
+      select.innerHTML = '<option value="">Todos</option>' + 
+        allData.professionals.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+    }
+
+    function updateManualSelects() {
+      const professionalSelect = document.getElementById('manual-professional');
+      const serviceSelect = document.getElementById('manual-service');
+      
+      professionalSelect.innerHTML = '<option value="">Selecione</option>' + 
+        allData.professionals.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
+      
+      serviceSelect.innerHTML = '<option value="">Selecione</option>' + 
+        allData.services.map(s => `<option value="${s.name}" data-value="${s.value}">${s.name}</option>`).join('');
+    }
+
+    // Form: Registro Manual
+    document.getElementById('manual-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const professional = document.getElementById('manual-professional').value;
+      const service = document.getElementById('manual-service').value;
+      const value = document.getElementById('manual-value').value;
+      const date = document.getElementById('manual-date').value;
+      const time = document.getElementById('manual-time').value;
+      const status = document.getElementById('manual-status').value;
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
+
+      const dateObj = new Date(date + 'T' + time);
+      const appointment = {
+        type: 'appointment',
+        professionalName: professional,
+        serviceName: service,
+        value: parseFloat(value),
+        status: status,
+        date: dateObj.toISOString(),
+        time: time,
+        month: String(dateObj.getMonth() + 1).padStart(2, '0'),
+        year: String(dateObj.getFullYear())
+      };
+
+      const result = await window.dataSdk.create(appointment);
+
+      if (result.isOk) {
+        showToast('Atendimento registrado com sucesso!');
+        e.target.reset();
+        document.getElementById('manual-date').value = today;
+        document.getElementById('manual-time').value = currentTime;
+      } else {
+        showToast('Erro ao registrar atendimento', 'error');
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'SALVAR ATENDIMENTO';
+    });
+
+    // Salvar linhas
+    document.querySelectorAll('.save-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const linesToSave = parseInt(btn.dataset.lines);
+        const savedCount = await saveLines(linesToSave);
+        if (savedCount > 0) {
+          showToast(`${savedCount} atendimento(s) salvos com sucesso!`);
+          clearLines(linesToSave);
+        }
+      });
+    });
+
+    async function saveLines(count) {
+      let savedCount = 0;
+      const savePromises = [];
+
+      for (let i = 1; i <= count; i++) {
+        const professional = document.querySelector(`.professional-select[data-line="${i}"]`).value;
+        const service = document.querySelector(`.service-select[data-line="${i}"]`).value;
+        const value = document.querySelector(`.value-input[data-line="${i}"]`).value;
+        const status = document.querySelector(`.status-select[data-line="${i}"]`).value;
+
+        if (professional && service && value) {
+          const now = new Date();
+          const appointment = {
+            type: 'appointment',
+            professionalName: professional,
+            serviceName: service,
+            value: parseFloat(value),
+            status: status,
+            date: now.toISOString(),
+            time: now.toTimeString().slice(0, 5),
+            month: String(now.getMonth() + 1).padStart(2, '0'),
+            year: String(now.getFullYear())
+          };
+          savePromises.push(window.dataSdk.create(appointment));
+          savedCount++;
+        }
+      }
+
+      const results = await Promise.all(savePromises);
+      const allSuccess = results.every(r => r.isOk);
+      
+      if (!allSuccess) {
+        showToast('Erro ao salvar alguns atendimentos', 'error');
+      }
+
+      return savedCount;
+    }
+
+    function clearLines(count) {
+      for (let i = 1; i <= count; i++) {
+        document.querySelector(`.professional-select[data-line="${i}"]`).value = '';
+        document.querySelector(`.service-select[data-line="${i}"]`).value = '';
+        document.querySelector(`.value-input[data-line="${i}"]`).value = '';
+        document.querySelector(`.status-select[data-line="${i}"]`).value = 'Pago';
+      }
+    }
+
+    // Form: Profissionais
+    document.getElementById('professional-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('professional-name').value;
+      const commission = document.getElementById('professional-commission').value;
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
+
+      const result = await window.dataSdk.create({
+        type: 'professional',
+        name: name,
+        commission: parseFloat(commission)
+      });
+
+      if (result.isOk) {
+        showToast('Profissional adicionado com sucesso!');
+        e.target.reset();
+      } else {
+        showToast('Erro ao adicionar profissional', 'error');
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'ADICIONAR';
+    });
+
+    // Form: Serviços
+    document.getElementById('service-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('service-name').value.trim();
+      const value = document.getElementById('service-value').value;
+      
+      if (!name || !value || parseFloat(value) <= 0) {
+        showToast('Preencha todos os campos corretamente', 'error');
+        return;
+      }
+
+      // Verificar se já existe serviço com esse nome
+      const existingService = allData.services.find(s => s.name.toLowerCase() === name.toLowerCase());
+      if (existingService) {
+        showToast('Já existe um serviço com esse nome', 'error');
+        return;
+      }
+
+      if (allData.services.length >= 999) {
+        showToast('Limite máximo de 999 serviços atingido', 'error');
+        return;
+      }
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
+
+      const result = await window.dataSdk.create({
+        type: 'service',
+        name: name,
+        value: parseFloat(value)
+      });
+
+      if (result.isOk) {
+        showToast('Serviço cadastrado com sucesso!');
+        e.target.reset();
+      } else {
+        showToast('Erro ao cadastrar serviço', 'error');
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'CADASTRAR SERVIÇO';
+    });
+
+    // Form: Custos
+    document.getElementById('cost-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const date = document.getElementById('cost-date').value;
+      const category = document.getElementById('cost-category').value;
+      const description = document.getElementById('cost-description').value;
+      const value = document.getElementById('cost-value').value;
+      
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
+
+      const result = await window.dataSdk.create({
+        type: 'cost',
+        date: new Date(date).toISOString(),
+        category: category,
+        description: description,
+        value: parseFloat(value)
+      });
+
+      if (result.isOk) {
+        showToast('Custo registrado com sucesso!');
+        e.target.reset();
+        document.getElementById('cost-date').value = today;
+      } else {
+        showToast('Erro ao registrar custo', 'error');
+      }
+      
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'ADICIONAR CUSTO';
+    });
+
+    // Filtros: Histórico
+    document.getElementById('filter-professional').addEventListener('change', renderHistory);
+    document.getElementById('filter-status').addEventListener('change', renderHistory);
+
+    // Relatórios
+    document.getElementById('report-date').addEventListener('change', updateReport);
+    document.getElementById('report-month').addEventListener('change', updateReport);
+    document.getElementById('report-year').addEventListener('change', updateReport);
+
+    function updateReport() {
+      const reportDate = document.getElementById('report-date').value;
+      const month = document.getElementById('report-month').value;
+      const year = document.getElementById('report-year').value;
+
+      generateReport(reportDate, month, year);
+      generateCharts(month, year);
+    }
+
+    function generateCharts(month, year) {
+      if (!month || !year) return;
+
+      // Filtrar atendimentos pagos do mês
+      const monthAppts = allData.appointments.filter(a => 
+        a.status === 'Pago' && a.month === month && a.year === year
+      );
+
+      // Filtrar custos do mês
+      const monthCosts = allData.costs.filter(c => {
+        const costDate = new Date(c.date);
+        const costMonth = String(costDate.getMonth() + 1).padStart(2, '0');
+        const costYear = String(costDate.getFullYear());
+        return costMonth === month && costYear === year;
+      });
+
+      // === GRÁFICO DE DESEMPENHO ===
+      const totalFaturamento = monthAppts.reduce((sum, a) => sum + a.value, 0);
+      const totalCustos = monthCosts.reduce((sum, c) => sum + c.value, 0);
+      const totalLucro = totalFaturamento - totalCustos;
+
+      document.getElementById('perf-faturamento').textContent = `R$ ${totalFaturamento.toFixed(2)}`;
+      document.getElementById('perf-custos').textContent = `R$ ${totalCustos.toFixed(2)}`;
+      document.getElementById('perf-lucro').textContent = `R$ ${totalLucro.toFixed(2)}`;
+
+      // Calcular porcentagem de lucro
+      const lucroPercentual = totalFaturamento > 0 ? ((totalLucro / totalFaturamento) * 100) : 0;
+      const profitBar = document.getElementById('profit-bar');
+      const monthStatus = document.getElementById('month-status');
+      const perfMessage = document.getElementById('performance-message');
+
+      // Definir status e cor
+      if (lucroPercentual >= 50) {
+        monthStatus.textContent = '🚀 EXCELENTE';
+        monthStatus.className = 'px-3 py-1 rounded-full text-xs font-bold bg-green-600 text-white';
+        profitBar.className = 'h-full transition-all duration-500 flex items-center justify-center text-xs font-bold bg-green-500 text-white';
+        perfMessage.textContent = 'Mês muito lucrativo! Continue assim!';
+      } else if (lucroPercentual >= 30) {
+        monthStatus.textContent = '✅ BOM';
+        monthStatus.className = 'px-3 py-1 rounded-full text-xs font-bold bg-blue-600 text-white';
+        profitBar.className = 'h-full transition-all duration-500 flex items-center justify-center text-xs font-bold bg-blue-500 text-white';
+        perfMessage.textContent = 'Mês positivo, mas pode melhorar!';
+      } else if (lucroPercentual >= 10) {
+        monthStatus.textContent = '⚠️ REGULAR';
+        monthStatus.className = 'px-3 py-1 rounded-full text-xs font-bold bg-yellow-600 text-zinc-900';
+        profitBar.className = 'h-full transition-all duration-500 flex items-center justify-center text-xs font-bold bg-yellow-500 text-zinc-900';
+        perfMessage.textContent = 'Lucro baixo. Revise os custos!';
+      } else if (lucroPercentual >= 0) {
+        monthStatus.textContent = '⚠️ CRÍTICO';
+        monthStatus.className = 'px-3 py-1 rounded-full text-xs font-bold bg-orange-600 text-white';
+        profitBar.className = 'h-full transition-all duration-500 flex items-center justify-center text-xs font-bold bg-orange-500 text-white';
+        perfMessage.textContent = 'Lucro muito baixo. Atenção urgente!';
+      } else {
+        monthStatus.textContent = '🚨 PREJUÍZO';
+        monthStatus.className = 'px-3 py-1 rounded-full text-xs font-bold bg-red-600 text-white';
+        profitBar.className = 'h-full transition-all duration-500 flex items-center justify-center text-xs font-bold bg-red-500 text-white';
+        perfMessage.textContent = 'Prejuízo! Reduza custos urgentemente!';
+      }
+
+      const displayPercentual = Math.max(0, Math.min(100, lucroPercentual));
+      profitBar.style.width = `${displayPercentual}%`;
+      profitBar.textContent = `${lucroPercentual.toFixed(1)}%`;
+
+      // === TOP 5 SERVIÇOS MAIS VENDIDOS ===
+      const serviceCounts = {};
+      monthAppts.forEach(appt => {
+        serviceCounts[appt.serviceName] = (serviceCounts[appt.serviceName] || 0) + 1;
+      });
+
+      const sortedServices = Object.entries(serviceCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+      const topServicesContainer = document.getElementById('top-services-chart');
+      
+      if (sortedServices.length === 0) {
+        topServicesContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum serviço realizado no mês</p>';
+      } else {
+        const maxCount = sortedServices[0][1];
+        topServicesContainer.innerHTML = sortedServices.map(([service, count], index) => {
+          const percentage = (count / maxCount) * 100;
+          const medals = ['🥇', '🥈', '🥉', '4º', '5º'];
+          return `
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-sm font-semibold">${medals[index]} ${service}</span>
+                <span class="text-sm text-yellow-500 font-bold">${count}x</span>
+              </div>
+              <div class="w-full bg-zinc-700 rounded-full h-4 overflow-hidden">
+                <div class="h-full gold-gradient transition-all duration-500" style="width: ${percentage}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // === ESTATÍSTICAS MENSAIS ===
+      const totalServices = monthAppts.length;
+      const daysInMonth = new Date(year, month, 0).getDate();
+      
+      // Contar dias únicos trabalhados
+      const uniqueDays = new Set(monthAppts.map(a => a.date.split('T')[0]));
+      const daysWorked = uniqueDays.size;
+      
+      const avgPerDay = daysWorked > 0 ? (totalServices / daysWorked).toFixed(1) : 0;
+      const avgTicket = totalServices > 0 ? (totalFaturamento / totalServices).toFixed(2) : 0;
+
+      document.getElementById('total-services-month').textContent = totalServices;
+      document.getElementById('avg-services-day').textContent = avgPerDay;
+      document.getElementById('avg-ticket').textContent = `R$ ${avgTicket}`;
+      document.getElementById('days-worked').textContent = daysWorked;
+    }
+
+    function generateReport(reportDate, month, year) {
+
+      // Filtrar atendimentos pagos
+      const paidAppts = allData.appointments.filter(a => a.status === 'Pago');
+
+      // Filtrar por dia
+      let dayAppts = [];
+      if (reportDate) {
+        dayAppts = paidAppts.filter(a => a.date.split('T')[0] === reportDate);
+      }
+
+      // Filtrar por mês
+      let monthAppts = [];
+      if (month && year) {
+        monthAppts = paidAppts.filter(a => a.month === month && a.year === year);
+      }
+
+      // Filtrar custos do mês
+      let monthCosts = [];
+      if (month && year) {
+        monthCosts = allData.costs.filter(c => {
+          const costDate = new Date(c.date);
+          const costMonth = String(costDate.getMonth() + 1).padStart(2, '0');
+          const costYear = String(costDate.getFullYear());
+          return costMonth === month && costYear === year;
+        });
+      }
+
+      const totalCostsMonth = monthCosts.reduce((sum, c) => sum + c.value, 0);
+
+      // === THIAGO (PROPRIETÁRIO) ===
+      
+      // Atendimentos do Thiago no dia
+      const thiagoDayAppts = dayAppts.filter(a => a.professionalName === 'Thiago');
+      const thiagoBrutoDia = thiagoDayAppts.reduce((sum, a) => sum + a.value, 0);
+      
+      // Atendimentos de outros no dia (Thiago recebe 50%)
+      const othersDayAppts = dayAppts.filter(a => a.professionalName !== 'Thiago');
+      const thiagoComissaoDia = othersDayAppts.reduce((sum, a) => sum + (a.value * 0.5), 0);
+      
+      const thiagoLiquidoDia = thiagoBrutoDia + thiagoComissaoDia;
+
+      // Atendimentos do Thiago no mês
+      const thiagoMonthAppts = monthAppts.filter(a => a.professionalName === 'Thiago');
+      const thiagoBrutoMensal = thiagoMonthAppts.reduce((sum, a) => sum + a.value, 0);
+      
+      // Atendimentos de outros no mês (Thiago recebe 50%)
+      const othersMonthAppts = monthAppts.filter(a => a.professionalName !== 'Thiago');
+      const thiagoComissaoMensal = othersMonthAppts.reduce((sum, a) => sum + (a.value * 0.5), 0);
+      
+      const thiagoLiquidoMensal = thiagoBrutoMensal + thiagoComissaoMensal - totalCostsMonth;
+
+      document.getElementById('thiago-liquido-dia').textContent = `R$ ${thiagoLiquidoDia.toFixed(2)}`;
+      document.getElementById('thiago-bruto-dia').textContent = `R$ ${thiagoBrutoDia.toFixed(2)}`;
+      document.getElementById('thiago-liquido-mensal').textContent = `R$ ${thiagoLiquidoMensal.toFixed(2)}`;
+      document.getElementById('thiago-bruto-mensal').textContent = `R$ ${thiagoBrutoMensal.toFixed(2)}`;
+
+      // === COLABORADORES ===
+      
+      const collaborators = allData.professionals.filter(p => p.name !== 'Thiago');
+      const collabContainer = document.getElementById('collaborators-report');
+
+      if (collaborators.length === 0) {
+        collabContainer.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum colaborador cadastrado</p>';
+      } else {
+        collabContainer.innerHTML = collaborators.map(collab => {
+          // Dia
+          const collabDayAppts = dayAppts.filter(a => a.professionalName === collab.name);
+          const collabBrutoDia = collabDayAppts.reduce((sum, a) => sum + a.value, 0);
+          const collabLiquidoDia = collabBrutoDia * (collab.commission / 100);
+
+          // Mês
+          const collabMonthAppts = monthAppts.filter(a => a.professionalName === collab.name);
+          const collabBrutoMensal = collabMonthAppts.reduce((sum, a) => sum + a.value, 0);
+          const collabLiquidoMensal = collabBrutoMensal * (collab.commission / 100);
+
+          return `
+            <div class="bg-zinc-700 rounded-lg p-4">
+              <h4 class="text-xl font-bold text-yellow-500 mb-4">${collab.name} (${collab.commission}% comissão)</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-zinc-600 rounded-lg p-3">
+                  <p class="text-xs text-gray-400 mb-1">Líquido do Dia</p>
+                  <p class="text-xl font-bold text-green-400">R$ ${collabLiquidoDia.toFixed(2)}</p>
+                </div>
+                <div class="bg-zinc-600 rounded-lg p-3">
+                  <p class="text-xs text-gray-400 mb-1">Líquido Mensal</p>
+                  <p class="text-xl font-bold text-blue-400">R$ ${collabLiquidoMensal.toFixed(2)}</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    // Extrato
+    function calculateExtrato() {
+      const paidAppts = allData.appointments.filter(a => a.status === 'Pago');
+      const total = paidAppts.reduce((sum, a) => sum + a.value, 0);
+      const custos = allData.costs.reduce((sum, c) => sum + c.value, 0);
+      const lucro = total - custos;
+
+      document.getElementById('extrato-total').textContent = `R$ ${total.toFixed(2)}`;
+      document.getElementById('extrato-custos').textContent = `R$ ${custos.toFixed(2)}`;
+      document.getElementById('extrato-lucro').textContent = `R$ ${lucro.toFixed(2)}`;
+    }
+
+    document.getElementById('filter-extrato-btn').addEventListener('click', () => {
+      const month = document.getElementById('extrato-month').value;
+      const year = document.getElementById('extrato-year').value;
+
+      if (!month || !year) {
+        showToast('Selecione mês e ano', 'error');
+        return;
+      }
+
+      const filtered = allData.appointments.filter(a => 
+        a.status === 'Pago' && a.month === month && a.year === year
+      );
+
+      document.getElementById('extrato-detail').classList.remove('hidden');
+      const container = document.getElementById('extrato-list');
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum serviço encontrado no período</p>';
+        return;
+      }
+
+      container.innerHTML = filtered.map(appt => `
+        <div class="bg-zinc-700 rounded-lg p-3 flex items-center justify-between">
+          <div class="flex-1 grid grid-cols-4 gap-4 text-sm">
+            <div>
+              <p class="text-gray-400 text-xs">Serviço</p>
+              <p class="font-semibold">${appt.serviceName}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Profissional</p>
+              <p class="font-semibold">${appt.professionalName}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Data</p>
+              <p class="font-semibold">${new Date(appt.date).toLocaleDateString('pt-BR')}</p>
+            </div>
+            <div>
+              <p class="text-gray-400 text-xs">Valor</p>
+              <p class="font-semibold text-green-400">R$ ${parseFloat(appt.value).toFixed(2)}</p>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    });
+
+    // Data SDK
+    const dataHandler = {
+      onDataChanged(data) {
+        allData = {
+          services: data.filter(d => d.type === 'service'),
+          professionals: data.filter(d => d.type === 'professional'),
+          costs: data.filter(d => d.type === 'cost'),
+          appointments: data.filter(d => d.type === 'appointment')
+        };
+
+        renderServiceLines();
+        renderProfessionalsList();
+        renderServicesList();
+        renderCostsList();
+        updateFilterProfessionals();
+        updateManualSelects();
+        calculateExtrato();
+        
+        // Atualizar relatórios se a aba estiver ativa
+        const activeTab = document.querySelector('.tab-button.active');
+        if (activeTab && activeTab.dataset.tab === 'relatorios') {
+          updateReport();
+        }
+      }
+    };
+
+    // Element SDK
+    async function onConfigChange(config) {
+      const shopName = config.shop_name || defaultConfig.shop_name;
+      const cnpj = config.cnpj || defaultConfig.cnpj;
+
+      document.getElementById('shop-name').textContent = shopName;
+      document.getElementById('cnpj').textContent = `CNPJ: ${cnpj}`;
+    }
+
+    const predefinedServices = [
+      { name: "CORTE", value: 40.00 },
+      { name: "CABELO MÉDIO", value: 50.00 },
+      { name: "CORTE CARECA", value: 30.00 },
+      { name: "CORTE+SOBRANCELHA+BOTOX", value: 140.00 },
+      { name: "CORTE+SOBRANCELHA", value: 50.00 },
+      { name: "CORTE+PIGMENTO", value: 50.00 },
+      { name: "CORTE+PENTEADO+SOMB...", value: 80.00 },
+      { name: "CORTE+PENTEADO", value: 70.00 },
+      { name: "CORTE+BARBA+SOBRANCELHA+PIG", value: 100.00 },
+      { name: "CORTE+BARBA+PIGMENTO", value: 90.00 },
+      { name: "CORTE+BARBA", value: 80.00 },
+      { name: "CORTE+BARBA+SOBRANCELHA", value: 90.00 },
+      { name: "CORTE+BARBA+PENTEADO", value: 110.00 },
+      { name: "CORTE+BARBA+SOMB+PENTEADO", value: 120.00 },
+      { name: "CORTE+SOMBRANCELHA+BIGODE", value: 60.00 },
+      { name: "CORTE+SOMB+BIGODE+CAVANHA", value: 80.00 },
+      { name: "CORTE+SOMBR+PENTEADO", value: 80.00 },
+      { name: "BARBA+PEZINHO", value: 50.00 },
+      { name: "BARBA+SOBRANCELHA", value: 50.00 },
+      { name: "CORTE+PLATINADO", value: 130.00 },
+      { name: "CORTE+LUZES", value: 120.00 },
+      { name: "CORTE+ALIZANTE", value: 80.00 },
+      { name: "CORTE+ALIZANTE+SOBRANCELHA", value: 90.00 },
+      { name: "CORTE+ALIZANTE+PENTEADO", value: 110.00 },
+      { name: "CORTE+ALIZANTE+SOMBR...", value: 90.00 },
+      { name: "ALIZANTE+PEZINHO", value: 50.00 },
+      { name: "CORTE+BOTOX", value: 120.00 },
+      { name: "CORTE+PROGRESSIVA", value: 160.00 },
+      { name: "PEZINHO+SOMBRANCELHA", value: 20.00 },
+      { name: "CORTE+CAVANHAQUE", value: 70.00 },
+      { name: "PENTEADO+BARBA", value: 70.00 },
+      { name: "SOBRANCELHA+PIGMENTO", value: 20.00 },
+      { name: "SOBRANCELHA", value: 10.00 },
+      { name: "GEL", value: 15.00 },
+      { name: "POMADA", value: 20.00 },
+      { name: "PLATINADO", value: 130.00 },
+      { name: "PIGMENTO", value: 10.00 },
+      { name: "LUZES", value: 80.00 },
+      { name: "ALIZANTE", value: 40.00 },
+      { name: "PEZINHO", value: 10.00 },
+      { name: "PENTEADO", value: 30.00 },
+      { name: "BARBA", value: 40.00 },
+      { name: "CAVANHAQUE", value: 30.00 },
+      { name: "GUSTAVO FREITAS 120", value: 140.00 },
+      { name: "COMBO DE BARBA", value: 150.00 },
+      { name: "COMBO CABELO", value: 150.00 },
+      { name: "COMBO SOBRANCELHA", value: 150.00 },
+      { name: "CORTE+BOTOX+SOBRANCELHA", value: 130.00 },
+      { name: "DESCOLORAÇÃO NEVOU", value: 130.00 },
+      { name: "COMBO ANDERSON", value: 70.00 },
+      { name: "COMBO NALDO", value: 140.00 },
+      { name: "EDMILSON", value: 110.00 },
+      { name: "COMBO CABELO", value: 140.00 },
+      { name: "COMBO SOBRANCELHA", value: 150.00 },
+      { name: "COMBO BARBA", value: 190.00 },
+      { name: "CORTE+BARBA+PIGMENTO1", value: 60.00 },
+      { name: "CORTE+BOTOX+SOBRANCELHA", value: 100.00 },
+      { name: "CORTE 15 TEMPORARIO", value: 15.00 },
+      { name: "GORDO", value: 100.00 },
+      { name: "PENDENCIA JULIO", value: 100.00 },
+      { name: "DESCOLORAÇÃO NEVOU", value: 100.00 },
+      { name: "COMBO DE CABELO+BARBA+SOB", value: 230.00 },
+      { name: "COMBO 2 CORTES", value: 50.00 },
+      { name: "COMBO 3 CORTES", value: 110.00 },
+      { name: "COMO ANDERSON 100", value: 100.00 },
+      { name: "COMBO NALDO", value: 140.00 }
+    ];
+
+    async function init() {
+      const initResult = await window.dataSdk.init(dataHandler);
+      if (!initResult.isOk) {
+        showToast('Erro ao inicializar sistema', 'error');
+        return;
+      }
+
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig,
+          onConfigChange,
+          mapToCapabilities: () => ({
+            recolorables: [],
+            borderables: [],
+            fontEditable: undefined,
+            fontSizeable: undefined
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["shop_name", config.shop_name || defaultConfig.shop_name],
+            ["cnpj", config.cnpj || defaultConfig.cnpj]
+          ])
+        });
+      }
+
+      // Criar Thiago se não existir
+      if (allData.professionals.length === 0) {
+        await window.dataSdk.create({
+          type: 'professional',
+          name: 'Thiago',
+          commission: 0
+        });
+      }
+
+      // Adicionar serviços pré-definidos se não existirem
+      if (allData.services.length === 0) {
+        for (const service of predefinedServices) {
+          await window.dataSdk.create({
+            type: 'service',
+            name: service.name,
+            value: service.value
+          });
+        }
+        showToast('Serviços cadastrados com sucesso!');
+      }
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ba6ca4556a0f200',t:'MTc2NzgyMzg3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
