@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Gestão - Barbearia</title>
-  <script src="/_sdk/data_sdk.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,6 +91,8 @@
     }
   </style>
   <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full bg-zinc-900 text-gray-100">
   <div id="app-wrapper" class="h-full w-full overflow-auto"><!-- Header -->
@@ -212,7 +212,7 @@
        </div>
       </div>
      </div><!-- Resultados do Relatório -->
-     <div id="report-results" class="space-y-6"><!-- Thiago - Proprietário -->
+     <div id="report-results" class="space-y-6"><!-- Thiago - Propriet��rio -->
       <div class="bg-zinc-800 rounded-lg p-6">
        <h3 class="text-2xl font-bold text-yellow-500 mb-4 flex items-center gap-2">👑 Thiago (Proprietário)</h3>
        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -343,6 +343,22 @@
     };
 
     let deleteCallback = null;
+
+    // LocalStorage helpers
+    function saveData() {
+      localStorage.setItem('barbeariaData', JSON.stringify(allData));
+    }
+
+    function loadData() {
+      const saved = localStorage.getItem('barbeariaData');
+      if (saved) {
+        allData = JSON.parse(saved);
+      }
+    }
+
+    function generateId() {
+      return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
 
     // Configuração de data atual
     const today = new Date().toISOString().split('T')[0];
@@ -529,28 +545,22 @@
               <p class="font-semibold ${appt.status === 'Pago' ? 'text-green-400' : 'text-yellow-400'}">${appt.status}</p>
             </div>
           </div>
-          <button class="delete-appt-btn ml-4 bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${appt.__backendId}">
+          <button class="delete-appt-btn ml-4 bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${appt.id}">
             Excluir
           </button>
         </div>
       `).join('');
 
       document.querySelectorAll('.delete-appt-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
-          const appt = allData.appointments.find(a => a.__backendId === id);
-          showConfirmModal(`Deseja excluir o atendimento de ${appt.serviceName}?`, async () => {
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner mx-auto"></div>';
-            const record = allData.appointments.find(a => a.__backendId === id);
-            const result = await window.dataSdk.delete(record);
-            if (result.isOk) {
-              showToast('Atendimento excluído com sucesso!');
-            } else {
-              showToast('Erro ao excluir atendimento', 'error');
-              btn.disabled = false;
-              btn.textContent = 'Excluir';
-            }
+          const appt = allData.appointments.find(a => a.id === id);
+          showConfirmModal(`Deseja excluir o atendimento de ${appt.serviceName}?`, () => {
+            allData.appointments = allData.appointments.filter(a => a.id !== id);
+            saveData();
+            showToast('Atendimento excluído com sucesso!');
+            renderHistory();
+            calculateExtrato();
           });
         });
       });
@@ -570,7 +580,7 @@
             <p class="text-sm text-gray-400">Comissão: ${pro.commission}%</p>
           </div>
           ${pro.name !== 'Thiago' ? `
-            <button class="delete-pro-btn bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${pro.__backendId}">
+            <button class="delete-pro-btn bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${pro.id}">
               Excluir
             </button>
           ` : '<span class="text-yellow-500 text-sm font-semibold">Proprietário</span>'}
@@ -578,21 +588,17 @@
       `).join('');
 
       document.querySelectorAll('.delete-pro-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
-          const pro = allData.professionals.find(p => p.__backendId === id);
-          showConfirmModal(`Deseja excluir o profissional ${pro.name}?`, async () => {
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner mx-auto"></div>';
-            const record = allData.professionals.find(p => p.__backendId === id);
-            const result = await window.dataSdk.delete(record);
-            if (result.isOk) {
-              showToast('Profissional excluído com sucesso!');
-            } else {
-              showToast('Erro ao excluir profissional', 'error');
-              btn.disabled = false;
-              btn.textContent = 'Excluir';
-            }
+          const pro = allData.professionals.find(p => p.id === id);
+          showConfirmModal(`Deseja excluir o profissional ${pro.name}?`, () => {
+            allData.professionals = allData.professionals.filter(p => p.id !== id);
+            saveData();
+            showToast('Profissional excluído com sucesso!');
+            renderProfessionalsList();
+            renderServiceLines();
+            updateFilterProfessionals();
+            updateManualSelects();
           });
         });
       });
@@ -611,28 +617,23 @@
             <p class="font-semibold">${service.name}</p>
             <p class="text-sm text-gray-400">R$ ${parseFloat(service.value).toFixed(2)}</p>
           </div>
-          <button class="delete-service-btn bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${service.__backendId}">
+          <button class="delete-service-btn bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition text-sm" data-id="${service.id}">
             Excluir
           </button>
         </div>
       `).join('');
 
       document.querySelectorAll('.delete-service-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
-          const service = allData.services.find(s => s.__backendId === id);
-          showConfirmModal(`Deseja excluir o serviço ${service.name}?`, async () => {
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner mx-auto"></div>';
-            const record = allData.services.find(s => s.__backendId === id);
-            const result = await window.dataSdk.delete(record);
-            if (result.isOk) {
-              showToast('Serviço excluído com sucesso!');
-            } else {
-              showToast('Erro ao excluir serviço', 'error');
-              btn.disabled = false;
-              btn.textContent = 'Excluir';
-            }
+          const service = allData.services.find(s => s.id === id);
+          showConfirmModal(`Deseja excluir o serviço ${service.name}?`, () => {
+            allData.services = allData.services.filter(s => s.id !== id);
+            saveData();
+            showToast('Serviço excluído com sucesso!');
+            renderServicesList();
+            renderServiceLines();
+            updateManualSelects();
           });
         });
       });
@@ -657,28 +658,22 @@
             <p class="text-sm">${cost.description}</p>
             <p class="text-sm font-bold text-red-400 mt-1">R$ ${parseFloat(cost.value).toFixed(2)}</p>
           </div>
-          <button class="delete-cost-btn ml-4 bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 rounded transition text-xs" data-id="${cost.__backendId}">
+          <button class="delete-cost-btn ml-4 bg-red-600 hover:bg-red-700 text-white font-bold px-3 py-1 rounded transition text-xs" data-id="${cost.id}">
             Excluir
           </button>
         </div>
       `).join('');
 
       document.querySelectorAll('.delete-cost-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
-          const cost = allData.costs.find(c => c.__backendId === id);
-          showConfirmModal(`Deseja excluir o custo ${cost.description}?`, async () => {
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner mx-auto"></div>';
-            const record = allData.costs.find(c => c.__backendId === id);
-            const result = await window.dataSdk.delete(record);
-            if (result.isOk) {
-              showToast('Custo excluído com sucesso!');
-            } else {
-              showToast('Erro ao excluir custo', 'error');
-              btn.disabled = false;
-              btn.textContent = 'Excluir';
-            }
+          const cost = allData.costs.find(c => c.id === id);
+          showConfirmModal(`Deseja excluir o custo ${cost.description}?`, () => {
+            allData.costs = allData.costs.filter(c => c.id !== id);
+            saveData();
+            showToast('Custo excluído com sucesso!');
+            renderCostsList();
+            calculateExtrato();
           });
         });
       });
@@ -702,7 +697,7 @@
     }
 
     // Form: Registro Manual
-    document.getElementById('manual-form').addEventListener('submit', async (e) => {
+    document.getElementById('manual-form').addEventListener('submit', (e) => {
       e.preventDefault();
       
       const professional = document.getElementById('manual-professional').value;
@@ -711,14 +706,10 @@
       const date = document.getElementById('manual-date').value;
       const time = document.getElementById('manual-time').value;
       const status = document.getElementById('manual-status').value;
-      
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
 
       const dateObj = new Date(date + 'T' + time);
       const appointment = {
-        type: 'appointment',
+        id: generateId(),
         professionalName: professional,
         serviceName: service,
         value: parseFloat(value),
@@ -729,26 +720,19 @@
         year: String(dateObj.getFullYear())
       };
 
-      const result = await window.dataSdk.create(appointment);
-
-      if (result.isOk) {
-        showToast('Atendimento registrado com sucesso!');
-        e.target.reset();
-        document.getElementById('manual-date').value = today;
-        document.getElementById('manual-time').value = currentTime;
-      } else {
-        showToast('Erro ao registrar atendimento', 'error');
-      }
-      
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'SALVAR ATENDIMENTO';
+      allData.appointments.push(appointment);
+      saveData();
+      showToast('Atendimento registrado com sucesso!');
+      e.target.reset();
+      document.getElementById('manual-date').value = today;
+      document.getElementById('manual-time').value = currentTime;
     });
 
     // Salvar linhas
     document.querySelectorAll('.save-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
+      btn.addEventListener('click', () => {
         const linesToSave = parseInt(btn.dataset.lines);
-        const savedCount = await saveLines(linesToSave);
+        const savedCount = saveLines(linesToSave);
         if (savedCount > 0) {
           showToast(`${savedCount} atendimento(s) salvos com sucesso!`);
           clearLines(linesToSave);
@@ -756,9 +740,8 @@
       });
     });
 
-    async function saveLines(count) {
+    function saveLines(count) {
       let savedCount = 0;
-      const savePromises = [];
 
       for (let i = 1; i <= count; i++) {
         const professional = document.querySelector(`.professional-select[data-line="${i}"]`).value;
@@ -769,7 +752,7 @@
         if (professional && service && value) {
           const now = new Date();
           const appointment = {
-            type: 'appointment',
+            id: generateId(),
             professionalName: professional,
             serviceName: service,
             value: parseFloat(value),
@@ -779,16 +762,13 @@
             month: String(now.getMonth() + 1).padStart(2, '0'),
             year: String(now.getFullYear())
           };
-          savePromises.push(window.dataSdk.create(appointment));
+          allData.appointments.push(appointment);
           savedCount++;
         }
       }
 
-      const results = await Promise.all(savePromises);
-      const allSuccess = results.every(r => r.isOk);
-      
-      if (!allSuccess) {
-        showToast('Erro ao salvar alguns atendimentos', 'error');
+      if (savedCount > 0) {
+        saveData();
       }
 
       return savedCount;
@@ -804,34 +784,28 @@
     }
 
     // Form: Profissionais
-    document.getElementById('professional-form').addEventListener('submit', async (e) => {
+    document.getElementById('professional-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('professional-name').value;
       const commission = document.getElementById('professional-commission').value;
-      
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
 
-      const result = await window.dataSdk.create({
-        type: 'professional',
+      allData.professionals.push({
+        id: generateId(),
         name: name,
         commission: parseFloat(commission)
       });
 
-      if (result.isOk) {
-        showToast('Profissional adicionado com sucesso!');
-        e.target.reset();
-      } else {
-        showToast('Erro ao adicionar profissional', 'error');
-      }
-      
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'ADICIONAR';
+      saveData();
+      showToast('Profissional adicionado com sucesso!');
+      e.target.reset();
+      renderProfessionalsList();
+      renderServiceLines();
+      updateFilterProfessionals();
+      updateManualSelects();
     });
 
     // Form: Serviços
-    document.getElementById('service-form').addEventListener('submit', async (e) => {
+    document.getElementById('service-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const name = document.getElementById('service-name').value.trim();
       const value = document.getElementById('service-value').value;
@@ -841,69 +815,48 @@
         return;
       }
 
-      // Verificar se já existe serviço com esse nome
       const existingService = allData.services.find(s => s.name.toLowerCase() === name.toLowerCase());
       if (existingService) {
         showToast('Já existe um serviço com esse nome', 'error');
         return;
       }
 
-      if (allData.services.length >= 999) {
-        showToast('Limite máximo de 999 serviços atingido', 'error');
-        return;
-      }
-      
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
-
-      const result = await window.dataSdk.create({
-        type: 'service',
+      allData.services.push({
+        id: generateId(),
         name: name,
         value: parseFloat(value)
       });
 
-      if (result.isOk) {
-        showToast('Serviço cadastrado com sucesso!');
-        e.target.reset();
-      } else {
-        showToast('Erro ao cadastrar serviço', 'error');
-      }
-      
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'CADASTRAR SERVIÇO';
+      saveData();
+      showToast('Serviço cadastrado com sucesso!');
+      e.target.reset();
+      renderServicesList();
+      renderServiceLines();
+      updateManualSelects();
     });
 
     // Form: Custos
-    document.getElementById('cost-form').addEventListener('submit', async (e) => {
+    document.getElementById('cost-form').addEventListener('submit', (e) => {
       e.preventDefault();
       const date = document.getElementById('cost-date').value;
       const category = document.getElementById('cost-category').value;
       const description = document.getElementById('cost-description').value;
       const value = document.getElementById('cost-value').value;
-      
-      const submitBtn = e.target.querySelector('button[type="submit"]');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<div class="spinner mx-auto"></div>';
 
-      const result = await window.dataSdk.create({
-        type: 'cost',
+      allData.costs.push({
+        id: generateId(),
         date: new Date(date).toISOString(),
         category: category,
         description: description,
         value: parseFloat(value)
       });
 
-      if (result.isOk) {
-        showToast('Custo registrado com sucesso!');
-        e.target.reset();
-        document.getElementById('cost-date').value = today;
-      } else {
-        showToast('Erro ao registrar custo', 'error');
-      }
-      
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'ADICIONAR CUSTO';
+      saveData();
+      showToast('Custo registrado com sucesso!');
+      e.target.reset();
+      document.getElementById('cost-date').value = today;
+      renderCostsList();
+      calculateExtrato();
     });
 
     // Filtros: Histórico
@@ -1293,53 +1246,45 @@
       { name: "COMBO NALDO", value: 140.00 }
     ];
 
-    async function init() {
-      const initResult = await window.dataSdk.init(dataHandler);
-      if (!initResult.isOk) {
-        showToast('Erro ao inicializar sistema', 'error');
-        return;
-      }
-
-      if (window.elementSdk) {
-        window.elementSdk.init({
-          defaultConfig,
-          onConfigChange,
-          mapToCapabilities: () => ({
-            recolorables: [],
-            borderables: [],
-            fontEditable: undefined,
-            fontSizeable: undefined
-          }),
-          mapToEditPanelValues: (config) => new Map([
-            ["shop_name", config.shop_name || defaultConfig.shop_name],
-            ["cnpj", config.cnpj || defaultConfig.cnpj]
-          ])
-        });
-      }
+    function init() {
+      // Carregar dados do localStorage
+      loadData();
 
       // Criar Thiago se não existir
       if (allData.professionals.length === 0) {
-        await window.dataSdk.create({
-          type: 'professional',
+        allData.professionals.push({
+          id: generateId(),
           name: 'Thiago',
           commission: 0
         });
+        saveData();
       }
 
       // Adicionar serviços pré-definidos se não existirem
       if (allData.services.length === 0) {
-        for (const service of predefinedServices) {
-          await window.dataSdk.create({
-            type: 'service',
+        predefinedServices.forEach(service => {
+          allData.services.push({
+            id: generateId(),
             name: service.name,
             value: service.value
           });
-        }
+        });
+        saveData();
         showToast('Serviços cadastrados com sucesso!');
       }
+
+      // Renderizar tudo
+      renderServiceLines();
+      renderProfessionalsList();
+      renderServicesList();
+      renderCostsList();
+      updateFilterProfessionals();
+      updateManualSelects();
+      calculateExtrato();
+      updateReport();
     }
 
     init();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ba6ca4556a0f200',t:'MTc2NzgyMzg3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9baa9a9874715e0f',t:'MTc2Nzg2Mzg2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
