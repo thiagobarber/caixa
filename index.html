@@ -8,6 +8,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/dialog/dialog.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/selection/active-line.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/search/search.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/search/searchcursor.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/dialog/dialog.min.js"></script>
   <style>
     body {
       box-sizing: border-box;
@@ -62,6 +78,7 @@
       width: 20px;
       height: 20px;
       animation: spin 0.6s linear infinite;
+      display: inline-block;
     }
     
     @keyframes spin {
@@ -78,13 +95,103 @@
       border-color: rgba(82, 82, 91, 0.4);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #app {
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .tab-content {
+      will-change: auto;
+    }
+
+    ::-webkit-scrollbar {
+      width: 12px;
+      height: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #18181b;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border-radius: 10px;
+      border: 2px solid #18181b;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+
+    ::-webkit-scrollbar-corner {
+      background: #18181b;
+    }
+
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: #10b981 #18181b;
+    }
+
+    .history-item, .cost-item, .service-item {
+      contain: layout style paint;
+    }
+
+    .CodeMirror {
+      height: 600px;
+      font-size: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(82, 82, 91, 0.3);
+    }
+
+    .editor-toolbar {
+      background: #18181b;
+      border: 1px solid rgba(82, 82, 91, 0.3);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .loading-spinner {
+      border: 4px solid rgba(16, 185, 129, 0.2);
+      border-top-color: #10b981;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 0.8s linear infinite;
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
- <body class="h-full bg-black text-gray-100">
-  <div id="app" class="h-full w-full overflow-auto"><!-- Header -->
+ <body class="h-full bg-black text-gray-100"><!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+   <div class="loading-spinner"></div>
+   <p class="text-white text-xl font-bold mt-6">Carregando dados...</p>
+  </div>
+  <div id="app" class="h-full w-full"><!-- Header -->
    <header class="bg-gradient-to-r from-zinc-950 to-black border-b border-zinc-800 px-6 py-5">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
      <div>
@@ -99,27 +206,27 @@
    </header><!-- Tabs -->
    <nav class="bg-zinc-950 border-b border-zinc-800">
     <div class="max-w-7xl mx-auto px-4">
-     <div class="flex gap-1"><button class="tab-btn active px-3 py-3 font-bold text-xs flex-1 whitespace-nowrap" data-tab="registro">✍️ REGISTRO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="historico">📊 HISTÓRICO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="relatorios">📈 RELATÓRIOS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="extrato">💼 EXTRATO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="profissionais">👥 PROFIS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="servicos">💈 SERVIÇOS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="custos">💳 CUSTOS</button>
+     <div class="flex gap-1 overflow-x-auto"><button class="tab-btn active px-3 py-3 font-bold text-xs flex-1 whitespace-nowrap text-green-400 border-b-2 border-green-400" data-tab="registro">📝 REGISTRO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="historico">📋 HISTÓRICO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="relatorios">📊 RELATÓRIOS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="extrato">💰 EXTRATO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="profissionais">👤 PROFISSIONAIS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="servicos">✂️ SERVIÇOS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="custos">💵 CUSTOS</button>
      </div>
     </div>
    </nav><!-- Main Content -->
    <main class="max-w-7xl mx-auto px-4 py-8"><!-- TAB: REGISTRO -->
     <div id="tab-registro" class="tab-content">
      <div class="card rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-6">⚡ Registro Rápido</h2><!-- Selecionar Profissional, Data e Horário -->
+      <h2 class="text-2xl font-bold text-green-400 mb-6">📝 Registro Rápido</h2><!-- Selecionar Profissional, Data e Horário -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-       <div><label class="block text-sm font-bold mb-3 text-gray-300">PROFISSIONAL:</label> <select id="quick-prof" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione o profissional</option> <option value="THIAGO">👑 THIAGO (Proprietário)</option> </select>
+       <div><label for="quick-prof" class="block text-sm font-bold mb-3 text-gray-300">PROFISSIONAL:</label> <select id="quick-prof" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione o profissional</option> <option value="THIAGO">👑 THIAGO (Proprietário)</option> </select>
        </div>
-       <div><label class="block text-sm font-bold mb-3 text-gray-300">DATA DO ATENDIMENTO:</label> <input type="date" id="quick-date" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none">
+       <div><label for="quick-date" class="block text-sm font-bold mb-3 text-gray-300">DATA DO ATENDIMENTO:</label> <input type="date" id="quick-date" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none">
        </div>
-       <div><label class="block text-sm font-bold mb-3 text-gray-300">HORÁRIO:</label> <input type="time" id="quick-time" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none">
+       <div><label for="quick-time" class="block text-sm font-bold mb-3 text-gray-300">HORÁRIO:</label> <input type="time" id="quick-time" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none">
        </div>
       </div><!-- Seletor de Serviços -->
-      <div class="mb-6"><label class="block text-sm font-bold mb-3 text-gray-300">ADICIONAR SERVIÇO:</label>
+      <div class="mb-6"><label for="service-selector" class="block text-sm font-bold mb-3 text-gray-300">ADICIONAR SERVIÇO:</label>
        <div class="flex gap-3"><select id="service-selector" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione um serviço</option> </select> <button id="add-service-btn" class="btn-primary text-white font-black px-8 py-3 rounded-xl whitespace-nowrap"> ➕ ADICIONAR </button>
        </div>
       </div><!-- Serviços Selecionados -->
-      <div id="selected-services-container" class="mb-6 hidden"><label class="block text-sm font-bold mb-3 text-gray-300">SELECIONADOS:</label>
+      <div id="selected-services-container" class="mb-6 hidden"><label class="block text-sm font-bold mb-3 text-gray-300">SERVIÇOS SELECIONADOS:</label>
        <div id="selected-services" class="bg-zinc-900 rounded-xl p-4 space-y-2"></div>
        <div class="mt-4 flex items-center justify-between bg-zinc-900 rounded-xl p-4"><span class="text-lg font-bold text-gray-300">TOTAL:</span> <span id="total-value" class="text-2xl font-black text-green-400">R$ 0,00</span>
        </div>
@@ -129,20 +236,20 @@
      </div>
     </div><!-- TAB: HISTÓRICO -->
     <div id="tab-historico" class="tab-content hidden">
-     <div class="card rounded-2xl p-6">
-      <div class="flex items-center justify-between mb-6">
-       <h2 class="text-2xl font-bold text-green-400">📋 Histórico de Atendimentos</h2>
-       <div class="flex gap-2"><button id="select-all-btn" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-4 py-2 rounded-xl text-sm hidden"> ✅ Selecionar Todos </button> <button id="delete-selected-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-xl text-sm hidden"> 🗑️ Excluir Selecionados (<span id="selected-count">0</span>) </button>
+     <div class="card rounded-2xl p-6 mb-6">
+      <h2 class="text-2xl font-bold text-green-400 mb-6">🔍 Filtros</h2>
+      <div class="flex gap-4">
+       <div class="flex-1"><label for="filter-date" class="block text-sm font-bold mb-2 text-gray-300">Filtrar por Data:</label> <input type="date" id="filter-date" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none">
+       </div>
+       <div class="flex items-end"><button id="clear-filters-btn" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-2 rounded-xl whitespace-nowrap"> 🗑️ LIMPAR FILTRO </button>
        </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-       <div><label for="filter-date" class="block text-sm font-bold mb-2">Data Específica:</label> <input type="date" id="filter-date" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2">
-       </div>
-       <div><label for="filter-month" class="block text-sm font-bold mb-2">Mês:</label> <select id="filter-month" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2"> <option value="">Todos</option> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
-       </div>
-       <div><label for="filter-prof" class="block text-sm font-bold mb-2">Profissional:</label> <select id="filter-prof" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2"> <option value="">Todos</option> </select>
-       </div>
-       <div><label for="filter-status" class="block text-sm font-bold mb-2">Status:</label> <select id="filter-status" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2"> <option value="">Todos</option> <option value="Pago">Pago</option> <option value="Pendente">Pendente</option> </select>
+     </div>
+     <div class="card rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-6">
+       <h2 class="text-2xl font-bold text-green-400">📋 Histórico de Transações</h2>
+       <div class="flex items-center gap-4">
+        <p class="text-sm text-gray-400"><span id="history-count">0</span> registros</p>
        </div>
       </div>
       <div id="history-list" class="space-y-3"></div>
@@ -150,15 +257,11 @@
     </div><!-- TAB: RELATÓRIOS -->
     <div id="tab-relatorios" class="tab-content hidden">
      <div class="card rounded-2xl p-6 mb-6">
-      <div class="flex items-center justify-between mb-6">
-       <h2 class="text-2xl font-bold text-green-400">📊 Filtros</h2><button id="toggle-owner-btn" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-3 rounded-xl flex items-center gap-2"> <span id="toggle-icon">👁️</span> <span id="toggle-text">Ocultar Proprietário</span> </button>
-      </div>
+      <h2 class="text-2xl font-bold text-green-400 mb-6">📊 Filtros de Relatório</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-       <div><label for="report-date" class="block text-sm font-bold mb-2">Data:</label> <input type="date" id="report-date" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2">
+       <div><label for="report-month" class="block text-sm font-bold mb-2 text-gray-300">Mês:</label> <select id="report-month" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
        </div>
-       <div><label for="report-month" class="block text-sm font-bold mb-2">Mês:</label> <select id="report-month" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
-       </div>
-       <div><label for="report-year" class="block text-sm font-bold mb-2">Ano:</label> <input type="number" id="report-year" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2">
+       <div><label for="report-year" class="block text-sm font-bold mb-2 text-gray-300">Ano:</label> <input type="number" id="report-year" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none">
        </div>
       </div>
      </div>
@@ -168,9 +271,9 @@
      <div class="card rounded-2xl p-6 mb-6">
       <h2 class="text-2xl font-bold text-green-400 mb-6">📅 Filtro de Período</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-       <div><label for="extrato-year" class="block text-sm font-bold mb-2">Ano:</label> <input type="number" id="extrato-year" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2">
+       <div><label for="extrato-year" class="block text-sm font-bold mb-2 text-gray-300">Ano:</label> <input type="number" id="extrato-year" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none">
        </div>
-       <div><label for="extrato-month" class="block text-sm font-bold mb-2">Mês (opcional):</label> <select id="extrato-month" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2"> <option value="">Anual (todos os meses)</option> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
+       <div><label for="extrato-month" class="block text-sm font-bold mb-2 text-gray-300">Mês (opcional):</label> <select id="extrato-month" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none"> <option value="">Anual (todos os meses)</option> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
        </div>
       </div>
      </div>
@@ -185,8 +288,8 @@
       </div>
      </div>
      <div class="card rounded-2xl p-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-4">👥 Colaboradores</h2>
-      <form id="prof-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><input type="text" id="prof-name" required placeholder="Nome do colaborador" class="bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 font-semibold"> <input type="number" id="prof-commission" required placeholder="Comissão %" min="0" max="100" class="bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 font-semibold"> <button type="submit" class="btn-primary text-white font-black py-3 rounded-xl">ADICIONAR</button>
+      <h2 class="text-2xl font-bold text-green-400 mb-4">👤 Colaboradores</h2>
+      <form id="prof-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><input type="text" id="prof-name" required placeholder="Nome do colaborador" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <input type="number" id="prof-commission" required placeholder="Comissão %" min="0" max="100" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <button type="submit" class="btn-primary text-white font-black py-3 rounded-xl">ADICIONAR</button>
       </form>
       <div id="prof-list" class="space-y-3"></div>
      </div>
@@ -195,13 +298,13 @@
      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="card rounded-2xl p-6">
        <h2 class="text-2xl font-bold text-green-400 mb-4">✂️ Cadastrar Serviço</h2>
-       <form id="service-form" class="space-y-4"><input type="text" id="service-name" required placeholder="Nome do serviço" class="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 font-semibold"> <input type="number" id="service-value" required placeholder="Valor R$" step="0.01" class="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 font-semibold"> <button type="submit" class="w-full btn-primary text-white font-black py-3 rounded-xl">CADASTRAR</button> <button type="button" id="cancel-edit-service" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl hidden">CANCELAR EDIÇÃO</button>
+       <form id="service-form" class="space-y-4"><input type="text" id="service-name" required placeholder="Nome do serviço" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <input type="number" id="service-value" required placeholder="Valor R$" step="0.01" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <button type="submit" class="w-full btn-primary text-white font-black py-3 rounded-xl">CADASTRAR</button>
        </form>
-       <div class="mt-6 pt-6 border-t border-slate-700"><button id="import-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl"> 📥 IMPORTAR SERVIÇOS PADRÃO </button>
+       <div class="mt-6 pt-6 border-t border-zinc-700"><button id="import-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl"> 📥 IMPORTAR SERVIÇOS PADRÃO </button>
        </div>
       </div>
       <div class="card rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-4">Lista (<span id="service-count">0</span>)</h2>
+       <h2 class="text-2xl font-bold text-green-400 mb-4">Lista de Serviços (<span id="service-count">0</span>)</h2>
        <div id="service-list" class="space-y-2 max-h-96 overflow-y-auto"></div>
       </div>
      </div>
@@ -209,8 +312,8 @@
     <div id="tab-custos" class="tab-content hidden">
      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="card rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-4">💰 Registrar Custo</h2>
-       <form id="cost-form" class="space-y-4"><input type="date" id="cost-date" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3"> <select id="cost-category" required class="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 font-semibold"> <option value="">Categoria</option> <option value="Aluguel">Aluguel</option> <option value="Energia">Energia</option> <option value="Água">Água</option> <option value="Internet">Internet</option> <option value="Produtos">Produtos</option> <option value="Equipamentos">Equipamentos</option> <option value="Manutenção">Manutenção</option> <option value="Marketing">Marketing</option> <option value="Outros">Outros</option> </select> <input type="text" id="cost-desc" required placeholder="Descrição" class="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3"> <input type="number" id="cost-value" required placeholder="Valor R$" step="0.01" class="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-3 font-semibold"> <button type="submit" class="w-full btn-primary text-white font-black py-3 rounded-xl">REGISTRAR</button>
+       <h2 class="text-2xl font-bold text-green-400 mb-4">💵 Registrar Custo</h2>
+       <form id="cost-form" class="space-y-4"><input type="date" id="cost-date" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none"> <input type="text" id="cost-desc" required placeholder="Descrição do custo" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <input type="number" id="cost-value" required placeholder="Valor R$" step="0.01" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <button type="submit" class="w-full btn-primary text-white font-black py-3 rounded-xl">REGISTRAR CUSTO</button>
        </form>
       </div>
       <div class="card rounded-2xl p-6">
@@ -219,148 +322,153 @@
       </div>
      </div>
     </div>
-   </main><!-- Modal de Confirmação -->
+   </main><!-- Botão Flutuante Editor --> <button id="floating-editor-btn" class="fixed bottom-6 right-6 bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl z-50 transition-all hover:scale-110 hover:rotate-90" title="Abrir Editor de Código"> ⚙️ </button> <!-- Modal Editor -->
+   <div id="editor-modal" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm overflow-y-auto">
+    <div class="min-h-screen px-4 py-8">
+     <div class="max-w-7xl mx-auto">
+      <div class="bg-zinc-900 rounded-2xl border border-zinc-700 overflow-hidden"><!-- Header do Modal -->
+       <div class="bg-gradient-to-r from-purple-900 to-blue-900 p-6 flex items-center justify-between border-b border-zinc-700">
+        <div>
+         <h2 class="text-3xl font-bold text-white title-font">🔧 EDITOR DE CÓDIGO</h2>
+         <p class="text-sm text-gray-300 mt-1">Editor avançado com suporte a JavaScript, HTML, CSS e JSON</p>
+        </div><button id="close-editor-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl transition-all hover:scale-105"> ✖️ FECHAR </button>
+       </div><!-- Conteúdo do Editor -->
+       <div class="p-6">
+        <div class="mb-6">
+         <div class="flex items-center justify-between mb-6">
+          <div class="flex gap-3"><button id="export-code-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-sm"> 📥 EXPORTAR CÓDIGO </button> <button id="format-code-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded-xl text-sm"> ✨ FORMATAR </button>
+          </div>
+         </div><!-- Barra de Ferramentas -->
+         <div class="editor-toolbar flex items-center gap-4 flex-wrap">
+          <div class="flex items-center gap-2"><label for="editor-language" class="text-sm font-bold text-gray-300">Linguagem:</label> <select id="editor-language" class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option value="javascript">JavaScript</option> <option value="htmlmixed">HTML</option> <option value="css">CSS</option> <option value="application/json">JSON</option> </select>
+          </div><button id="load-page-code-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-lg text-sm"> 📄 CARREGAR CÓDIGO DA PÁGINA </button>
+          <div class="flex items-center gap-2"><label for="editor-theme" class="text-sm font-bold text-gray-300">Tema:</label> <select id="editor-theme" class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option value="dracula">Dracula</option> <option value="monokai">Monokai</option> <option value="material">Material</option> <option value="default">Claro</option> </select>
+          </div>
+          <div class="flex items-center gap-2"><label for="editor-fontsize" class="text-sm font-bold text-gray-300">Tamanho:</label> <select id="editor-fontsize" class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option value="12">12px</option> <option value="14" selected>14px</option> <option value="16">16px</option> <option value="18">18px</option> <option value="20">20px</option> </select>
+          </div><button id="toggle-linenumbers-btn" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-3 py-2 rounded-lg text-sm"> 📄 Linhas: ON </button>
+          <div class="flex-1"></div>
+          <div class="flex items-center gap-2 text-sm text-gray-400"><span>Linhas: <span id="editor-lines">0</span></span> <span>|</span> <span>Caracteres: <span id="editor-chars">0</span></span>
+          </div>
+         </div><!-- Editor de Código -->
+         <div class="mb-4"><textarea id="code-editor"></textarea>
+         </div><!-- Botões de Ação -->
+         <div class="grid grid-cols-1 md:grid-cols-3 gap-4"><button id="clear-editor-btn" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-3 rounded-xl"> 🗑️ LIMPAR EDITOR </button> <button id="save-snippet-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl"> 💾 SALVAR SNIPPET </button> <button id="run-code-btn" class="btn-primary text-white font-black py-3 rounded-xl"> ▶️ EXECUTAR CÓDIGO </button>
+         </div><!-- Console de Saída -->
+         <div class="mt-6">
+          <div class="flex items-center justify-between mb-3">
+           <h3 class="text-lg font-bold text-green-400">📟 Console</h3><button id="clear-console-btn" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-3 py-2 rounded-lg text-sm"> 🗑️ LIMPAR </button>
+          </div>
+          <div id="console-output" class="bg-zinc-950 border border-zinc-700 rounded-xl p-4 font-mono text-sm min-h-[200px] max-h-[400px] overflow-y-auto"></div>
+         </div>
+        </div><!-- Snippets Salvos -->
+        <div class="card rounded-2xl p-6">
+         <h3 class="text-2xl font-bold text-green-400 mb-4">📚 Snippets Salvos (LocalStorage)</h3>
+         <div id="snippets-list" class="space-y-2"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div><!-- Modal de Confirmação -->
    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-    <div class="bg-slate-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-slate-700">
+    <div class="bg-zinc-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-zinc-700">
      <h3 class="text-xl font-bold text-red-400 mb-4">⚠️ Confirmar Exclusão</h3>
      <p id="modal-text" class="text-gray-300 mb-6"></p>
-     <div class="flex gap-3"><button id="modal-cancel" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="modal-confirm" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl">EXCLUIR</button>
+     <div class="flex gap-3"><button id="modal-cancel" class="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="modal-confirm" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl">EXCLUIR</button>
+     </div>
+    </div>
+   </div><!-- Modal de Salvar Snippet -->
+   <div id="snippet-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+    <div class="bg-zinc-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-zinc-700">
+     <h3 class="text-xl font-bold text-green-400 mb-4">💾 Salvar Snippet</h3><input type="text" id="snippet-name" placeholder="Nome do snippet" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white mb-4 focus:border-green-500 focus:outline-none">
+     <div class="flex gap-3"><button id="snippet-modal-cancel" class="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="snippet-modal-save" class="flex-1 btn-primary text-white font-bold py-3 rounded-xl">SALVAR</button>
      </div>
     </div>
    </div>
   </div>
   <script>
-    // API Config
+    // ====================================
+    // CONFIGURAÇÃO DA API GOOGLE SHEETS
+    // ====================================
     const API_URL = 'https://script.google.com/macros/s/AKfycbwcwmkZYIpAyqwPej-Myb4JI8mc6QUovHQnTJBQM9mJej9eAfVVxncNT_aJPURoy06t/exec';
     const TOKEN = '753826';
 
-    // Estado Global
+    // ====================================
+    // FUNÇÕES DE API
+    // ====================================
+    
+    // GET - Listar transações
+    async function apiGetListar() {
+      try {
+        const response = await fetch(`${API_URL}?acao=listar&token=${TOKEN}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('Erro ao listar:', error);
+        return { ok: false, items: [] };
+      }
+    }
+
+    // POST - Adicionar ou deletar
+    async function apiPost(acao, payload) {
+      try {
+        const body = {
+          token: TOKEN,
+          acao: acao,
+          ...payload
+        };
+        
+        // Google Apps Script aceita POST como query params em alguns casos
+        const params = new URLSearchParams(body);
+        
+        const response = await fetch(`${API_URL}?${params.toString()}`, {
+          method: 'POST',
+          mode: 'no-cors' // Importante para APIs do Google
+        });
+        
+        // Com no-cors, não conseguimos ler o response, mas se não der erro HTTP, funcionou
+        return { ok: true };
+      } catch (error) {
+        console.error('Erro no POST:', error);
+        return { ok: false, error: error.message };
+      }
+    }
+
+    // Adicionar transação
+    async function adicionarTransacao(obj) {
+      return await apiPost('adicionar', obj);
+    }
+
+    // Deletar transação
+    async function deletarTransacao(id) {
+      return await apiPost('deletar', { id: id });
+    }
+
+    // ====================================
+    // ESTADO GLOBAL
+    // ====================================
     const state = {
       services: [],
       professionals: [],
-      appointments: [],
-      costs: [],
+      transacoes: [], // Todas as transações da API
       selectedServices: [],
       deleteCallback: null,
-      selectedForDeletion: new Set(),
-      showOwnerValues: true,
-      allData: []
+      filterDate: null,
+      snippets: []
     };
 
-    // API Functions
-    async function apiList() {
-      try {
-        const response = await fetch(`${API_URL}?acao=listar&token=${TOKEN}`);
-        const data = await response.json();
-        return data || [];
-      } catch (error) {
-        console.error('Erro ao listar:', error);
-        return [];
-      }
-    }
+    // CodeMirror Instance
+    let editorInstance = null;
 
-    async function apiAdd(payload) {
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            acao: 'adicionar',
-            token: TOKEN,
-            ...payload
-          })
-        });
-        return await response.json();
-      } catch (error) {
-        console.error('Erro ao adicionar:', error);
-        return { success: false };
-      }
-    }
-
-    async function apiDelete(id) {
-      try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            acao: 'deletar',
-            token: TOKEN,
-            id: id
-          })
-        });
-        return await response.json();
-      } catch (error) {
-        console.error('Erro ao deletar:', error);
-        return { success: false };
-      }
-    }
-
-    // Load Data
-    async function loadData() {
-      const data = await apiList();
-      state.allData = data;
-      
-      state.services = [];
-      state.professionals = [];
-      state.appointments = [];
-      state.costs = [];
-
-      data.forEach(record => {
-        if (record.categoria === 'servico') {
-          state.services.push({
-            id: record.id,
-            name: record.descricao,
-            value: parseFloat(record.valor) || 0
-          });
-        } else if (record.categoria === 'profissional') {
-          state.professionals.push({
-            id: record.id,
-            name: record.descricao,
-            commission: parseFloat(record.valor) || 0
-          });
-        } else if (record.categoria === 'atendimento') {
-          const dateObj = new Date(record.data);
-          state.appointments.push({
-            id: record.id,
-            professionalName: record.tipo || '',
-            serviceName: record.descricao || '',
-            value: parseFloat(record.valor) || 0,
-            status: 'Pago',
-            date: record.data,
-            time: dateObj.toTimeString().slice(0, 5),
-            month: String(dateObj.getMonth() + 1).padStart(2, '0'),
-            year: String(dateObj.getFullYear())
-          });
-        } else if (record.categoria && record.categoria.startsWith('custo_')) {
-          state.costs.push({
-            id: record.id,
-            date: record.data,
-            category: record.tipo || '',
-            description: record.descricao || '',
-            value: parseFloat(record.valor) || 0,
-            costType: record.categoria === 'custo_fixo' ? 'Fixo' : 'Variável'
-          });
-        }
-      });
-
-      const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab;
-      if (!activeTab || activeTab === 'registro') {
-        render();
-      } else if (activeTab === 'historico') {
-        renderHistory();
-      } else if (activeTab === 'relatorios') {
-        renderReports();
-      } else if (activeTab === 'extrato') {
-        renderExtrato();
-      } else if (activeTab === 'profissionais') {
-        renderProfList();
-      } else if (activeTab === 'servicos') {
-        renderServiceList();
-      } else if (activeTab === 'custos') {
-        renderCostList();
-      }
-    }
-
+    // ====================================
+    // FUNÇÕES DE UI
+    // ====================================
+    
     // Toast
     function toast(msg, type = 'success') {
       const div = document.createElement('div');
@@ -370,6 +478,15 @@
       setTimeout(() => div.remove(), 3000);
     }
 
+    // Loading Overlay
+    function showLoading() {
+      document.getElementById('loading-overlay').classList.remove('hidden');
+    }
+
+    function hideLoading() {
+      document.getElementById('loading-overlay').classList.add('hidden');
+    }
+
     // Modal
     function showModal(msg, callback) {
       document.getElementById('modal-text').textContent = msg;
@@ -377,51 +494,79 @@
       state.deleteCallback = callback;
     }
 
-    document.getElementById('modal-cancel').onclick = () => {
+    document.getElementById('modal-cancel').addEventListener('click', () => {
       document.getElementById('modal').classList.add('hidden');
       state.deleteCallback = null;
-    };
+    });
 
-    document.getElementById('modal-confirm').onclick = () => {
+    document.getElementById('modal-confirm').addEventListener('click', () => {
       if (state.deleteCallback) state.deleteCallback();
       document.getElementById('modal').classList.add('hidden');
       state.deleteCallback = null;
-    };
-
-    // Tabs
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('active', 'text-green-400', 'border-b-2', 'border-green-400');
-          b.classList.add('text-gray-400');
-        });
-        btn.classList.add('active', 'text-green-400', 'border-b-2', 'border-green-400');
-        btn.classList.remove('text-gray-400');
-
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-        document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
-
-        if (btn.dataset.tab === 'historico') renderHistory();
-        if (btn.dataset.tab === 'relatorios') renderReports();
-        if (btn.dataset.tab === 'extrato') renderExtrato();
-      };
     });
 
-    // Render Principal
+    // ====================================
+    // CARREGAR DADOS DA API
+    // ====================================
+    async function carregarDados() {
+      showLoading();
+      
+      const result = await apiGetListar();
+      
+      if (result.ok && result.items) {
+        state.transacoes = result.items;
+        console.log('✅ Dados carregados:', state.transacoes.length, 'transações');
+      } else {
+        console.error('❌ Erro ao carregar dados');
+        toast('Erro ao carregar dados!', 'error');
+      }
+      
+      // Carregar dados do LocalStorage
+      carregarLocalStorage();
+      
+      hideLoading();
+      render();
+    }
+
+    // ====================================
+    // LOCALSTORAGE (Serviços, Profissionais, Snippets)
+    // ====================================
+    function salvarLocalStorage() {
+      localStorage.setItem('barbeariaServices', JSON.stringify(state.services));
+      localStorage.setItem('barbeariaProfessionals', JSON.stringify(state.professionals));
+      localStorage.setItem('barbeariaSnippets', JSON.stringify(state.snippets));
+    }
+
+    function carregarLocalStorage() {
+      const services = localStorage.getItem('barbeariaServices');
+      const professionals = localStorage.getItem('barbeariaProfessionals');
+      const snippets = localStorage.getItem('barbeariaSnippets');
+      
+      if (services) state.services = JSON.parse(services);
+      if (professionals) state.professionals = JSON.parse(professionals);
+      if (snippets) state.snippets = JSON.parse(snippets);
+    }
+
+    // ====================================
+    // RENDER
+    // ====================================
     function render() {
       renderServiceSelector();
       renderProfList();
       renderServiceList();
-      renderCostList();
       updateSelects();
+      
+      const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab;
+      if (activeTab === 'historico') renderHistory();
+      if (activeTab === 'relatorios') renderReports();
+      if (activeTab === 'extrato') renderExtrato();
+      if (activeTab === 'custos') renderCostList();
     }
 
     // Render Seletor de Serviços
     function renderServiceSelector() {
       const selector = document.getElementById('service-selector');
       if (!selector) return;
-      
-      const currentValue = selector.value;
       
       if (state.services.length === 0) {
         selector.innerHTML = '<option value="">Nenhum serviço cadastrado</option>';
@@ -433,12 +578,10 @@
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(s => `<option value="${s.id}">${s.name} - R$ ${s.value.toFixed(2)}</option>`)
           .join('');
-      
-      if (currentValue) selector.value = currentValue;
     }
 
     // Adicionar serviço selecionado
-    document.getElementById('add-service-btn').onclick = () => {
+    document.getElementById('add-service-btn').addEventListener('click', () => {
       const selector = document.getElementById('service-selector');
       const serviceId = selector.value;
       
@@ -459,7 +602,7 @@
       
       selector.value = '';
       renderSelectedServices();
-    };
+    });
 
     // Render Serviços Selecionados
     function renderSelectedServices() {
@@ -479,15 +622,15 @@
         const subtotal = s.value * s.qty;
         total += subtotal;
         return `
-          <div class="flex items-center justify-between bg-slate-700 rounded-lg p-3">
+          <div class="flex items-center justify-between bg-zinc-800 rounded-lg p-3">
             <div class="flex-1">
               <p class="font-bold">${s.name}</p>
-              <p class="text-sm text-gray-400">R$ ${s.value.toFixed(2)} x ${s.qty}</p>
+              <p class="text-sm text-gray-400">R$ ${s.value.toFixed(2)} x ${s.qty} = R$ ${subtotal.toFixed(2)}</p>
             </div>
             <div class="flex items-center gap-3">
-              <button class="qty-btn bg-slate-600 hover:bg-slate-500 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-action="minus">-</button>
+              <button class="qty-btn bg-zinc-700 hover:bg-zinc-600 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-action="minus">-</button>
               <span class="font-bold text-lg w-8 text-center">${s.qty}</span>
-              <button class="qty-btn bg-slate-600 hover:bg-slate-500 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-action="plus">+</button>
+              <button class="qty-btn bg-zinc-700 hover:bg-zinc-600 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-action="plus">+</button>
               <button class="remove-btn bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${s.id}">Remover</button>
             </div>
           </div>
@@ -497,7 +640,7 @@
       totalEl.textContent = `R$ ${total.toFixed(2)}`;
 
       list.querySelectorAll('.qty-btn').forEach(btn => {
-        btn.onclick = () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
           const action = btn.dataset.action;
           const service = state.selectedServices.find(s => s.id === id);
@@ -506,41 +649,26 @@
           else if (action === 'minus' && service.qty > 1) service.qty--;
           
           renderSelectedServices();
-        };
+        });
       });
 
       list.querySelectorAll('.remove-btn').forEach(btn => {
-        btn.onclick = () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
           state.selectedServices = state.selectedServices.filter(s => s.id !== id);
           renderSelectedServices();
-        };
+        });
       });
     }
 
-    // Salvar Atendimento Rápido
-    document.getElementById('save-quick-btn').onclick = async () => {
+    // Salvar Atendimento
+    document.getElementById('save-quick-btn').addEventListener('click', async () => {
       const prof = document.getElementById('quick-prof').value;
       const dateInput = document.getElementById('quick-date').value;
       const timeInput = document.getElementById('quick-time').value;
       
-      if (!prof) {
-        toast('Selecione um profissional!', 'error');
-        return;
-      }
-
-      if (!dateInput) {
-        toast('Selecione uma data!', 'error');
-        return;
-      }
-
-      if (!timeInput) {
-        toast('Selecione um horário!', 'error');
-        return;
-      }
-
-      if (state.selectedServices.length === 0) {
-        toast('Selecione pelo menos um serviço!', 'error');
+      if (!prof || !dateInput || !timeInput || state.selectedServices.length === 0) {
+        toast('Preencha todos os campos!', 'error');
         return;
       }
 
@@ -548,38 +676,352 @@
       btn.disabled = true;
       btn.innerHTML = '<div class="spinner mx-auto"></div>';
 
-      let saved = 0;
       for (const service of state.selectedServices) {
         for (let i = 0; i < service.qty; i++) {
-          const result = await apiAdd({
-            data: `${dateInput}T${timeInput}:00`,
-            tipo: prof,
+          const transacao = {
+            data: dateInput,
+            tipo: 'entrada',
             valor: service.value,
-            categoria: 'atendimento',
-            descricao: service.name
-          });
+            categoria: service.name,
+            descricao: `Profissional: ${prof} - Horário: ${timeInput}`
+          };
           
-          if (result.success) saved++;
+          const result = await adicionarTransacao(transacao);
+          
+          if (!result.ok) {
+            toast('Erro ao salvar atendimento!', 'error');
+            btn.disabled = false;
+            btn.textContent = '💾 SALVAR ATENDIMENTO';
+            return;
+          }
         }
       }
 
-      toast(`✅ ${saved} atendimento(s) salvos!`);
+      toast('✅ Atendimentos salvos!');
       state.selectedServices = [];
       renderSelectedServices();
       
       btn.disabled = false;
       btn.textContent = '💾 SALVAR ATENDIMENTO';
       
-      await loadData();
-    };
+      await carregarDados();
+    });
 
     // Limpar Seleção
-    document.getElementById('clear-quick-btn').onclick = () => {
+    document.getElementById('clear-quick-btn').addEventListener('click', () => {
       state.selectedServices = [];
       renderSelectedServices();
-    };
+    });
 
-    // Render Lista de Profissionais
+    // ====================================
+    // HISTÓRICO
+    // ====================================
+    function renderHistory() {
+      const list = document.getElementById('history-list');
+      
+      if (state.transacoes.length === 0) {
+        list.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhuma transação encontrada</p>';
+        document.getElementById('history-count').textContent = '0';
+        return;
+      }
+
+      let filteredTransacoes = state.transacoes;
+      
+      if (state.filterDate) {
+        filteredTransacoes = filteredTransacoes.filter(t => t.data === state.filterDate);
+      }
+
+      const sorted = filteredTransacoes.sort((a, b) => {
+        const dateA = new Date(a.criado_em || a.data);
+        const dateB = new Date(b.criado_em || b.data);
+        return dateB - dateA;
+      });
+
+      document.getElementById('history-count').textContent = sorted.length;
+
+      list.innerHTML = sorted.map(t => {
+        const isEntrada = t.tipo === 'entrada';
+        const icon = isEntrada ? '💰' : '💸';
+        const colorClass = isEntrada ? 'text-green-400' : 'text-red-400';
+        
+        return `
+          <div class="history-item card rounded-xl p-4">
+            <div class="flex items-center justify-between">
+              <div class="flex-1 grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
+                <div>
+                  <p class="text-gray-400 text-xs">Tipo</p>
+                  <p class="font-bold">${icon} ${isEntrada ? 'ENTRADA' : 'SAÍDA'}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs">Categoria</p>
+                  <p class="font-bold">${t.categoria || 'N/A'}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs">Data</p>
+                  <p class="font-bold">${new Date(t.data).toLocaleDateString('pt-BR')}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs">Descrição</p>
+                  <p class="font-bold text-xs">${t.descricao || 'N/A'}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs">Valor</p>
+                  <p class="font-bold ${colorClass}">R$ ${parseFloat(t.valor).toFixed(2)}</p>
+                </div>
+              </div>
+              <button class="del-transaction-btn bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm ml-4" data-id="${t.id}">
+                🗑️ Excluir
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      list.querySelectorAll('.del-transaction-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          
+          showModal('Excluir esta transação?', async () => {
+            btn.disabled = true;
+            btn.innerHTML = '<div class="spinner mx-auto"></div>';
+            
+            const result = await deletarTransacao(id);
+            
+            if (result.ok) {
+              toast('Transação excluída!');
+              await carregarDados();
+            } else {
+              toast('Erro ao excluir transação!', 'error');
+              btn.disabled = false;
+              btn.textContent = '🗑️ Excluir';
+            }
+          });
+        });
+      });
+    }
+
+    document.getElementById('filter-date').addEventListener('change', (e) => {
+      state.filterDate = e.target.value || null;
+      renderHistory();
+    });
+
+    document.getElementById('clear-filters-btn').addEventListener('click', () => {
+      document.getElementById('filter-date').value = '';
+      state.filterDate = null;
+      renderHistory();
+      toast('Filtro limpo!');
+    });
+
+    // ====================================
+    // RELATÓRIOS
+    // ====================================
+    function renderReports() {
+      const container = document.getElementById('reports-container');
+      const month = document.getElementById('report-month').value;
+      const year = document.getElementById('report-year').value;
+
+      if (!year) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano</p>';
+        return;
+      }
+
+      const monthTransacoes = state.transacoes.filter(t => {
+        const tDate = new Date(t.data);
+        return String(tDate.getMonth() + 1).padStart(2, '0') === month && 
+               String(tDate.getFullYear()) === year;
+      });
+
+      const entradas = monthTransacoes.filter(t => t.tipo === 'entrada');
+      const saidas = monthTransacoes.filter(t => t.tipo === 'saida');
+
+      const totalEntradas = entradas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      const totalSaidas = saidas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      const saldo = totalEntradas - totalSaidas;
+
+      // Agrupar por categoria
+      const categorias = {};
+      entradas.forEach(t => {
+        const cat = t.categoria || 'Sem categoria';
+        if (!categorias[cat]) {
+          categorias[cat] = { quantidade: 0, valor: 0 };
+        }
+        categorias[cat].quantidade++;
+        categorias[cat].valor += parseFloat(t.valor);
+      });
+
+      // Agrupar profissionais (pela descrição)
+      const profissionais = {};
+      entradas.forEach(t => {
+        const match = (t.descricao || '').match(/Profissional:\s*([^\-]+)/);
+        const prof = match ? match[1].trim() : 'Não especificado';
+        
+        if (!profissionais[prof]) {
+          profissionais[prof] = { quantidade: 0, valor: 0 };
+        }
+        profissionais[prof].quantidade++;
+        profissionais[prof].valor += parseFloat(t.valor);
+      });
+
+      container.innerHTML = `
+        <div class="card rounded-2xl p-6 mb-6">
+          <h3 class="text-2xl font-bold text-green-400 mb-6">📊 Resumo do Mês</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-zinc-900 rounded-xl p-6">
+              <p class="text-sm text-gray-400 mb-2">💰 Entradas</p>
+              <p class="text-3xl font-black text-green-400">R$ ${totalEntradas.toFixed(2)}</p>
+              <p class="text-xs text-gray-500 mt-2">${entradas.length} transações</p>
+            </div>
+            <div class="bg-zinc-900 rounded-xl p-6">
+              <p class="text-sm text-gray-400 mb-2">💸 Saídas</p>
+              <p class="text-3xl font-black text-red-400">R$ ${totalSaidas.toFixed(2)}</p>
+              <p class="text-xs text-gray-500 mt-2">${saidas.length} transações</p>
+            </div>
+            <div class="bg-zinc-900 rounded-xl p-6">
+              <p class="text-sm text-gray-400 mb-2">💎 Saldo</p>
+              <p class="text-3xl font-black ${saldo >= 0 ? 'text-blue-400' : 'text-orange-400'}">R$ ${saldo.toFixed(2)}</p>
+              <p class="text-xs text-gray-500 mt-2">${saldo >= 0 ? 'Positivo' : 'Negativo'}</p>
+            </div>
+            <div class="bg-zinc-900 rounded-xl p-6">
+              <p class="text-sm text-gray-400 mb-2">📊 Ticket Médio</p>
+              <p class="text-3xl font-black text-purple-400">R$ ${entradas.length > 0 ? (totalEntradas / entradas.length).toFixed(2) : '0.00'}</p>
+              <p class="text-xs text-gray-500 mt-2">por entrada</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card rounded-2xl p-6 mb-6">
+          <h3 class="text-2xl font-bold text-green-400 mb-6">👥 Por Profissional</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${Object.entries(profissionais)
+              .sort((a, b) => b[1].valor - a[1].valor)
+              .map(([nome, data]) => `
+                <div class="bg-zinc-900 rounded-xl p-4">
+                  <p class="font-bold text-lg mb-2">${nome}</p>
+                  <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <p class="text-gray-400">Atendimentos</p>
+                      <p class="font-bold text-white">${data.quantidade}</p>
+                    </div>
+                    <div>
+                      <p class="text-gray-400">Faturamento</p>
+                      <p class="font-bold text-green-400">R$ ${data.valor.toFixed(2)}</p>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+          </div>
+        </div>
+
+        <div class="card rounded-2xl p-6">
+          <h3 class="text-2xl font-bold text-green-400 mb-6">✂️ Por Serviço/Categoria</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            ${Object.entries(categorias)
+              .sort((a, b) => b[1].valor - a[1].valor)
+              .map(([nome, data]) => `
+                <div class="bg-zinc-900 rounded-xl p-4">
+                  <p class="font-bold text-lg mb-2">${nome}</p>
+                  <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <p class="text-gray-400">Quantidade</p>
+                      <p class="font-bold text-white">${data.quantidade}x</p>
+                    </div>
+                    <div>
+                      <p class="text-gray-400">Faturamento</p>
+                      <p class="font-bold text-green-400">R$ ${data.valor.toFixed(2)}</p>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById('report-month').addEventListener('change', renderReports);
+    document.getElementById('report-year').addEventListener('change', renderReports);
+
+    // ====================================
+    // EXTRATO
+    // ====================================
+    function renderExtrato() {
+      const container = document.getElementById('extrato-container');
+      const year = document.getElementById('extrato-year').value;
+      const month = document.getElementById('extrato-month').value;
+
+      if (!year) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano</p>';
+        return;
+      }
+
+      let filteredTransacoes = state.transacoes.filter(t => {
+        const tDate = new Date(t.data);
+        return String(tDate.getFullYear()) === year;
+      });
+
+      if (month) {
+        filteredTransacoes = filteredTransacoes.filter(t => {
+          const tDate = new Date(t.data);
+          return String(tDate.getMonth() + 1).padStart(2, '0') === month;
+        });
+      }
+
+      const entradas = filteredTransacoes.filter(t => t.tipo === 'entrada');
+      const saidas = filteredTransacoes.filter(t => t.tipo === 'saida');
+
+      const totalEntradas = entradas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      const totalSaidas = saidas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      const saldo = totalEntradas - totalSaidas;
+
+      const periodo = month ? `${month}/${year}` : year;
+
+      container.innerHTML = `
+        <div class="card rounded-2xl p-6">
+          <h3 class="text-2xl font-bold text-green-400 mb-6">📅 Extrato ${periodo}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-zinc-900 rounded-xl p-6">
+              <p class="text-sm text-gray-400 mb-2">💰 Total Entradas</p>
+              <p class="text-3xl font-black text-green-400">R$ ${totalEntradas.toFixed(2)}</p>
+              <p class="text-sm text-gray-400 mt-4">${entradas.length} transações</p>
+            </div>
+            <div class="bg-zinc-900 rounded-xl p-6">
+              <p class="text-sm text-gray-400 mb-2">💸 Total Saídas</p>
+              <p class="text-3xl font-black text-red-400">R$ ${totalSaidas.toFixed(2)}</p>
+              <p class="text-sm text-gray-400 mt-4">${saidas.length} transações</p>
+            </div>
+            <div class="bg-zinc-900 rounded-xl p-6">
+              <p class="text-sm text-gray-400 mb-2">💎 Saldo Final</p>
+              <p class="text-3xl font-black ${saldo >= 0 ? 'text-blue-400' : 'text-orange-400'}">R$ ${saldo.toFixed(2)}</p>
+              <p class="text-sm text-gray-400 mt-4">${saldo >= 0 ? 'Lucro' : 'Prejuízo'}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById('extrato-year').addEventListener('change', renderExtrato);
+    document.getElementById('extrato-month').addEventListener('change', renderExtrato);
+
+    // ====================================
+    // PROFISSIONAIS (LocalStorage)
+    // ====================================
+    document.getElementById('prof-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const name = document.getElementById('prof-name').value;
+      const commission = parseFloat(document.getElementById('prof-commission').value);
+
+      state.professionals.push({
+        id: Date.now().toString(),
+        name: name,
+        commission: commission
+      });
+
+      salvarLocalStorage();
+      toast('Colaborador adicionado!');
+      e.target.reset();
+      render();
+    });
+
     function renderProfList() {
       const list = document.getElementById('prof-list');
       if (state.professionals.length === 0) {
@@ -588,7 +1030,7 @@
       }
 
       list.innerHTML = state.professionals.map(p => `
-        <div class="bg-slate-700 rounded-xl p-4 flex items-center justify-between">
+        <div class="bg-zinc-900 rounded-xl p-4 flex items-center justify-between">
           <div>
             <p class="font-bold text-lg">${p.name}</p>
             <p class="text-sm text-gray-400">Comissão: ${p.commission}%</p>
@@ -598,49 +1040,41 @@
       `).join('');
 
       list.querySelectorAll('.del-prof-btn').forEach(btn => {
-        btn.onclick = async () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
           const prof = state.professionals.find(p => p.id === id);
-          showModal(`Excluir ${prof.name}?`, async () => {
-            const result = await apiDelete(id);
-            if (result.success) {
-              toast('Profissional excluído!');
-              await loadData();
-            }
+          
+          showModal(`Excluir ${prof.name}?`, () => {
+            state.professionals = state.professionals.filter(p => p.id !== id);
+            salvarLocalStorage();
+            toast('Profissional excluído!');
+            render();
           });
-        };
+        });
       });
     }
 
-    // Form Profissional
-    document.getElementById('prof-form').onsubmit = async (e) => {
+    // ====================================
+    // SERVIÇOS (LocalStorage)
+    // ====================================
+    document.getElementById('service-form').addEventListener('submit', (e) => {
       e.preventDefault();
-      const btn = e.target.querySelector('button');
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner mx-auto"></div>';
+      
+      const name = document.getElementById('service-name').value;
+      const value = parseFloat(document.getElementById('service-value').value);
 
-      const name = document.getElementById('prof-name').value;
-      const commission = document.getElementById('prof-commission').value;
-
-      const result = await apiAdd({
-        data: new Date().toISOString(),
-        tipo: 'entrada',
-        valor: parseFloat(commission),
-        categoria: 'profissional',
-        descricao: name
+      state.services.push({
+        id: Date.now().toString(),
+        name: name,
+        value: value
       });
 
-      if (result.success) {
-        toast('Colaborador adicionado!');
-        e.target.reset();
-        await loadData();
-      }
+      salvarLocalStorage();
+      toast('✅ Serviço cadastrado!');
+      e.target.reset();
+      render();
+    });
 
-      btn.disabled = false;
-      btn.textContent = 'ADICIONAR';
-    };
-
-    // Render Lista de Serviços
     function renderServiceList() {
       const list = document.getElementById('service-list');
       const count = document.getElementById('service-count');
@@ -652,8 +1086,8 @@
       }
 
       list.innerHTML = state.services.map(s => `
-        <div class="bg-slate-700 rounded-lg p-3 flex items-center justify-between">
-          <div>
+        <div class="service-item bg-zinc-900 rounded-lg p-3 flex items-center justify-between">
+          <div class="flex-1">
             <p class="font-bold">${s.name}</p>
             <p class="text-sm text-green-400">R$ ${s.value.toFixed(2)}</p>
           </div>
@@ -662,723 +1096,437 @@
       `).join('');
 
       list.querySelectorAll('.del-service-btn').forEach(btn => {
-        btn.onclick = async () => {
+        btn.addEventListener('click', () => {
           const id = btn.dataset.id;
           const service = state.services.find(s => s.id === id);
-          showModal(`Excluir ${service.name}?`, async () => {
-            const result = await apiDelete(id);
-            if (result.success) {
-              toast('Serviço excluído!');
-              await loadData();
-            }
+          
+          showModal(`Excluir ${service.name}?`, () => {
+            state.services = state.services.filter(s => s.id !== id);
+            salvarLocalStorage();
+            toast('Serviço excluído!');
+            render();
           });
-        };
+        });
       });
     }
 
-    // Form Serviço
-    document.getElementById('service-form').onsubmit = async (e) => {
-      e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner mx-auto"></div>';
-
-      const name = document.getElementById('service-name').value;
-      const value = parseFloat(document.getElementById('service-value').value);
-
-      const result = await apiAdd({
-        data: new Date().toISOString(),
-        tipo: 'entrada',
-        valor: value,
-        categoria: 'servico',
-        descricao: name
-      });
-
-      if (result.success) {
-        toast('Serviço cadastrado!');
-        e.target.reset();
-        await loadData();
-      }
-
-      btn.disabled = false;
-      btn.textContent = 'CADASTRAR';
-    };
-
     // Importar Serviços
-    document.getElementById('import-btn').onclick = async () => {
-      const btn = document.getElementById('import-btn');
-      btn.disabled = true;
-      btn.innerHTML = '<div class="spinner mx-auto"></div>';
-
+    document.getElementById('import-btn').addEventListener('click', () => {
       const servicos = [
         { name: 'CORTE', value: 40.00 },
         { name: 'CABELO MÉDIO', value: 50.00 },
         { name: 'CORTE CARECA', value: 30.00 },
         { name: 'CORTE+SOBRANCELHA+BOTOX', value: 140.00 },
         { name: 'CORTE+SOBRANCELHA', value: 50.00 },
-        { name: 'CORTE+PIGMENTO', value: 50.00 },
-        { name: 'CORTE+PENTEADO+SOMB...', value: 80.00 },
-        { name: 'CORTE+PENTEADO', value: 70.00 },
-        { name: 'CORTE+BARBA+SOBRANCELHA+PIG', value: 100.00 },
-        { name: 'CORTE+BARBA+PIGMENTO', value: 90.00 },
         { name: 'CORTE+BARBA', value: 80.00 },
-        { name: 'CORTE+BARBA+SOBRANCELHA', value: 90.00 },
-        { name: 'CORTE+BARBA+PENTEADO', value: 110.00 },
-        { name: 'CORTE+BARBA+SOMB+PENTEADO', value: 120.00 },
-        { name: 'CORTE+SOMBRANCELHA+BIGODE', value: 60.00 },
-        { name: 'CORTE+SOMB+BIGODE+CAVANHA', value: 80.00 },
-        { name: 'CORTE+SOMBR+PENTEADO', value: 80.00 },
-        { name: 'BARBA+PEZINHO', value: 50.00 },
-        { name: 'BARBA+SOBRANCELHA', value: 50.00 },
-        { name: 'CORTE+PLATINADO', value: 130.00 },
-        { name: 'CORTE+LUZES', value: 120.00 },
-        { name: 'CORTE+ALIZANTE', value: 80.00 },
-        { name: 'CORTE+ALIZANTE+SOBRANCELHA', value: 90.00 },
-        { name: 'CORTE+ALIZANTE+PENTEADO', value: 110.00 },
-        { name: 'CORTE+ALIZANTE+SOMBR...', value: 90.00 },
-        { name: 'ALIZANTE+PEZINHO', value: 50.00 },
-        { name: 'CORTE+BOTOX', value: 120.00 },
-        { name: 'CORTE+PROGRESSIVA', value: 160.00 },
-        { name: 'PEZINHO+SOMBRANCELHA', value: 20.00 },
-        { name: 'CORTE+CAVANHAQUE', value: 70.00 },
-        { name: 'PENTEADO+BARBA', value: 70.00 },
-        { name: 'SOBRANCELHA+PIGMENTO', value: 20.00 },
-        { name: 'SOBRANCELHA', value: 10.00 },
-        { name: 'GEL', value: 15.00 },
-        { name: 'POMADA', value: 20.00 },
-        { name: 'PLATINADO', value: 130.00 },
-        { name: 'PIGMENTO', value: 10.00 },
-        { name: 'LUZES', value: 80.00 },
-        { name: 'ALIZANTE', value: 40.00 },
-        { name: 'PEZINHO', value: 10.00 },
-        { name: 'PENTEADO', value: 30.00 },
-        { name: 'BARBA', value: 40.00 },
-        { name: 'CAVANHAQUE', value: 30.00 }
+        { name: 'BARBA', value: 40.00 }
       ];
 
-      let count = 0;
-      for (const s of servicos) {
+      servicos.forEach(s => {
         const exists = state.services.find(existing => existing.name.toLowerCase() === s.name.toLowerCase());
         if (!exists) {
-          const result = await apiAdd({
-            data: new Date().toISOString(),
-            tipo: 'entrada',
-            valor: s.value,
-            categoria: 'servico',
-            descricao: s.name
+          state.services.push({
+            id: Date.now().toString() + Math.random(),
+            name: s.name,
+            value: s.value
           });
-          if (result.success) count++;
         }
-      }
-
-      toast(`✅ ${count} serviços importados!`);
-      btn.disabled = false;
-      btn.textContent = '📥 IMPORTAR SERVIÇOS PADRÃO';
-      await loadData();
-    };
-
-    // Render Custos
-    function renderCostList() {
-      const list = document.getElementById('cost-list');
-      if (state.costs.length === 0) {
-        list.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum custo registrado</p>';
-        return;
-      }
-
-      const fixedCosts = state.costs.filter(c => c.costType === 'Fixo');
-      const variableCosts = state.costs.filter(c => c.costType === 'Variável');
-
-      let html = '';
-
-      if (fixedCosts.length > 0) {
-        html += '<div class="mb-4"><h4 class="text-sm font-bold text-green-400 mb-2">💰 CUSTOS FIXOS MENSAIS</h4>';
-        html += fixedCosts.map(c => `
-          <div class="bg-zinc-900 rounded-lg p-3 flex items-center justify-between mb-2 border-l-4 border-orange-500">
-            <div>
-              <p class="font-bold">${c.description} <span class="text-xs bg-orange-600 px-2 py-1 rounded-full ml-2">FIXO</span></p>
-              <p class="text-sm text-gray-400">${c.category}</p>
-              <p class="text-sm text-red-400 font-bold mt-1">R$ ${c.value.toFixed(2)} / mês</p>
-            </div>
-            <button class="del-cost-btn bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${c.id}">Excluir</button>
-          </div>
-        `).join('');
-        html += '</div>';
-      }
-
-      if (variableCosts.length > 0) {
-        html += '<div><h4 class="text-sm font-bold text-blue-400 mb-2">📊 CUSTOS VARIÁVEIS</h4>';
-        html += variableCosts.slice(-15).reverse().map(c => `
-          <div class="bg-zinc-900 rounded-lg p-3 flex items-center justify-between mb-2">
-            <div>
-              <p class="font-bold">${c.description}</p>
-              <p class="text-sm text-gray-400">${c.category} • ${new Date(c.date).toLocaleDateString('pt-BR')}</p>
-              <p class="text-sm text-red-400 font-bold mt-1">R$ ${c.value.toFixed(2)}</p>
-            </div>
-            <button class="del-cost-btn bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${c.id}">Excluir</button>
-          </div>
-        `).join('');
-        html += '</div>';
-      }
-
-      list.innerHTML = html;
-
-      list.querySelectorAll('.del-cost-btn').forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.dataset.id;
-          const cost = state.costs.find(c => c.id === id);
-          showModal(`Excluir ${cost.description}?`, async () => {
-            const result = await apiDelete(id);
-            if (result.success) {
-              toast('Custo excluído!');
-              await loadData();
-            }
-          });
-        };
       });
-    }
 
-    // Form Custo
-    document.getElementById('cost-form').onsubmit = async (e) => {
+      salvarLocalStorage();
+      toast('✅ Serviços importados!');
+      render();
+    });
+
+    // ====================================
+    // CUSTOS
+    // ====================================
+    document.getElementById('cost-form').addEventListener('submit', async (e) => {
       e.preventDefault();
+      
       const btn = e.target.querySelector('button');
       btn.disabled = true;
       btn.innerHTML = '<div class="spinner mx-auto"></div>';
 
       const date = document.getElementById('cost-date').value;
-      const category = document.getElementById('cost-category').value;
       const desc = document.getElementById('cost-desc').value;
-      const value = document.getElementById('cost-value').value;
+      const value = parseFloat(document.getElementById('cost-value').value);
 
-      const result = await apiAdd({
-        data: `${date}T00:00:00`,
-        tipo: category,
-        valor: parseFloat(value),
-        categoria: 'custo_variavel',
+      const transacao = {
+        data: date,
+        tipo: 'saida',
+        valor: value,
+        categoria: 'Custo Operacional',
         descricao: desc
-      });
-
-      if (result.success) {
+      };
+      
+      const result = await adicionarTransacao(transacao);
+      
+      if (result.ok) {
         toast('Custo registrado!');
         e.target.reset();
         document.getElementById('cost-date').value = new Date().toISOString().split('T')[0];
-        await loadData();
+        await carregarDados();
+      } else {
+        toast('Erro ao registrar custo!', 'error');
+      }
+      
+      btn.disabled = false;
+      btn.textContent = 'REGISTRAR CUSTO';
+    });
+
+    function renderCostList() {
+      const list = document.getElementById('cost-list');
+      const costs = state.transacoes.filter(t => t.tipo === 'saida');
+      
+      if (costs.length === 0) {
+        list.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum custo registrado</p>';
+        return;
       }
 
-      btn.disabled = false;
-      btn.textContent = 'REGISTRAR';
-    };
+      const recent = costs.slice(-10).reverse();
 
-    // Atualizar Selects
+      list.innerHTML = recent.map(c => `
+        <div class="cost-item bg-zinc-900 rounded-lg p-3 flex items-center justify-between mb-2">
+          <div>
+            <p class="font-bold">${c.descricao || 'N/A'}</p>
+            <p class="text-sm text-gray-400">${c.categoria || 'Custo'} • ${new Date(c.data).toLocaleDateString('pt-BR')}</p>
+            <p class="text-sm text-red-400 font-bold mt-1">R$ ${parseFloat(c.valor).toFixed(2)}</p>
+          </div>
+          <button class="del-cost-btn bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${c.id}">Excluir</button>
+        </div>
+      `).join('');
+
+      list.querySelectorAll('.del-cost-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          
+          showModal('Excluir este custo?', async () => {
+            const result = await deletarTransacao(id);
+            
+            if (result.ok) {
+              toast('Custo excluído!');
+              await carregarDados();
+            } else {
+              toast('Erro ao excluir custo!', 'error');
+            }
+          });
+        });
+      });
+    }
+
+    // ====================================
+    // SELECTS
+    // ====================================
     function updateSelects() {
       const quickProf = document.getElementById('quick-prof');
-      const filterProf = document.getElementById('filter-prof');
-
       const profs = [{name: 'THIAGO'}, ...state.professionals];
       
       const quickValue = quickProf.value;
       quickProf.innerHTML = '<option value="">Selecione o profissional</option>' + 
         profs.map(p => `<option value="${p.name}">${p.name === 'THIAGO' ? '👑 ' : ''}${p.name}</option>`).join('');
       if (quickValue) quickProf.value = quickValue;
-
-      const filterValue = filterProf.value;
-      filterProf.innerHTML = '<option value="">Todos</option>' + 
-        profs.map(p => `<option value="${p.name}">${p.name}</option>`).join('');
-      if (filterValue) filterProf.value = filterValue;
     }
 
-    // Histórico
-    function renderHistory() {
-      const list = document.getElementById('history-list');
-      const filterProf = document.getElementById('filter-prof').value;
-      const filterStatus = document.getElementById('filter-status').value;
-      const filterDate = document.getElementById('filter-date').value;
-      const filterMonth = document.getElementById('filter-month').value;
-      const selectAllBtn = document.getElementById('select-all-btn');
-      const deleteSelectedBtn = document.getElementById('delete-selected-btn');
+    // ====================================
+    // TABS
+    // ====================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('active', 'text-green-400', 'border-b-2', 'border-green-400');
+          b.classList.add('text-gray-400');
+        });
+        btn.classList.add('active', 'text-green-400', 'border-b-2', 'border-green-400');
+        btn.classList.remove('text-gray-400');
 
-      let filtered = state.appointments;
-      if (filterProf) filtered = filtered.filter(a => a.professionalName === filterProf);
-      if (filterStatus) filtered = filtered.filter(a => a.status === filterStatus);
-      if (filterDate) filtered = filtered.filter(a => a.date.split('T')[0] === filterDate);
-      if (filterMonth) filtered = filtered.filter(a => a.month === filterMonth);
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
 
-      if (filtered.length === 0) {
-        list.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhum atendimento encontrado</p>';
-        selectAllBtn.classList.add('hidden');
-        deleteSelectedBtn.classList.add('hidden');
-        return;
+        if (btn.dataset.tab === 'historico') renderHistory();
+        if (btn.dataset.tab === 'relatorios') renderReports();
+        if (btn.dataset.tab === 'extrato') renderExtrato();
+        if (btn.dataset.tab === 'custos') renderCostList();
+      });
+    });
+
+    // ====================================
+    // EDITOR DE CÓDIGO
+    // ====================================
+    document.getElementById('floating-editor-btn').addEventListener('click', () => {
+      document.getElementById('editor-modal').classList.remove('hidden');
+      if (!editorInstance) {
+        initEditor();
       }
+    });
 
-      selectAllBtn.classList.remove('hidden');
+    document.getElementById('close-editor-btn').addEventListener('click', () => {
+      document.getElementById('editor-modal').classList.add('hidden');
+    });
 
-      list.innerHTML = filtered.reverse().map(a => {
-        const isSelected = state.selectedForDeletion.has(a.id);
-        return `
-        <div class="card rounded-xl p-4 flex items-center gap-4 ${isSelected ? 'ring-2 ring-red-500' : ''}">
-          <input type="checkbox" class="appt-checkbox w-5 h-5 rounded cursor-pointer" data-id="${a.id}" ${isSelected ? 'checked' : ''}>
-          <div class="flex-1 grid grid-cols-2 md:grid-cols-6 gap-3 text-sm">
-            <div>
-              <p class="text-gray-400 text-xs">Serviço</p>
-              <p class="font-bold">${a.serviceName}</p>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs">Profissional</p>
-              <p class="font-bold">${a.professionalName}</p>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs">Data</p>
-              <p class="font-bold">${new Date(a.date).toLocaleDateString('pt-BR')}</p>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs">Horário</p>
-              <p class="font-bold">${a.time}</p>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs">Valor</p>
-              <p class="font-bold text-green-400">R$ ${a.value.toFixed(2)}</p>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs">Status</p>
-              <p class="font-bold ${a.status === 'Pago' ? 'text-green-400' : 'text-yellow-400'}">${a.status}</p>
-            </div>
-          </div>
-          <button class="del-appt-btn bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${a.id}">Excluir</button>
-        </div>
-      `;
-      }).join('');
+    function initEditor() {
+      if (editorInstance) return;
 
-      list.querySelectorAll('.appt-checkbox').forEach(checkbox => {
-        checkbox.onchange = (e) => {
-          const id = e.target.dataset.id;
-          if (e.target.checked) {
-            state.selectedForDeletion.add(id);
+      editorInstance = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+        mode: 'javascript',
+        theme: 'dracula',
+        lineNumbers: true,
+        autoCloseBrackets: true,
+        matchBrackets: true,
+        styleActiveLine: true,
+        indentUnit: 2,
+        tabSize: 2,
+        lineWrapping: true
+      });
+
+      editorInstance.setSize('100%', '600px');
+
+      editorInstance.on('change', () => {
+        const content = editorInstance.getValue();
+        const lines = content.split('\n').length;
+        const chars = content.length;
+        document.getElementById('editor-lines').textContent = lines;
+        document.getElementById('editor-chars').textContent = chars;
+      });
+
+      document.getElementById('editor-language').addEventListener('change', (e) => {
+        editorInstance.setOption('mode', e.target.value);
+      });
+
+      document.getElementById('editor-theme').addEventListener('change', (e) => {
+        editorInstance.setOption('theme', e.target.value);
+      });
+
+      document.getElementById('editor-fontsize').addEventListener('change', (e) => {
+        document.querySelector('.CodeMirror').style.fontSize = e.target.value + 'px';
+        editorInstance.refresh();
+      });
+
+      let lineNumbersEnabled = true;
+      document.getElementById('toggle-linenumbers-btn').addEventListener('click', () => {
+        lineNumbersEnabled = !lineNumbersEnabled;
+        editorInstance.setOption('lineNumbers', lineNumbersEnabled);
+        document.getElementById('toggle-linenumbers-btn').textContent = 
+          lineNumbersEnabled ? '📄 Linhas: ON' : '📄 Linhas: OFF';
+      });
+
+      document.getElementById('clear-editor-btn').addEventListener('click', () => {
+        if (editorInstance.getValue().trim() !== '') {
+          showModal('Limpar todo o conteúdo do editor?', () => {
+            editorInstance.setValue('');
+            addConsoleMessage('Editor limpo!', 'info');
+          });
+        }
+      });
+
+      document.getElementById('format-code-btn').addEventListener('click', () => {
+        try {
+          const code = editorInstance.getValue();
+          const mode = editorInstance.getOption('mode');
+          
+          if (mode === 'application/json') {
+            const formatted = JSON.stringify(JSON.parse(code), null, 2);
+            editorInstance.setValue(formatted);
+            addConsoleMessage('✅ JSON formatado com sucesso!', 'success');
           } else {
-            state.selectedForDeletion.delete(id);
+            addConsoleMessage('⚠️ Formatação automática disponível apenas para JSON', 'warning');
           }
-          updateDeleteButton();
-        };
+        } catch (e) {
+          addConsoleMessage('❌ Erro ao formatar: ' + e.message, 'error');
+        }
       });
 
-      list.querySelectorAll('.del-appt-btn').forEach(btn => {
-        btn.onclick = async () => {
-          const id = btn.dataset.id;
-          const appt = state.appointments.find(a => a.id === id);
-          showModal(`Excluir atendimento de ${appt.serviceName}?`, async () => {
-            const result = await apiDelete(id);
-            if (result.isOk || result.success) {
-              toast('Atendimento excluído!');
-              state.selectedForDeletion.delete(id);
-              await loadData();
-              renderHistory();
-            }
-          });
-        };
+      document.getElementById('export-code-btn').addEventListener('click', () => {
+        const code = editorInstance.getValue();
+        const blob = new Blob([code], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'code-export.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        addConsoleMessage('📥 Código exportado com sucesso!', 'success');
       });
 
-      updateDeleteButton();
-    }
+      document.getElementById('run-code-btn').addEventListener('click', () => {
+        const code = editorInstance.getValue();
+        const mode = editorInstance.getOption('mode');
+        
+        clearConsole();
+        
+        if (mode === 'javascript') {
+          executeJavaScript(code);
+        } else {
+          addConsoleMessage(`⚠️ Execução disponível apenas para JavaScript. Modo atual: ${mode}`, 'warning');
+        }
+      });
 
-    function updateDeleteButton() {
-      const deleteBtn = document.getElementById('delete-selected-btn');
-      const count = document.getElementById('selected-count');
-      const selectedCount = state.selectedForDeletion.size;
+      document.getElementById('clear-console-btn').addEventListener('click', clearConsole);
 
-      count.textContent = selectedCount;
+      document.getElementById('load-page-code-btn').addEventListener('click', () => {
+        const pageHTML = document.documentElement.outerHTML;
+        editorInstance.setValue(pageHTML);
+        editorInstance.setOption('mode', 'htmlmixed');
+        document.getElementById('editor-language').value = 'htmlmixed';
+        addConsoleMessage('📄 Código completo da página carregado no editor!', 'success');
+        addConsoleMessage(`Total de ${pageHTML.length} caracteres carregados`, 'info');
+      });
 
-      if (selectedCount > 0) {
-        deleteBtn.classList.remove('hidden');
-      } else {
-        deleteBtn.classList.add('hidden');
-      }
-    }
+      document.getElementById('save-snippet-btn').addEventListener('click', () => {
+        const code = editorInstance.getValue();
+        if (!code.trim()) {
+          toast('Escreva algum código antes de salvar!', 'error');
+          return;
+        }
+        document.getElementById('snippet-modal').classList.remove('hidden');
+      });
 
-    document.getElementById('select-all-btn').onclick = () => {
-      const filterProf = document.getElementById('filter-prof').value;
-      const filterStatus = document.getElementById('filter-status').value;
+      document.getElementById('snippet-modal-cancel').addEventListener('click', () => {
+        document.getElementById('snippet-modal').classList.add('hidden');
+        document.getElementById('snippet-name').value = '';
+      });
 
-      let filtered = state.appointments;
-      if (filterProf) filtered = filtered.filter(a => a.professionalName === filterProf);
-      if (filterStatus) filtered = filtered.filter(a => a.status === filterStatus);
-
-      const allSelected = filtered.every(a => state.selectedForDeletion.has(a.id));
-
-      if (allSelected) {
-        filtered.forEach(a => state.selectedForDeletion.delete(a.id));
-      } else {
-        filtered.forEach(a => state.selectedForDeletion.add(a.id));
-      }
-
-      renderHistory();
-    };
-
-    document.getElementById('delete-selected-btn').onclick = async () => {
-      const count = state.selectedForDeletion.size;
-      showModal(`Excluir ${count} atendimento(s) selecionado(s)?`, async () => {
-        const btn = document.getElementById('delete-selected-btn');
-        btn.disabled = true;
-        btn.innerHTML = '<div class="spinner mx-auto"></div>';
-
-        const idsToDelete = Array.from(state.selectedForDeletion);
-        let deleted = 0;
-
-        for (const id of idsToDelete) {
-          const result = await apiDelete(id);
-          if (result.success) deleted++;
+      document.getElementById('snippet-modal-save').addEventListener('click', () => {
+        const name = document.getElementById('snippet-name').value.trim();
+        if (!name) {
+          toast('Digite um nome para o snippet!', 'error');
+          return;
         }
 
-        state.selectedForDeletion.clear();
-        toast(`✅ ${deleted} atendimento(s) excluídos!`);
-        
-        btn.disabled = false;
-        btn.innerHTML = '🗑️ Excluir Selecionados (<span id="selected-count">0</span>)';
-        await loadData();
-        renderHistory();
-      });
-    };
+        const code = editorInstance.getValue();
+        const language = editorInstance.getOption('mode');
 
-    document.getElementById('filter-date').onchange = () => {
-      state.selectedForDeletion.clear();
-      renderHistory();
-    };
-    document.getElementById('filter-month').onchange = () => {
-      state.selectedForDeletion.clear();
-      renderHistory();
-    };
-    document.getElementById('filter-prof').onchange = () => {
-      state.selectedForDeletion.clear();
-      renderHistory();
-    };
-    document.getElementById('filter-status').onchange = () => {
-      state.selectedForDeletion.clear();
-      renderHistory();
-    };
+        state.snippets.push({
+          id: Date.now().toString(),
+          name: name,
+          code: code,
+          language: language,
+          created: new Date().toISOString()
+        });
 
-    // Relatórios
-    function renderReports() {
-      const date = document.getElementById('report-date').value;
-      const month = document.getElementById('report-month').value;
-      const year = document.getElementById('report-year').value;
-
-      const container = document.getElementById('reports-container');
-
-      const paidAppts = state.appointments.filter(a => a.status === 'Pago');
-      
-      const dayAppts = date ? paidAppts.filter(a => a.date.split('T')[0] === date) : [];
-      const monthAppts = month && year ? paidAppts.filter(a => a.month === month && a.year === year) : [];
-
-      const ownerDay = dayAppts.filter(a => a.professionalName === 'THIAGO').reduce((sum, a) => sum + a.value, 0);
-      const othersDay = dayAppts.filter(a => a.professionalName !== 'THIAGO').reduce((sum, a) => sum + (a.value * 0.5), 0);
-      const ownerDayTotal = ownerDay + othersDay;
-
-      const ownerMonth = monthAppts.filter(a => a.professionalName === 'THIAGO').reduce((sum, a) => sum + a.value, 0);
-      const othersMonth = monthAppts.filter(a => a.professionalName !== 'THIAGO').reduce((sum, a) => sum + (a.value * 0.5), 0);
-      const ownerMonthTotal = ownerMonth + othersMonth;
-
-      const totalFat = monthAppts.reduce((sum, a) => sum + a.value, 0);
-
-      const dayFaturamentoBruto = dayAppts.reduce((sum, a) => sum + a.value, 0);
-      const monthLucroLiquido = totalFat;
-
-      const today = new Date(date);
-      const startOfWeek = new Date(today);
-      startOfWeek.setDate(today.getDate() - today.getDay());
-      const endOfWeek = new Date(startOfWeek);
-      endOfWeek.setDate(startOfWeek.getDate() + 6);
-
-      const weekAppts = paidAppts.filter(a => {
-        const apptDate = new Date(a.date);
-        return apptDate >= startOfWeek && apptDate <= endOfWeek && a.year === year && a.month === month;
+        salvarLocalStorage();
+        toast('💾 Snippet salvo com sucesso!');
+        document.getElementById('snippet-modal').classList.add('hidden');
+        document.getElementById('snippet-name').value = '';
+        renderSnippets();
       });
 
-      const weekFaturamento = weekAppts.reduce((sum, a) => sum + a.value, 0);
-      const weekQtdServicos = weekAppts.length;
-
-      const serviceCount = {};
-      monthAppts.forEach(a => {
-        serviceCount[a.serviceName] = (serviceCount[a.serviceName] || 0) + 1;
-      });
-      const topService = Object.entries(serviceCount).sort((a, b) => b[1] - a[1])[0] || ['Nenhum', 0];
-
-      const ticketMedioDia = dayAppts.length > 0 ? dayFaturamentoBruto / dayAppts.length : 0;
-      const ticketMedioSemana = weekQtdServicos > 0 ? weekFaturamento / weekQtdServicos : 0;
-      const ticketMedioMes = monthAppts.length > 0 ? totalFat / monthAppts.length : 0;
-
-      const mediaDiaria = totalFat / 30;
-      const statusDia = dayFaturamentoBruto >= mediaDiaria ? '🟢 BOM' : '🔴 ABAIXO';
-      const statusSemana = weekFaturamento >= (mediaDiaria * 7) ? '🟢 BOA' : '🔴 ABAIXO';
-      const statusMes = totalFat >= (mediaDiaria * 30) ? '🟢 BOM' : '🔴 ABAIXO';
-
-      container.innerHTML = `
-        ${state.showOwnerValues ? `
-        <div class="card rounded-2xl p-6 mb-6">
-          <h3 class="text-2xl font-bold text-yellow-400 mb-6">👑 THIAGO (Proprietário)</h3>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 class="text-lg font-bold text-gray-300 mb-3">📅 DIA</h4>
-              <div class="space-y-3">
-                <div class="bg-zinc-900 rounded-xl p-4">
-                  <p class="text-sm text-gray-400 mb-2">💰 Lucro Bruto</p>
-                  <p class="text-2xl font-black text-blue-400">R$ ${dayFaturamentoBruto.toFixed(2)}</p>
-                  <p class="text-xs text-gray-500 mt-2">✂️ ${dayAppts.filter(a => a.professionalName === 'THIAGO').length} atendimentos diretos</p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 class="text-lg font-bold text-gray-300 mb-3">📊 MENSAL</h4>
-              <div class="space-y-3">
-                <div class="bg-zinc-900 rounded-xl p-4">
-                  <p class="text-sm text-gray-400 mb-2">💰 Lucro Bruto</p>
-                  <p class="text-2xl font-black text-blue-400">R$ ${totalFat.toFixed(2)}</p>
-                  <p class="text-xs text-gray-500 mt-2">✂️ ${monthAppts.filter(a => a.professionalName === 'THIAGO').length} atendimentos diretos</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        ` : ''}
-
-        <div class="card rounded-2xl p-6 mb-6">
-          <h3 class="text-2xl font-bold text-green-400 mb-4">👥 Colaboradores</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            ${state.professionals.map(p => {
-              const pDay = dayAppts.filter(a => a.professionalName === p.name).reduce((sum, a) => sum + (a.value * (p.commission / 100)), 0);
-              const pMonth = monthAppts.filter(a => a.professionalName === p.name).reduce((sum, a) => sum + (a.value * (p.commission / 100)), 0);
-              const pDayCount = dayAppts.filter(a => a.professionalName === p.name).length;
-              const pMonthCount = monthAppts.filter(a => a.professionalName === p.name).length;
-              return `
-                <div class="bg-zinc-900 rounded-xl p-4">
-                  <p class="font-bold text-lg mb-3">${p.name} <span class="text-xs text-gray-400">(${p.commission}%)</span></p>
-                  <div class="space-y-2">
-                    <div>
-                      <p class="text-xs text-gray-400">Dia</p>
-                      <p class="text-xl font-bold text-green-400">R$ ${pDay.toFixed(2)}</p>
-                      <p class="text-xs text-gray-500">✂️ ${pDayCount} atendimentos</p>
-                    </div>
-                    <div>
-                      <p class="text-xs text-gray-400">Mês</p>
-                      <p class="text-xl font-bold text-blue-400">R$ ${pMonth.toFixed(2)}</p>
-                      <p class="text-xs text-gray-500">✂️ ${pMonthCount} atendimentos</p>
-                    </div>
-                  </div>
-                </div>
-              `;
-            }).join('') || '<p class="text-gray-400 text-center py-4 col-span-full">Nenhum colaborador cadastrado</p>'}
-          </div>
-        </div>
-
-        <div class="card rounded-2xl p-6">
-          <h3 class="text-2xl font-bold text-green-400 mb-6">📊 Análise de Desempenho</h3>
-          
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-lg mb-4 text-gray-300">🎯 Status de Desempenho</h4>
-              <div class="space-y-3">
-                <div class="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
-                  <span class="font-bold">Dia:</span>
-                  <span class="font-black text-lg">${statusDia}</span>
-                </div>
-                <div class="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
-                  <span class="font-bold">Semana:</span>
-                  <span class="font-black text-lg">${statusSemana}</span>
-                </div>
-                <div class="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
-                  <span class="font-bold">Mês:</span>
-                  <span class="font-black text-lg">${statusMes}</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-lg mb-4 text-gray-300">🏆 Serviço Mais Vendido (Mês)</h4>
-              <div class="text-center py-4">
-                <p class="text-3xl font-black text-green-400 mb-2">${topService[0]}</p>
-                <p class="text-gray-400 text-sm">${topService[1]} atendimentos</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-sm mb-2 text-gray-400">💳 Ticket Médio (Dia)</h4>
-              <p class="text-3xl font-black text-blue-400">R$ ${ticketMedioDia.toFixed(2)}</p>
-            </div>
-
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-sm mb-2 text-gray-400">💳 Ticket Médio (Semana)</h4>
-              <p class="text-3xl font-black text-purple-400">R$ ${ticketMedioSemana.toFixed(2)}</p>
-            </div>
-
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-sm mb-2 text-gray-400">💳 Ticket Médio (Mês)</h4>
-              <p class="text-3xl font-black text-green-400">R$ ${ticketMedioMes.toFixed(2)}</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-sm mb-2 text-gray-400">✂️ Serviços (Dia)</h4>
-              <p class="text-3xl font-black text-blue-400">${dayAppts.length}</p>
-              <p class="text-xs text-gray-500 mt-1">atendimentos</p>
-            </div>
-
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-sm mb-2 text-gray-400">✂️ Serviços (Semana)</h4>
-              <p class="text-3xl font-black text-purple-400">${weekQtdServicos}</p>
-              <p class="text-xs text-gray-500 mt-1">atendimentos</p>
-            </div>
-
-            <div class="bg-zinc-900 rounded-xl p-5">
-              <h4 class="font-bold text-sm mb-2 text-gray-400">✂️ Serviços (Mês)</h4>
-              <p class="text-3xl font-black text-green-400">${monthAppts.length}</p>
-              <p class="text-xs text-gray-500 mt-1">atendimentos</p>
-            </div>
-          </div>
-        </div>
-      `;
+      renderSnippets();
     }
 
-    document.getElementById('report-date').onchange = renderReports;
-    document.getElementById('report-month').onchange = renderReports;
-    document.getElementById('report-year').onchange = renderReports;
+    function addConsoleMessage(msg, type = 'log') {
+      const console = document.getElementById('console-output');
+      const colors = {
+        log: 'text-gray-300',
+        info: 'text-blue-400',
+        success: 'text-green-400',
+        warning: 'text-yellow-400',
+        error: 'text-red-400'
+      };
 
-    document.getElementById('toggle-owner-btn').onclick = () => {
-      state.showOwnerValues = !state.showOwnerValues;
-      const icon = document.getElementById('toggle-icon');
-      const text = document.getElementById('toggle-text');
-      
-      if (state.showOwnerValues) {
-        icon.textContent = '👁️';
-        text.textContent = 'Ocultar Proprietário';
-      } else {
-        icon.textContent = '🔒';
-        text.textContent = 'Mostrar Proprietário';
+      const div = document.createElement('div');
+      div.className = `${colors[type]} mb-2`;
+      div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      console.appendChild(div);
+      console.scrollTop = console.scrollHeight;
+    }
+
+    function clearConsole() {
+      document.getElementById('console-output').innerHTML = '';
+      addConsoleMessage('Console limpo!', 'info');
+    }
+
+    function executeJavaScript(code) {
+      const originalConsoleLog = console.log;
+      const originalConsoleError = console.error;
+      const originalConsoleWarn = console.warn;
+
+      console.log = (...args) => {
+        addConsoleMessage(args.join(' '), 'log');
+        originalConsoleLog.apply(console, args);
+      };
+
+      console.error = (...args) => {
+        addConsoleMessage('ERROR: ' + args.join(' '), 'error');
+        originalConsoleError.apply(console, args);
+      };
+
+      console.warn = (...args) => {
+        addConsoleMessage('WARN: ' + args.join(' '), 'warning');
+        originalConsoleWarn.apply(console, args);
+      };
+
+      try {
+        addConsoleMessage('▶️ Executando código...', 'info');
+        const result = eval(code);
+        if (result !== undefined) {
+          addConsoleMessage('Resultado: ' + JSON.stringify(result), 'success');
+        }
+        addConsoleMessage('✅ Execução concluída!', 'success');
+      } catch (e) {
+        addConsoleMessage('❌ Erro: ' + e.message, 'error');
+      } finally {
+        console.log = originalConsoleLog;
+        console.error = originalConsoleError;
+        console.warn = originalConsoleWarn;
       }
+    }
+
+    function renderSnippets() {
+      const list = document.getElementById('snippets-list');
       
-      renderReports();
-    };
-
-    // Extrato
-    function renderExtrato() {
-      const year = document.getElementById('extrato-year').value;
-      const month = document.getElementById('extrato-month').value;
-      const container = document.getElementById('extrato-container');
-
-      if (!year) {
-        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano para visualizar o extrato</p>';
+      if (state.snippets.length === 0) {
+        list.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum snippet salvo</p>';
         return;
       }
 
-      const paidAppts = state.appointments.filter(a => a.status === 'Pago');
+      const sorted = state.snippets.sort((a, b) => new Date(b.created) - new Date(a.created));
 
-      if (month) {
-        const monthAppts = paidAppts.filter(a => a.month === month && a.year === year);
-
-        const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                           'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-        
-        const faturamento = monthAppts.reduce((sum, a) => sum + a.value, 0);
-
-        const ownerRevenue = monthAppts.filter(a => a.professionalName === 'THIAGO').reduce((sum, a) => sum + a.value, 0);
-        const collabRevenue = monthAppts.filter(a => a.professionalName !== 'THIAGO').reduce((sum, a) => sum + (a.value * 0.5), 0);
-        const ownerTotal = ownerRevenue + collabRevenue;
-
-        container.innerHTML = `
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-2xl font-bold text-green-400 mb-6">📅 ${monthNames[parseInt(month) - 1]} ${year}</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div class="bg-zinc-900 rounded-xl p-6">
-                <p class="text-sm text-gray-400 mb-2">Faturamento Total</p>
-                <p class="text-3xl font-black text-blue-400">R$ ${faturamento.toFixed(2)}</p>
-              </div>
-              <div class="bg-zinc-900 rounded-xl p-6">
-                <p class="text-sm text-gray-400 mb-2">👑 Receita THIAGO</p>
-                <p class="text-3xl font-black text-green-400">R$ ${ownerTotal.toFixed(2)}</p>
-              </div>
-            </div>
+      list.innerHTML = sorted.map(s => `
+        <div class="bg-zinc-900 rounded-lg p-4 flex items-center justify-between">
+          <div class="flex-1">
+            <p class="font-bold text-lg">${s.name}</p>
+            <p class="text-sm text-gray-400">${s.language} • ${new Date(s.created).toLocaleString('pt-BR')}</p>
           </div>
-        `;
+          <div class="flex gap-2">
+            <button class="load-snippet-btn bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">📂 Carregar</button>
+            <button class="del-snippet-btn bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">Excluir</button>
+          </div>
+        </div>
+      `).join('');
 
-      } else {
-        const yearAppts = paidAppts.filter(a => a.year === year);
+      list.querySelectorAll('.load-snippet-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const snippet = state.snippets.find(s => s.id === id);
+          if (editorInstance && snippet) {
+            editorInstance.setValue(snippet.code);
+            editorInstance.setOption('mode', snippet.language);
+            document.getElementById('editor-language').value = snippet.language;
+            toast(`📂 Snippet "${snippet.name}" carregado!`);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        });
+      });
 
-        const monthlyData = [];
-        for (let m = 1; m <= 12; m++) {
-          const monthStr = String(m).padStart(2, '0');
-          const mAppts = yearAppts.filter(a => a.month === monthStr);
-
-          const fat = mAppts.reduce((sum, a) => sum + a.value, 0);
-
-          const ownerRev = mAppts.filter(a => a.professionalName === 'THIAGO').reduce((sum, a) => sum + a.value, 0);
-          const collabRev = mAppts.filter(a => a.professionalName !== 'THIAGO').reduce((sum, a) => sum + (a.value * 0.5), 0);
-          const ownerTot = ownerRev + collabRev;
-
-          monthlyData.push({
-            month: m,
-            faturamento: fat,
-            ownerReceita: ownerTot
+      list.querySelectorAll('.del-snippet-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const snippet = state.snippets.find(s => s.id === id);
+          
+          showModal(`Excluir snippet "${snippet.name}"?`, () => {
+            state.snippets = state.snippets.filter(s => s.id !== id);
+            salvarLocalStorage();
+            toast('Snippet excluído!');
+            renderSnippets();
           });
-        }
-
-        const totalFat = monthlyData.reduce((sum, m) => sum + m.faturamento, 0);
-        const totalOwnerReceita = monthlyData.reduce((sum, m) => sum + m.ownerReceita, 0);
-
-        const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-
-        container.innerHTML = `
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-2xl font-bold text-green-400 mb-6">📅 Extrato Anual ${year}</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <div class="bg-zinc-900 rounded-xl p-6">
-                <p class="text-sm text-gray-400 mb-2">Faturamento Anual</p>
-                <p class="text-3xl font-black text-blue-400">R$ ${totalFat.toFixed(2)}</p>
-              </div>
-              <div class="bg-zinc-900 rounded-xl p-6">
-                <p class="text-sm text-gray-400 mb-2">👑 Receita THIAGO</p>
-                <p class="text-3xl font-black text-green-400">R$ ${totalOwnerReceita.toFixed(2)}</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="card rounded-2xl p-6">
-            <h3 class="text-xl font-bold text-green-400 mb-4">📊 Detalhamento Mensal</h3>
-            <div class="overflow-x-auto">
-              <table class="w-full text-sm">
-                <thead class="bg-zinc-900">
-                  <tr>
-                    <th class="px-4 py-3 text-left">Mês</th>
-                    <th class="px-4 py-3 text-right">Faturamento</th>
-                    <th class="px-4 py-3 text-right">👑 Receita THIAGO</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${monthlyData.map((m, idx) => `
-                    <tr class="border-t border-zinc-700 hover:bg-zinc-900/50">
-                      <td class="px-4 py-3 font-bold">${monthNames[idx]}</td>
-                      <td class="px-4 py-3 text-right text-blue-400">R$ ${m.faturamento.toFixed(2)}</td>
-                      <td class="px-4 py-3 text-right font-bold text-green-400">R$ ${m.ownerReceita.toFixed(2)}</td>
-                    </tr>
-                  `).join('')}
-                  <tr class="border-t-2 border-green-500 bg-zinc-900 font-bold">
-                    <td class="px-4 py-3">TOTAL</td>
-                    <td class="px-4 py-3 text-right text-blue-400">R$ ${totalFat.toFixed(2)}</td>
-                    <td class="px-4 py-3 text-right text-green-400">R$ ${totalOwnerReceita.toFixed(2)}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-      }
+        });
+      });
     }
 
-    document.getElementById('extrato-year').onchange = renderExtrato;
-    document.getElementById('extrato-month').onchange = renderExtrato;
-
-    // Atualizar data e hora
+    // ====================================
+    // DATA/HORA NO HEADER
+    // ====================================
     function updateHeaderDateTime() {
       const now = new Date();
       const dateStr = now.toLocaleDateString('pt-BR', { 
@@ -1397,26 +1545,34 @@
       document.getElementById('header-time').textContent = timeStr;
     }
 
-    // Init
+    // ====================================
+    // INICIALIZAÇÃO
+    // ====================================
     async function initApp() {
-      await loadData();
-    }
-    
-    const today = new Date().toISOString().split('T')[0];
-    const now = new Date().toTimeString().slice(0, 5);
-    document.getElementById('quick-date').value = today;
-    document.getElementById('quick-time').value = now;
-    document.getElementById('report-date').value = today;
-    document.getElementById('report-month').value = String(new Date().getMonth() + 1).padStart(2, '0');
-    document.getElementById('report-year').value = new Date().getFullYear();
-    document.getElementById('extrato-year').value = new Date().getFullYear();
-    document.getElementById('cost-date').value = today;
-    document.getElementById('filter-date').value = today;
+      console.log('🚀 Iniciando aplicação...');
+      
+      const today = new Date().toISOString().split('T')[0];
+      const now = new Date().toTimeString().slice(0, 5);
+      
+      document.getElementById('quick-date').value = today;
+      document.getElementById('quick-time').value = now;
+      document.getElementById('report-month').value = String(new Date().getMonth() + 1).padStart(2, '0');
+      document.getElementById('report-year').value = new Date().getFullYear();
+      document.getElementById('extrato-year').value = new Date().getFullYear();
+      document.getElementById('cost-date').value = today;
+      
+      document.getElementById('filter-date').value = today;
+      state.filterDate = today;
 
-    updateHeaderDateTime();
-    setInterval(updateHeaderDateTime, 1000);
+      updateHeaderDateTime();
+      setInterval(updateHeaderDateTime, 1000);
+
+      await carregarDados();
+      
+      console.log('✅ Sistema iniciado com sucesso!');
+    }
 
     initApp();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bb2e2e87203f200',t:'MTc2Nzk1MDcxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bd68f03937e5f28',t:'MTc2ODMyNDc2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
