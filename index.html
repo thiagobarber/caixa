@@ -3,27 +3,11 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sistema Barbearia</title>
+  <title>Sistema Barbearia - Caixa</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/material.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/dialog/dialog.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/xml/xml.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/css/css.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/htmlmixed/htmlmixed.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/closebrackets.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/edit/matchbrackets.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/selection/active-line.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/search/search.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/search/searchcursor.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/dialog/dialog.min.js"></script>
   <style>
     body {
       box-sizing: border-box;
@@ -36,7 +20,21 @@
     .title-font {
       font-family: 'Bebas Neue', sans-serif;
     }
-    
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #app {
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
     .toast {
       position: fixed;
       top: 20px;
@@ -60,17 +58,7 @@
         opacity: 1;
       }
     }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      transition: all 0.3s ease;
-    }
-    
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
-    }
-    
+
     .spinner {
       border: 3px solid rgba(255, 255, 255, 0.3);
       border-top-color: white;
@@ -85,87 +73,13 @@
       to { transform: rotate(360deg); }
     }
 
-    .card {
-      background: linear-gradient(135deg, #18181b 0%, #0a0a0a 100%);
-      border: 1px solid rgba(82, 82, 91, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .card:hover {
-      border-color: rgba(82, 82, 91, 0.4);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    }
-
-    html, body {
-      height: 100%;
-      overflow: hidden;
-    }
-
-    #app {
-      height: 100%;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .tab-content {
-      will-change: auto;
-    }
-
-    ::-webkit-scrollbar {
-      width: 12px;
-      height: 12px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #18181b;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      border-radius: 10px;
-      border: 2px solid #18181b;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, #059669 0%, #047857 100%);
-    }
-
-    ::-webkit-scrollbar-corner {
-      background: #18181b;
-    }
-
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: #10b981 #18181b;
-    }
-
-    .history-item, .cost-item, .service-item {
-      contain: layout style paint;
-    }
-
-    .CodeMirror {
-      height: 600px;
-      font-size: 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(82, 82, 91, 0.3);
-    }
-
-    .editor-toolbar {
-      background: #18181b;
-      border: 1px solid rgba(82, 82, 91, 0.3);
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 16px;
-    }
-
     .loading-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.95);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -181,13 +95,31 @@
       height: 60px;
       animation: spin 0.8s linear infinite;
     }
+
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #18181b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      border-radius: 10px;
+      border: 2px solid #18181b;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
  <body class="h-full bg-black text-gray-100"><!-- Loading Overlay -->
-  <div id="loading-overlay" class="loading-overlay">
+  <div id="loading-overlay" class="loading-overlay hidden">
    <div class="loading-spinner"></div>
    <p class="text-white text-xl font-bold mt-6">Carregando dados...</p>
   </div>
@@ -206,279 +138,251 @@
    </header><!-- Tabs -->
    <nav class="bg-zinc-950 border-b border-zinc-800">
     <div class="max-w-7xl mx-auto px-4">
-     <div class="flex gap-1 overflow-x-auto"><button class="tab-btn active px-3 py-3 font-bold text-xs flex-1 whitespace-nowrap text-green-400 border-b-2 border-green-400" data-tab="registro">📝 REGISTRO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="historico">📋 HISTÓRICO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="relatorios">📊 RELATÓRIOS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="extrato">💰 EXTRATO</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="profissionais">👤 PROFISSIONAIS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="servicos">✂️ SERVIÇOS</button> <button class="tab-btn px-3 py-3 font-bold text-xs flex-1 text-gray-400 whitespace-nowrap" data-tab="custos">💵 CUSTOS</button>
+     <div class="flex gap-1 overflow-x-auto"><button class="tab-btn active px-6 py-4 font-bold text-sm text-green-400 border-b-2 border-green-400" data-tab="registro">📝 REGISTRO</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="servicos">✂️ SERVIÇOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="profissionais">👤 PROFISSIONAIS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="custos">💵 CUSTOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="historico">📋 HISTÓRICO</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="relatorios">📊 RELATÓRIOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="faturamento">💼 FATURAMENTO</button>
      </div>
     </div>
    </nav><!-- Main Content -->
-   <main class="max-w-7xl mx-auto px-4 py-8"><!-- TAB: REGISTRO -->
+   <main class="max-w-7xl mx-auto px-4 py-8"><!-- TAB: REGISTRO DE ATENDIMENTO -->
     <div id="tab-registro" class="tab-content">
-     <div class="card rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-6">📝 Registro Rápido</h2><!-- Selecionar Profissional, Data e Horário -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-       <div><label for="quick-prof" class="block text-sm font-bold mb-3 text-gray-300">PROFISSIONAL:</label> <select id="quick-prof" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione o profissional</option> <option value="THIAGO">👑 THIAGO (Proprietário)</option> </select>
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+      <h2 class="text-2xl font-bold text-green-400 mb-6">📝 Novo Atendimento</h2>
+      <form id="form-atendimento" class="space-y-6"><!-- Profissional, Data e Horário -->
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div><label for="atend-prof" class="block text-sm font-bold mb-2 text-gray-300">PROFISSIONAL:</label> <select id="atend-prof" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione</option> <option value="THIAGO">👑 THIAGO (Proprietário)</option> </select>
+        </div>
+        <div><label for="atend-data" class="block text-sm font-bold mb-2 text-gray-300">DATA:</label> <input type="date" id="atend-data" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        </div>
+        <div><label for="atend-hora" class="block text-sm font-bold mb-2 text-gray-300">HORÁRIO:</label> <input type="time" id="atend-hora" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        </div>
+       </div><!-- Selecionar Serviço -->
+       <div><label for="atend-servico" class="block text-sm font-bold mb-2 text-gray-300">SERVIÇO:</label>
+        <div class="flex gap-3"><select id="atend-servico" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione um serviço</option> </select> <button type="button" id="btn-add-servico" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black px-8 py-3 rounded-xl"> ➕ ADICIONAR </button>
+        </div>
+       </div><!-- Lista de Serviços Selecionados -->
+       <div id="servicos-selecionados-container" class="hidden"><label class="block text-sm font-bold mb-2 text-gray-300">SERVIÇOS SELECIONADOS:</label>
+        <div id="servicos-selecionados-lista" class="bg-zinc-900 rounded-xl p-4 space-y-2 mb-4"></div>
+        <div class="bg-gradient-to-r from-green-900 to-green-800 rounded-xl p-4 flex items-center justify-between"><span class="text-lg font-bold text-white">TOTAL:</span> <span id="total-atendimento" class="text-3xl font-black text-green-300">R$ 0,00</span>
+        </div>
+       </div><!-- Botões -->
+       <div class="flex gap-4"><button type="submit" class="flex-1 bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black py-4 rounded-xl text-lg"> 💾 SALVAR ATENDIMENTO </button> <button type="button" id="btn-limpar-atendimento" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-8 py-4 rounded-xl"> 🗑️ LIMPAR </button>
        </div>
-       <div><label for="quick-date" class="block text-sm font-bold mb-3 text-gray-300">DATA DO ATENDIMENTO:</label> <input type="date" id="quick-date" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none">
+      </form>
+     </div>
+    </div><!-- TAB: SERVIÇOS -->
+    <div id="tab-servicos" class="tab-content hidden">
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Cadastrar Serviço -->
+      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+       <h2 class="text-2xl font-bold text-green-400 mb-6">✂️ Cadastrar Serviço</h2>
+       <form id="form-servico" class="space-y-4">
+        <div><label for="servico-nome" class="block text-sm font-bold mb-2 text-gray-300">NOME:</label> <input type="text" id="servico-nome" required placeholder="Ex: Corte Masculino" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        </div>
+        <div><label for="servico-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="servico-valor" required step="0.01" min="0" placeholder="Ex: 40.00" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        </div><button type="submit" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black py-3 rounded-xl"> CADASTRAR </button>
+       </form>
+       <div class="mt-6 pt-6 border-t border-zinc-700"><button id="btn-importar-servicos" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-black py-3 rounded-xl"> 📥 IMPORTAR SERVIÇOS PADRÃO </button>
        </div>
-       <div><label for="quick-time" class="block text-sm font-bold mb-3 text-gray-300">HORÁRIO:</label> <input type="time" id="quick-time" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none">
-       </div>
-      </div><!-- Seletor de Serviços -->
-      <div class="mb-6"><label for="service-selector" class="block text-sm font-bold mb-3 text-gray-300">ADICIONAR SERVIÇO:</label>
-       <div class="flex gap-3"><select id="service-selector" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-lg font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione um serviço</option> </select> <button id="add-service-btn" class="btn-primary text-white font-black px-8 py-3 rounded-xl whitespace-nowrap"> ➕ ADICIONAR </button>
-       </div>
-      </div><!-- Serviços Selecionados -->
-      <div id="selected-services-container" class="mb-6 hidden"><label class="block text-sm font-bold mb-3 text-gray-300">SERVIÇOS SELECIONADOS:</label>
-       <div id="selected-services" class="bg-zinc-900 rounded-xl p-4 space-y-2"></div>
-       <div class="mt-4 flex items-center justify-between bg-zinc-900 rounded-xl p-4"><span class="text-lg font-bold text-gray-300">TOTAL:</span> <span id="total-value" class="text-2xl font-black text-green-400">R$ 0,00</span>
-       </div>
-      </div><!-- Botões de Ação -->
-      <div class="flex gap-3"><button id="save-quick-btn" class="flex-1 btn-primary text-white font-black py-4 rounded-xl text-lg shadow-lg"> 💾 SALVAR ATENDIMENTO </button> <button id="clear-quick-btn" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-4 rounded-xl"> 🗑️ LIMPAR </button>
+      </div><!-- Lista de Serviços -->
+      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+       <h2 class="text-2xl font-bold text-green-400 mb-6">Lista de Serviços (<span id="count-servicos">0</span>)</h2>
+       <div id="lista-servicos" class="space-y-2 max-h-96 overflow-y-auto"></div>
+      </div>
+     </div>
+    </div><!-- TAB: PROFISSIONAIS -->
+    <div id="tab-profissionais" class="tab-content hidden">
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
+      <h2 class="text-2xl font-bold text-yellow-400 mb-4">👑 Proprietário</h2>
+      <div class="bg-zinc-900 rounded-xl p-6">
+       <p class="text-3xl font-black text-yellow-400">THIAGO</p>
+       <p class="text-gray-400 mt-2">Recebe 50% dos atendimentos dos colaboradores</p>
+      </div>
+     </div>
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+      <h2 class="text-2xl font-bold text-green-400 mb-6">👤 Colaboradores</h2>
+      <form id="form-profissional" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><input type="text" id="prof-nome" required placeholder="Nome do colaborador" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <input type="number" id="prof-comissao" required placeholder="Comissão %" min="0" max="100" value="50" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <button type="submit" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black py-3 rounded-xl"> ADICIONAR </button>
+      </form>
+      <div id="lista-profissionais" class="space-y-3"></div>
+     </div>
+    </div><!-- TAB: CUSTOS -->
+    <div id="tab-custos" class="tab-content hidden">
+     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Registrar Custo -->
+      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+       <h2 class="text-2xl font-bold text-red-400 mb-6">💵 Registrar Custo</h2>
+       <form id="form-custo" class="space-y-4">
+        <div><label for="custo-data" class="block text-sm font-bold mb-2 text-gray-300">DATA:</label> <input type="date" id="custo-data" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        </div>
+        <div><label for="custo-desc" class="block text-sm font-bold mb-2 text-gray-300">DESCRIÇÃO:</label> <input type="text" id="custo-desc" required placeholder="Ex: Energia elétrica" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        </div>
+        <div><label for="custo-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="custo-valor" required step="0.01" min="0" placeholder="Ex: 150.00" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        </div><button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-black py-3 rounded-xl"> REGISTRAR CUSTO </button>
+       </form>
+      </div><!-- Lista de Custos -->
+      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+       <h2 class="text-2xl font-bold text-red-400 mb-6">Custos Recentes</h2>
+       <div id="lista-custos" class="space-y-2 max-h-96 overflow-y-auto"></div>
       </div>
      </div>
     </div><!-- TAB: HISTÓRICO -->
     <div id="tab-historico" class="tab-content hidden">
-     <div class="card rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-6">🔍 Filtros</h2>
-      <div class="flex gap-4">
-       <div class="flex-1"><label for="filter-date" class="block text-sm font-bold mb-2 text-gray-300">Filtrar por Data:</label> <input type="date" id="filter-date" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none">
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
+      <h2 class="text-2xl font-bold text-green-400 mb-4">🔍 Filtros e Ações</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+       <div><label for="filtro-data" class="block text-sm font-bold mb-2 text-gray-300">FILTRAR POR DATA:</label> <input type="date" id="filtro-data" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
        </div>
-       <div class="flex items-end"><button id="clear-filters-btn" class="bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-2 rounded-xl whitespace-nowrap"> 🗑️ LIMPAR FILTRO </button>
+       <div class="flex items-end"><button id="btn-limpar-filtro" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-3 rounded-xl"> 🗑️ LIMPAR FILTRO </button>
        </div>
+       <div class="flex items-end"><button id="btn-modo-selecao" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"> ☑ SELECIONAR MÚLTIPLOS </button>
+       </div>
+      </div>
+     </div><!-- Container de Seleção Múltipla -->
+     <div id="container-excluir-multiplos" class="bg-gradient-to-br from-red-900 to-red-800 border border-red-700 rounded-2xl p-6 mb-6 hidden">
+      <div class="flex flex-wrap items-center gap-4"><button id="btn-selecionar-todos" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"> ✅ SELECIONAR TODOS </button> <button id="btn-desselecionar-todos" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-6 py-3 rounded-xl"> ❌ DESSELECIONAR TODOS </button> <button id="btn-excluir-multiplos" disabled class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl opacity-50 cursor-not-allowed"> 🗑️ EXCLUIR SELECIONADOS </button>
       </div>
      </div>
-     <div class="card rounded-2xl p-6">
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
       <div class="flex items-center justify-between mb-6">
        <h2 class="text-2xl font-bold text-green-400">📋 Histórico de Transações</h2>
-       <div class="flex items-center gap-4">
-        <p class="text-sm text-gray-400"><span id="history-count">0</span> registros</p>
-       </div>
+       <p class="text-sm text-gray-400"><span id="count-historico">0</span> registros</p>
       </div>
-      <div id="history-list" class="space-y-3"></div>
+      <div id="lista-historico" class="space-y-3"></div>
      </div>
     </div><!-- TAB: RELATÓRIOS -->
     <div id="tab-relatorios" class="tab-content hidden">
-     <div class="card rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-6">📊 Filtros de Relatório</h2>
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
+      <h2 class="text-2xl font-bold text-green-400 mb-6">📊 Selecionar Período</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-       <div><label for="report-month" class="block text-sm font-bold mb-2 text-gray-300">Mês:</label> <select id="report-month" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
+       <div><label for="rel-data" class="block text-sm font-bold mb-2 text-gray-300">📅 VER LUCRO DO DIA:</label> <input type="date" id="rel-data" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
        </div>
-       <div><label for="report-year" class="block text-sm font-bold mb-2 text-gray-300">Ano:</label> <input type="number" id="report-year" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none">
+       <div><label for="rel-mes" class="block text-sm font-bold mb-2 text-gray-300">MÊS:</label> <select id="rel-mes" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
        </div>
-      </div>
-     </div>
-     <div id="reports-container" class="space-y-6"></div>
-    </div><!-- TAB: EXTRATO -->
-    <div id="tab-extrato" class="tab-content hidden">
-     <div class="card rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-6">📅 Filtro de Período</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-       <div><label for="extrato-year" class="block text-sm font-bold mb-2 text-gray-300">Ano:</label> <input type="number" id="extrato-year" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none">
-       </div>
-       <div><label for="extrato-month" class="block text-sm font-bold mb-2 text-gray-300">Mês (opcional):</label> <select id="extrato-month" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-2 text-white focus:border-green-500 focus:outline-none"> <option value="">Anual (todos os meses)</option> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
+       <div><label for="rel-ano" class="block text-sm font-bold mb-2 text-gray-300">ANO:</label> <input type="number" id="rel-ano" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
        </div>
       </div>
      </div>
-     <div id="extrato-container" class="space-y-6"></div>
-    </div><!-- TAB: PROFISSIONAIS -->
-    <div id="tab-profissionais" class="tab-content hidden">
-     <div class="card rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-4">👑 Proprietário</h2>
-      <div class="bg-zinc-900 rounded-xl p-6">
-       <p class="text-3xl font-black text-green-400">THIAGO</p>
-       <p class="text-gray-400 mt-2">Recebe 50% de comissão dos colaboradores</p>
-      </div>
-     </div>
-     <div class="card rounded-2xl p-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-4">👤 Colaboradores</h2>
-      <form id="prof-form" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><input type="text" id="prof-name" required placeholder="Nome do colaborador" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <input type="number" id="prof-commission" required placeholder="Comissão %" min="0" max="100" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <button type="submit" class="btn-primary text-white font-black py-3 rounded-xl">ADICIONAR</button>
-      </form>
-      <div id="prof-list" class="space-y-3"></div>
-     </div>
-    </div><!-- TAB: SERVIÇOS -->
-    <div id="tab-servicos" class="tab-content hidden">
-     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="card rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-4">✂️ Cadastrar Serviço</h2>
-       <form id="service-form" class="space-y-4"><input type="text" id="service-name" required placeholder="Nome do serviço" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <input type="number" id="service-value" required placeholder="Valor R$" step="0.01" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <button type="submit" class="w-full btn-primary text-white font-black py-3 rounded-xl">CADASTRAR</button>
-       </form>
-       <div class="mt-6 pt-6 border-t border-zinc-700"><button id="import-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl"> 📥 IMPORTAR SERVIÇOS PADRÃO </button>
+     <div id="container-relatorios" class="space-y-6"></div>
+    </div><!-- TAB: FATURAMENTO -->
+    <div id="tab-faturamento" class="tab-content hidden"><!-- Filtros -->
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
+      <h2 class="text-2xl font-bold text-purple-400 mb-6">💼 Análise de Faturamento - TTBN BARBERSHOP</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+       <div><label for="fat-mes" class="block text-sm font-bold mb-2 text-gray-300">MÊS:</label> <select id="fat-mes" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-purple-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
+       </div>
+       <div><label for="fat-ano" class="block text-sm font-bold mb-2 text-gray-300">ANO:</label> <input type="number" id="fat-ano" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-purple-500 focus:outline-none">
+       </div>
+       <div class="flex items-end"><button id="btn-gerar-pdf-mensal" class="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white font-black py-3 rounded-xl"> 📄 GERAR PDF MENSAL </button>
        </div>
       </div>
-      <div class="card rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-4">Lista de Serviços (<span id="service-count">0</span>)</h2>
-       <div id="service-list" class="space-y-2 max-h-96 overflow-y-auto"></div>
+     </div><!-- Relatório Mensal -->
+     <div id="container-faturamento-mensal" class="space-y-6 mb-8"></div><!-- Extrato Anual -->
+     <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+      <div class="flex items-center justify-between mb-6">
+       <h2 class="text-2xl font-bold text-orange-400">📅 Extrato Anual</h2><button id="btn-gerar-pdf-anual" class="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-black px-6 py-3 rounded-xl"> 📄 GERAR PDF ANUAL </button>
       </div>
-     </div>
-    </div><!-- TAB: CUSTOS -->
-    <div id="tab-custos" class="tab-content hidden">
-     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <div class="card rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-4">💵 Registrar Custo</h2>
-       <form id="cost-form" class="space-y-4"><input type="date" id="cost-date" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:border-green-500 focus:outline-none"> <input type="text" id="cost-desc" required placeholder="Descrição do custo" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <input type="number" id="cost-value" required placeholder="Valor R$" step="0.01" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 font-semibold text-white placeholder-gray-500 focus:border-green-500 focus:outline-none"> <button type="submit" class="w-full btn-primary text-white font-black py-3 rounded-xl">REGISTRAR CUSTO</button>
-       </form>
-      </div>
-      <div class="card rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-4">Custos Recentes</h2>
-       <div id="cost-list" class="space-y-2 max-h-96 overflow-y-auto"></div>
-      </div>
+      <div id="container-extrato-anual"></div>
      </div>
     </div>
-   </main><!-- Botão Flutuante Editor --> <button id="floating-editor-btn" class="fixed bottom-6 right-6 bg-gradient-to-br from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-3xl z-50 transition-all hover:scale-110 hover:rotate-90" title="Abrir Editor de Código"> ⚙️ </button> <!-- Modal Editor -->
-   <div id="editor-modal" class="hidden fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm overflow-y-auto">
-    <div class="min-h-screen px-4 py-8">
-     <div class="max-w-7xl mx-auto">
-      <div class="bg-zinc-900 rounded-2xl border border-zinc-700 overflow-hidden"><!-- Header do Modal -->
-       <div class="bg-gradient-to-r from-purple-900 to-blue-900 p-6 flex items-center justify-between border-b border-zinc-700">
-        <div>
-         <h2 class="text-3xl font-bold text-white title-font">🔧 EDITOR DE CÓDIGO</h2>
-         <p class="text-sm text-gray-300 mt-1">Editor avançado com suporte a JavaScript, HTML, CSS e JSON</p>
-        </div><button id="close-editor-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3 rounded-xl transition-all hover:scale-105"> ✖️ FECHAR </button>
-       </div><!-- Conteúdo do Editor -->
-       <div class="p-6">
-        <div class="mb-6">
-         <div class="flex items-center justify-between mb-6">
-          <div class="flex gap-3"><button id="export-code-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-sm"> 📥 EXPORTAR CÓDIGO </button> <button id="format-code-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded-xl text-sm"> ✨ FORMATAR </button>
-          </div>
-         </div><!-- Barra de Ferramentas -->
-         <div class="editor-toolbar flex items-center gap-4 flex-wrap">
-          <div class="flex items-center gap-2"><label for="editor-language" class="text-sm font-bold text-gray-300">Linguagem:</label> <select id="editor-language" class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option value="javascript">JavaScript</option> <option value="htmlmixed">HTML</option> <option value="css">CSS</option> <option value="application/json">JSON</option> </select>
-          </div><button id="load-page-code-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-lg text-sm"> 📄 CARREGAR CÓDIGO DA PÁGINA </button>
-          <div class="flex items-center gap-2"><label for="editor-theme" class="text-sm font-bold text-gray-300">Tema:</label> <select id="editor-theme" class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option value="dracula">Dracula</option> <option value="monokai">Monokai</option> <option value="material">Material</option> <option value="default">Claro</option> </select>
-          </div>
-          <div class="flex items-center gap-2"><label for="editor-fontsize" class="text-sm font-bold text-gray-300">Tamanho:</label> <select id="editor-fontsize" class="bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-white text-sm focus:border-green-500 focus:outline-none"> <option value="12">12px</option> <option value="14" selected>14px</option> <option value="16">16px</option> <option value="18">18px</option> <option value="20">20px</option> </select>
-          </div><button id="toggle-linenumbers-btn" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-3 py-2 rounded-lg text-sm"> 📄 Linhas: ON </button>
-          <div class="flex-1"></div>
-          <div class="flex items-center gap-2 text-sm text-gray-400"><span>Linhas: <span id="editor-lines">0</span></span> <span>|</span> <span>Caracteres: <span id="editor-chars">0</span></span>
-          </div>
-         </div><!-- Editor de Código -->
-         <div class="mb-4"><textarea id="code-editor"></textarea>
-         </div><!-- Botões de Ação -->
-         <div class="grid grid-cols-1 md:grid-cols-3 gap-4"><button id="clear-editor-btn" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-3 rounded-xl"> 🗑️ LIMPAR EDITOR </button> <button id="save-snippet-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl"> 💾 SALVAR SNIPPET </button> <button id="run-code-btn" class="btn-primary text-white font-black py-3 rounded-xl"> ▶️ EXECUTAR CÓDIGO </button>
-         </div><!-- Console de Saída -->
-         <div class="mt-6">
-          <div class="flex items-center justify-between mb-3">
-           <h3 class="text-lg font-bold text-green-400">📟 Console</h3><button id="clear-console-btn" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-3 py-2 rounded-lg text-sm"> 🗑️ LIMPAR </button>
-          </div>
-          <div id="console-output" class="bg-zinc-950 border border-zinc-700 rounded-xl p-4 font-mono text-sm min-h-[200px] max-h-[400px] overflow-y-auto"></div>
-         </div>
-        </div><!-- Snippets Salvos -->
-        <div class="card rounded-2xl p-6">
-         <h3 class="text-2xl font-bold text-green-400 mb-4">📚 Snippets Salvos (LocalStorage)</h3>
-         <div id="snippets-list" class="space-y-2"></div>
-        </div>
-       </div>
-      </div>
-     </div>
+   </main>
+  </div><!-- Modal de Confirmação -->
+  <div id="modal-confirmar" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+   <div class="bg-zinc-900 rounded-2xl p-6 max-w-md w-full mx-4 border border-zinc-700">
+    <h3 class="text-xl font-bold text-red-400 mb-4">⚠��� Confirmar Exclusão</h3>
+    <p id="modal-texto" class="text-gray-300 mb-6"></p>
+    <div class="flex gap-3"><button id="modal-cancelar" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="modal-confirmar-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl">EXCLUIR</button>
     </div>
-   </div><!-- Modal de Confirmação -->
-   <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-    <div class="bg-zinc-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-zinc-700">
-     <h3 class="text-xl font-bold text-red-400 mb-4">⚠️ Confirmar Exclusão</h3>
-     <p id="modal-text" class="text-gray-300 mb-6"></p>
-     <div class="flex gap-3"><button id="modal-cancel" class="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="modal-confirm" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl">EXCLUIR</button>
+   </div>
+  </div><!-- Modal de Edição -->
+  <div id="modal-editar-transacao" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+   <div class="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full mx-4 border border-zinc-700">
+    <h3 class="text-xl font-bold text-blue-400 mb-4">✏️ Editar Transação</h3>
+    <form id="form-editar-transacao" class="space-y-4">
+     <div><label for="edit-tipo" class="block text-sm font-bold mb-2 text-gray-300">TIPO:</label> <select id="edit-tipo" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="entrada">���� Entrada</option> <option value="saida">💸 Saída</option> </select>
      </div>
-    </div>
-   </div><!-- Modal de Salvar Snippet -->
-   <div id="snippet-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-    <div class="bg-zinc-800 rounded-2xl p-6 max-w-md w-full mx-4 border border-zinc-700">
-     <h3 class="text-xl font-bold text-green-400 mb-4">💾 Salvar Snippet</h3><input type="text" id="snippet-name" placeholder="Nome do snippet" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white mb-4 focus:border-green-500 focus:outline-none">
-     <div class="flex gap-3"><button id="snippet-modal-cancel" class="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="snippet-modal-save" class="flex-1 btn-primary text-white font-bold py-3 rounded-xl">SALVAR</button>
+     <div><label for="edit-data" class="block text-sm font-bold mb-2 text-gray-300">DATA:</label> <input type="date" id="edit-data" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
-    </div>
+     <div><label for="edit-categoria" class="block text-sm font-bold mb-2 text-gray-300">CATEGORIA:</label> <input type="text" id="edit-categoria" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+     </div>
+     <div><label for="edit-descricao" class="block text-sm font-bold mb-2 text-gray-300">DESCRIÇÃO:</label> <input type="text" id="edit-descricao" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+     </div>
+     <div><label for="edit-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="edit-valor" required step="0.01" min="0" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+     </div>
+     <div class="flex gap-3 pt-4"><button type="button" id="btn-cancelar-edicao" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">💾 SALVAR ALTERAÇÕES</button>
+     </div>
+    </form>
    </div>
   </div>
   <script>
-    // ====================================
-    // CONFIGURAÇÃO DA API GOOGLE SHEETS
-    // ====================================
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwcwmkZYIpAyqwPej-Myb4JI8mc6QUovHQnTJBQM9mJej9eAfVVxncNT_aJPURoy06t/exec';
+    // ==========================================
+    // CONFIGURAÇÃO DA API
+    // ==========================================
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzn2gC4-r7B6_dkqw4SYG3PbixBPJXP9uMR2uGb96fEYk0ma7ROEBVmEv-NOdWd5Dx3nw/exec';
     const TOKEN = '753826';
 
-    // ====================================
+    // ==========================================
+    // ESTADO GLOBAL
+    // ==========================================
+    const state = {
+      servicos: [],
+      profissionais: [],
+      transacoes: [],
+      servicosSelecionados: [],
+      modalCallback: null
+    };
+
+    // ==========================================
     // FUNÇÕES DE API
-    // ====================================
-    
-    // GET - Listar transações
-    async function apiGetListar() {
+    // ==========================================
+    async function apiListar() {
       try {
-        const response = await fetch(`${API_URL}?acao=listar&token=${TOKEN}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+        const response = await fetch(`${API_URL}?acao=listar&token=${TOKEN}`);
         const data = await response.json();
-        return data;
+        return { ok: true, items: Array.isArray(data) ? data : (data.items || data.data || []) };
       } catch (error) {
         console.error('Erro ao listar:', error);
         return { ok: false, items: [] };
       }
     }
 
-    // POST - Adicionar ou deletar
-    async function apiPost(acao, payload) {
+    async function apiAdicionar(obj) {
       try {
-        const body = {
-          token: TOKEN,
-          acao: acao,
-          ...payload
-        };
-        
-        // Google Apps Script aceita POST como query params em alguns casos
-        const params = new URLSearchParams(body);
-        
-        const response = await fetch(`${API_URL}?${params.toString()}`, {
-          method: 'POST',
-          mode: 'no-cors' // Importante para APIs do Google
-        });
-        
-        // Com no-cors, não conseguimos ler o response, mas se não der erro HTTP, funcionou
+        const params = new URLSearchParams({ token: TOKEN, acao: 'adicionar', ...obj });
+        await fetch(`${API_URL}?${params.toString()}`, { method: 'POST', mode: 'no-cors' });
         return { ok: true };
       } catch (error) {
-        console.error('Erro no POST:', error);
-        return { ok: false, error: error.message };
+        console.error('Erro ao adicionar:', error);
+        return { ok: false };
       }
     }
 
-    // Adicionar transação
-    async function adicionarTransacao(obj) {
-      return await apiPost('adicionar', obj);
+    async function apiDeletar(id) {
+      try {
+        const params = new URLSearchParams({ token: TOKEN, acao: 'deletar', id: id });
+        await fetch(`${API_URL}?${params.toString()}`, { method: 'POST', mode: 'no-cors' });
+        return { ok: true };
+      } catch (error) {
+        console.error('Erro ao deletar:', error);
+        return { ok: false };
+      }
     }
 
-    // Deletar transação
-    async function deletarTransacao(id) {
-      return await apiPost('deletar', { id: id });
-    }
-
-    // ====================================
-    // ESTADO GLOBAL
-    // ====================================
-    const state = {
-      services: [],
-      professionals: [],
-      transacoes: [], // Todas as transações da API
-      selectedServices: [],
-      deleteCallback: null,
-      filterDate: null,
-      snippets: []
-    };
-
-    // CodeMirror Instance
-    let editorInstance = null;
-
-    // ====================================
+    // ==========================================
     // FUNÇÕES DE UI
-    // ====================================
-    
-    // Toast
-    function toast(msg, type = 'success') {
+    // ==========================================
+    function formatarDinheiro(valor) {
+      return parseFloat(valor || 0).toLocaleString('pt-BR', { 
+        style: 'currency', 
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function toast(mensagem, tipo = 'success') {
       const div = document.createElement('div');
-      div.className = `toast ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
-      div.textContent = msg;
+      div.className = `toast ${tipo === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+      div.textContent = mensagem;
       document.body.appendChild(div);
       setTimeout(() => div.remove(), 3000);
     }
 
-    // Loading Overlay
     function showLoading() {
       document.getElementById('loading-overlay').classList.remove('hidden');
     }
@@ -487,1092 +391,1466 @@
       document.getElementById('loading-overlay').classList.add('hidden');
     }
 
-    // Modal
-    function showModal(msg, callback) {
-      document.getElementById('modal-text').textContent = msg;
-      document.getElementById('modal').classList.remove('hidden');
-      state.deleteCallback = callback;
+    function showModal(texto, callback) {
+      document.getElementById('modal-texto').textContent = texto;
+      document.getElementById('modal-confirmar').classList.remove('hidden');
+      state.modalCallback = callback;
     }
 
-    document.getElementById('modal-cancel').addEventListener('click', () => {
-      document.getElementById('modal').classList.add('hidden');
-      state.deleteCallback = null;
+    document.getElementById('modal-cancelar').addEventListener('click', () => {
+      document.getElementById('modal-confirmar').classList.add('hidden');
+      state.modalCallback = null;
     });
 
-    document.getElementById('modal-confirm').addEventListener('click', () => {
-      if (state.deleteCallback) state.deleteCallback();
-      document.getElementById('modal').classList.add('hidden');
-      state.deleteCallback = null;
+    document.getElementById('modal-confirmar-btn').addEventListener('click', () => {
+      if (state.modalCallback) state.modalCallback();
+      document.getElementById('modal-confirmar').classList.add('hidden');
+      state.modalCallback = null;
     });
 
-    // ====================================
-    // CARREGAR DADOS DA API
-    // ====================================
+    // ==========================================
+    // CARREGAR DADOS
+    // ==========================================
     async function carregarDados() {
       showLoading();
       
-      const result = await apiGetListar();
+      // Carregar do LocalStorage
+      const servicosLS = localStorage.getItem('barbeariaServicos');
+      const profissionaisLS = localStorage.getItem('barbeariaProfissionais');
       
-      if (result.ok && result.items) {
+      if (servicosLS) state.servicos = JSON.parse(servicosLS);
+      if (profissionaisLS) state.profissionais = JSON.parse(profissionaisLS);
+      
+      // Carregar transações da API
+      const result = await apiListar();
+      if (result.ok) {
         state.transacoes = result.items;
-        console.log('✅ Dados carregados:', state.transacoes.length, 'transações');
-      } else {
-        console.error('❌ Erro ao carregar dados');
-        toast('Erro ao carregar dados!', 'error');
       }
-      
-      // Carregar dados do LocalStorage
-      carregarLocalStorage();
       
       hideLoading();
-      render();
+      renderizar();
     }
 
-    // ====================================
-    // LOCALSTORAGE (Serviços, Profissionais, Snippets)
-    // ====================================
     function salvarLocalStorage() {
-      localStorage.setItem('barbeariaServices', JSON.stringify(state.services));
-      localStorage.setItem('barbeariaProfessionals', JSON.stringify(state.professionals));
-      localStorage.setItem('barbeariaSnippets', JSON.stringify(state.snippets));
+      localStorage.setItem('barbeariaServicos', JSON.stringify(state.servicos));
+      localStorage.setItem('barbeariaProfissionais', JSON.stringify(state.profissionais));
     }
 
-    function carregarLocalStorage() {
-      const services = localStorage.getItem('barbeariaServices');
-      const professionals = localStorage.getItem('barbeariaProfessionals');
-      const snippets = localStorage.getItem('barbeariaSnippets');
+    // ==========================================
+    // RENDERIZAR
+    // ==========================================
+    function renderizar() {
+      renderizarServicos();
+      renderizarProfissionais();
+      renderizarSelectServico();
+      renderizarSelectProfissional();
       
-      if (services) state.services = JSON.parse(services);
-      if (professionals) state.professionals = JSON.parse(professionals);
-      if (snippets) state.snippets = JSON.parse(snippets);
+      const tabAtiva = document.querySelector('.tab-btn.active')?.dataset.tab;
+      if (tabAtiva === 'custos') renderizarCustos();
+      if (tabAtiva === 'historico') renderizarHistorico();
+      if (tabAtiva === 'relatorios') renderizarRelatorios();
     }
 
-    // ====================================
-    // RENDER
-    // ====================================
-    function render() {
-      renderServiceSelector();
-      renderProfList();
-      renderServiceList();
-      updateSelects();
+    // ==========================================
+    // TAB: SERVIÇOS
+    // ==========================================
+    document.getElementById('form-servico').addEventListener('submit', (e) => {
+      e.preventDefault();
       
-      const activeTab = document.querySelector('.tab-btn.active')?.dataset.tab;
-      if (activeTab === 'historico') renderHistory();
-      if (activeTab === 'relatorios') renderReports();
-      if (activeTab === 'extrato') renderExtrato();
-      if (activeTab === 'custos') renderCostList();
-    }
+      const nome = document.getElementById('servico-nome').value.trim();
+      const valor = parseFloat(document.getElementById('servico-valor').value);
+      
+      state.servicos.push({
+        id: Date.now().toString(),
+        nome: nome,
+        valor: valor
+      });
+      
+      salvarLocalStorage();
+      toast('✅ Serviço cadastrado!');
+      e.target.reset();
+      renderizar();
+    });
 
-    // Render Seletor de Serviços
-    function renderServiceSelector() {
-      const selector = document.getElementById('service-selector');
-      if (!selector) return;
+    document.getElementById('btn-importar-servicos').addEventListener('click', () => {
+      const servicosPadrao = [
+        { nome: 'CORTE', valor: 40.00 },
+        { nome: 'CABELO MÉDIO', valor: 50.00 },
+        { nome: 'CORTE CARECA', valor: 30.00 },
+        { nome: 'CORTE+SOBRANCELHA+BOTOX', valor: 140.00 },
+        { nome: 'CORTE+SOBRANCELHA', valor: 50.00 },
+        { nome: 'CORTE+BARBA', valor: 80.00 },
+        { nome: 'BARBA', valor: 40.00 }
+      ];
       
-      if (state.services.length === 0) {
-        selector.innerHTML = '<option value="">Nenhum serviço cadastrado</option>';
+      servicosPadrao.forEach(s => {
+        const existe = state.servicos.find(srv => srv.nome.toLowerCase() === s.nome.toLowerCase());
+        if (!existe) {
+          state.servicos.push({
+            id: Date.now().toString() + Math.random(),
+            nome: s.nome,
+            valor: s.valor
+          });
+        }
+      });
+      
+      salvarLocalStorage();
+      toast('✅ Serviços importados!');
+      renderizar();
+    });
+
+    function renderizarServicos() {
+      const lista = document.getElementById('lista-servicos');
+      const count = document.getElementById('count-servicos');
+      
+      count.textContent = state.servicos.length;
+      
+      if (state.servicos.length === 0) {
+        lista.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum serviço cadastrado</p>';
         return;
       }
+      
+      lista.innerHTML = state.servicos
+        .sort((a, b) => a.nome.localeCompare(b.nome))
+        .map(s => `
+          <div class="bg-zinc-900 rounded-lg p-4 flex items-center justify-between">
+            <div>
+              <p class="font-bold text-lg">${s.nome}</p>
+              <p class="text-green-400 font-bold">${formatarDinheiro(s.valor)}</p>
+            </div>
+            <button class="btn-del-servico bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">
+              🗑️ Excluir
+            </button>
+          </div>
+        `).join('');
+      
+      lista.querySelectorAll('.btn-del-servico').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const servico = state.servicos.find(s => s.id === id);
+          
+          showModal(`Excluir "${servico.nome}"?`, () => {
+            state.servicos = state.servicos.filter(s => s.id !== id);
+            salvarLocalStorage();
+            toast('Serviço excluído!');
+            renderizar();
+          });
+        });
+      });
+    }
 
-      selector.innerHTML = '<option value="">Selecione um serviço</option>' + 
-        state.services
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map(s => `<option value="${s.id}">${s.name} - R$ ${s.value.toFixed(2)}</option>`)
+    function renderizarSelectServico() {
+      const select = document.getElementById('atend-servico');
+      
+      if (state.servicos.length === 0) {
+        select.innerHTML = '<option value="">Nenhum serviço cadastrado</option>';
+        return;
+      }
+      
+      select.innerHTML = '<option value="">Selecione um serviço</option>' +
+        state.servicos
+          .sort((a, b) => a.nome.localeCompare(b.nome))
+          .map(s => `<option value="${s.id}">${s.nome} - ${formatarDinheiro(s.valor)}</option>`)
           .join('');
     }
 
-    // Adicionar serviço selecionado
-    document.getElementById('add-service-btn').addEventListener('click', () => {
-      const selector = document.getElementById('service-selector');
-      const serviceId = selector.value;
+    // ==========================================
+    // TAB: PROFISSIONAIS
+    // ==========================================
+    document.getElementById('form-profissional').addEventListener('submit', (e) => {
+      e.preventDefault();
       
-      if (!serviceId) {
+      const nome = document.getElementById('prof-nome').value.trim();
+      const comissao = parseFloat(document.getElementById('prof-comissao').value);
+      
+      state.profissionais.push({
+        id: Date.now().toString(),
+        nome: nome,
+        comissao: comissao
+      });
+      
+      salvarLocalStorage();
+      toast('✅ Profissional adicionado!');
+      e.target.reset();
+      document.getElementById('prof-comissao').value = 50;
+      renderizar();
+    });
+
+    function renderizarProfissionais() {
+      const lista = document.getElementById('lista-profissionais');
+      
+      if (state.profissionais.length === 0) {
+        lista.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum colaborador cadastrado</p>';
+        return;
+      }
+      
+      lista.innerHTML = state.profissionais.map(p => `
+        <div class="bg-zinc-900 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <p class="font-bold text-lg">${p.nome}</p>
+            <p class="text-sm text-gray-400">Comissão: ${p.comissao}%</p>
+          </div>
+          <button class="btn-del-prof bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${p.id}">
+            🗑️ Excluir
+          </button>
+        </div>
+      `).join('');
+      
+      lista.querySelectorAll('.btn-del-prof').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const prof = state.profissionais.find(p => p.id === id);
+          
+          showModal(`Excluir "${prof.nome}"?`, () => {
+            state.profissionais = state.profissionais.filter(p => p.id !== id);
+            salvarLocalStorage();
+            toast('Profissional excluído!');
+            renderizar();
+          });
+        });
+      });
+    }
+
+    function renderizarSelectProfissional() {
+      const select = document.getElementById('atend-prof');
+      const valorAtual = select.value;
+      
+      select.innerHTML = '<option value="">Selecione</option>' +
+        '<option value="THIAGO">👑 THIAGO (Proprietário)</option>' +
+        state.profissionais.map(p => `<option value="${p.nome}">${p.nome}</option>`).join('');
+      
+      if (valorAtual) select.value = valorAtual;
+    }
+
+    // ==========================================
+    // TAB: REGISTRO DE ATENDIMENTO
+    // ==========================================
+    document.getElementById('btn-add-servico').addEventListener('click', () => {
+      const select = document.getElementById('atend-servico');
+      const servicoId = select.value;
+      
+      if (!servicoId) {
         toast('Selecione um serviço!', 'error');
         return;
       }
       
-      const service = state.services.find(s => s.id === serviceId);
-      if (!service) return;
+      const servico = state.servicos.find(s => s.id === servicoId);
+      if (!servico) return;
       
-      const exists = state.selectedServices.find(s => s.id === serviceId);
-      if (exists) {
-        exists.qty++;
+      const existe = state.servicosSelecionados.find(s => s.id === servicoId);
+      if (existe) {
+        existe.quantidade++;
       } else {
-        state.selectedServices.push({...service, qty: 1});
+        state.servicosSelecionados.push({
+          ...servico,
+          quantidade: 1
+        });
       }
       
-      selector.value = '';
-      renderSelectedServices();
+      select.value = '';
+      renderizarServicosSelecionados();
     });
 
-    // Render Serviços Selecionados
-    function renderSelectedServices() {
-      const container = document.getElementById('selected-services-container');
-      const list = document.getElementById('selected-services');
-      const totalEl = document.getElementById('total-value');
-
-      if (state.selectedServices.length === 0) {
+    function renderizarServicosSelecionados() {
+      const container = document.getElementById('servicos-selecionados-container');
+      const lista = document.getElementById('servicos-selecionados-lista');
+      const totalEl = document.getElementById('total-atendimento');
+      
+      if (state.servicosSelecionados.length === 0) {
         container.classList.add('hidden');
         return;
       }
-
+      
       container.classList.remove('hidden');
       
       let total = 0;
-      list.innerHTML = state.selectedServices.map(s => {
-        const subtotal = s.value * s.qty;
+      
+      lista.innerHTML = state.servicosSelecionados.map(s => {
+        const subtotal = s.valor * s.quantidade;
         total += subtotal;
+        
         return `
           <div class="flex items-center justify-between bg-zinc-800 rounded-lg p-3">
             <div class="flex-1">
-              <p class="font-bold">${s.name}</p>
-              <p class="text-sm text-gray-400">R$ ${s.value.toFixed(2)} x ${s.qty} = R$ ${subtotal.toFixed(2)}</p>
+              <p class="font-bold">${s.nome}</p>
+              <p class="text-sm text-gray-400">${formatarDinheiro(s.valor)} x ${s.quantidade} = ${formatarDinheiro(subtotal)}</p>
             </div>
             <div class="flex items-center gap-3">
-              <button class="qty-btn bg-zinc-700 hover:bg-zinc-600 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-action="minus">-</button>
-              <span class="font-bold text-lg w-8 text-center">${s.qty}</span>
-              <button class="qty-btn bg-zinc-700 hover:bg-zinc-600 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-action="plus">+</button>
-              <button class="remove-btn bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${s.id}">Remover</button>
+              <button class="btn-qty bg-zinc-700 hover:bg-zinc-600 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-acao="menos">-</button>
+              <span class="font-bold text-lg w-8 text-center">${s.quantidade}</span>
+              <button class="btn-qty bg-zinc-700 hover:bg-zinc-600 w-8 h-8 rounded-lg font-bold" data-id="${s.id}" data-acao="mais">+</button>
+              <button class="btn-remove bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${s.id}">Remover</button>
             </div>
           </div>
         `;
       }).join('');
-
-      totalEl.textContent = `R$ ${total.toFixed(2)}`;
-
-      list.querySelectorAll('.qty-btn').forEach(btn => {
+      
+      totalEl.textContent = formatarDinheiro(total);
+      
+      lista.querySelectorAll('.btn-qty').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.dataset.id;
-          const action = btn.dataset.action;
-          const service = state.selectedServices.find(s => s.id === id);
+          const acao = btn.dataset.acao;
+          const servico = state.servicosSelecionados.find(s => s.id === id);
           
-          if (action === 'plus') service.qty++;
-          else if (action === 'minus' && service.qty > 1) service.qty--;
+          if (acao === 'mais') {
+            servico.quantidade++;
+          } else if (acao === 'menos' && servico.quantidade > 1) {
+            servico.quantidade--;
+          }
           
-          renderSelectedServices();
+          renderizarServicosSelecionados();
         });
       });
-
-      list.querySelectorAll('.remove-btn').forEach(btn => {
+      
+      lista.querySelectorAll('.btn-remove').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.dataset.id;
-          state.selectedServices = state.selectedServices.filter(s => s.id !== id);
-          renderSelectedServices();
+          state.servicosSelecionados = state.servicosSelecionados.filter(s => s.id !== id);
+          renderizarServicosSelecionados();
         });
       });
     }
 
-    // Salvar Atendimento
-    document.getElementById('save-quick-btn').addEventListener('click', async () => {
-      const prof = document.getElementById('quick-prof').value;
-      const dateInput = document.getElementById('quick-date').value;
-      const timeInput = document.getElementById('quick-time').value;
+    document.getElementById('btn-limpar-atendimento').addEventListener('click', () => {
+      state.servicosSelecionados = [];
+      renderizarServicosSelecionados();
+    });
+
+    document.getElementById('form-atendimento').addEventListener('submit', async (e) => {
+      e.preventDefault();
       
-      if (!prof || !dateInput || !timeInput || state.selectedServices.length === 0) {
+      const prof = document.getElementById('atend-prof').value;
+      const data = document.getElementById('atend-data').value;
+      const hora = document.getElementById('atend-hora').value;
+      
+      if (!prof || !data || !hora || state.servicosSelecionados.length === 0) {
         toast('Preencha todos os campos!', 'error');
         return;
       }
-
-      const btn = document.getElementById('save-quick-btn');
+      
+      const btn = e.target.querySelector('button[type="submit"]');
       btn.disabled = true;
       btn.innerHTML = '<div class="spinner mx-auto"></div>';
-
-      for (const service of state.selectedServices) {
-        for (let i = 0; i < service.qty; i++) {
+      
+      for (const servico of state.servicosSelecionados) {
+        for (let i = 0; i < servico.quantidade; i++) {
           const transacao = {
-            data: dateInput,
+            data: data,
             tipo: 'entrada',
-            valor: service.value,
-            categoria: service.name,
-            descricao: `Profissional: ${prof} - Horário: ${timeInput}`
+            valor: servico.valor,
+            categoria: servico.nome,
+            descricao: `Profissional: ${prof} - Horário: ${hora}`
           };
           
-          const result = await adicionarTransacao(transacao);
-          
-          if (!result.ok) {
-            toast('Erro ao salvar atendimento!', 'error');
-            btn.disabled = false;
-            btn.textContent = '💾 SALVAR ATENDIMENTO';
-            return;
-          }
+          await apiAdicionar(transacao);
         }
       }
-
-      toast('✅ Atendimentos salvos!');
-      state.selectedServices = [];
-      renderSelectedServices();
+      
+      toast('✅ Atendimento(s) salvo(s)!');
+      state.servicosSelecionados = [];
+      renderizarServicosSelecionados();
+      e.target.reset();
       
       btn.disabled = false;
-      btn.textContent = '💾 SALVAR ATENDIMENTO';
+      btn.innerHTML = '💾 SALVAR ATENDIMENTO';
       
       await carregarDados();
     });
 
-    // Limpar Seleção
-    document.getElementById('clear-quick-btn').addEventListener('click', () => {
-      state.selectedServices = [];
-      renderSelectedServices();
-    });
-
-    // ====================================
-    // HISTÓRICO
-    // ====================================
-    function renderHistory() {
-      const list = document.getElementById('history-list');
-      
-      if (state.transacoes.length === 0) {
-        list.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhuma transação encontrada</p>';
-        document.getElementById('history-count').textContent = '0';
-        return;
-      }
-
-      let filteredTransacoes = state.transacoes;
-      
-      if (state.filterDate) {
-        filteredTransacoes = filteredTransacoes.filter(t => t.data === state.filterDate);
-      }
-
-      const sorted = filteredTransacoes.sort((a, b) => {
-        const dateA = new Date(a.criado_em || a.data);
-        const dateB = new Date(b.criado_em || b.data);
-        return dateB - dateA;
-      });
-
-      document.getElementById('history-count').textContent = sorted.length;
-
-      list.innerHTML = sorted.map(t => {
-        const isEntrada = t.tipo === 'entrada';
-        const icon = isEntrada ? '💰' : '💸';
-        const colorClass = isEntrada ? 'text-green-400' : 'text-red-400';
-        
-        return `
-          <div class="history-item card rounded-xl p-4">
-            <div class="flex items-center justify-between">
-              <div class="flex-1 grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
-                <div>
-                  <p class="text-gray-400 text-xs">Tipo</p>
-                  <p class="font-bold">${icon} ${isEntrada ? 'ENTRADA' : 'SAÍDA'}</p>
-                </div>
-                <div>
-                  <p class="text-gray-400 text-xs">Categoria</p>
-                  <p class="font-bold">${t.categoria || 'N/A'}</p>
-                </div>
-                <div>
-                  <p class="text-gray-400 text-xs">Data</p>
-                  <p class="font-bold">${new Date(t.data).toLocaleDateString('pt-BR')}</p>
-                </div>
-                <div>
-                  <p class="text-gray-400 text-xs">Descrição</p>
-                  <p class="font-bold text-xs">${t.descricao || 'N/A'}</p>
-                </div>
-                <div>
-                  <p class="text-gray-400 text-xs">Valor</p>
-                  <p class="font-bold ${colorClass}">R$ ${parseFloat(t.valor).toFixed(2)}</p>
-                </div>
-              </div>
-              <button class="del-transaction-btn bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm ml-4" data-id="${t.id}">
-                🗑️ Excluir
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      list.querySelectorAll('.del-transaction-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const id = btn.dataset.id;
-          
-          showModal('Excluir esta transação?', async () => {
-            btn.disabled = true;
-            btn.innerHTML = '<div class="spinner mx-auto"></div>';
-            
-            const result = await deletarTransacao(id);
-            
-            if (result.ok) {
-              toast('Transação excluída!');
-              await carregarDados();
-            } else {
-              toast('Erro ao excluir transação!', 'error');
-              btn.disabled = false;
-              btn.textContent = '🗑️ Excluir';
-            }
-          });
-        });
-      });
-    }
-
-    document.getElementById('filter-date').addEventListener('change', (e) => {
-      state.filterDate = e.target.value || null;
-      renderHistory();
-    });
-
-    document.getElementById('clear-filters-btn').addEventListener('click', () => {
-      document.getElementById('filter-date').value = '';
-      state.filterDate = null;
-      renderHistory();
-      toast('Filtro limpo!');
-    });
-
-    // ====================================
-    // RELATÓRIOS
-    // ====================================
-    function renderReports() {
-      const container = document.getElementById('reports-container');
-      const month = document.getElementById('report-month').value;
-      const year = document.getElementById('report-year').value;
-
-      if (!year) {
-        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano</p>';
-        return;
-      }
-
-      const monthTransacoes = state.transacoes.filter(t => {
-        const tDate = new Date(t.data);
-        return String(tDate.getMonth() + 1).padStart(2, '0') === month && 
-               String(tDate.getFullYear()) === year;
-      });
-
-      const entradas = monthTransacoes.filter(t => t.tipo === 'entrada');
-      const saidas = monthTransacoes.filter(t => t.tipo === 'saida');
-
-      const totalEntradas = entradas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
-      const totalSaidas = saidas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
-      const saldo = totalEntradas - totalSaidas;
-
-      // Agrupar por categoria
-      const categorias = {};
-      entradas.forEach(t => {
-        const cat = t.categoria || 'Sem categoria';
-        if (!categorias[cat]) {
-          categorias[cat] = { quantidade: 0, valor: 0 };
-        }
-        categorias[cat].quantidade++;
-        categorias[cat].valor += parseFloat(t.valor);
-      });
-
-      // Agrupar profissionais (pela descrição)
-      const profissionais = {};
-      entradas.forEach(t => {
-        const match = (t.descricao || '').match(/Profissional:\s*([^\-]+)/);
-        const prof = match ? match[1].trim() : 'Não especificado';
-        
-        if (!profissionais[prof]) {
-          profissionais[prof] = { quantidade: 0, valor: 0 };
-        }
-        profissionais[prof].quantidade++;
-        profissionais[prof].valor += parseFloat(t.valor);
-      });
-
-      container.innerHTML = `
-        <div class="card rounded-2xl p-6 mb-6">
-          <h3 class="text-2xl font-bold text-green-400 mb-6">📊 Resumo do Mês</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-zinc-900 rounded-xl p-6">
-              <p class="text-sm text-gray-400 mb-2">💰 Entradas</p>
-              <p class="text-3xl font-black text-green-400">R$ ${totalEntradas.toFixed(2)}</p>
-              <p class="text-xs text-gray-500 mt-2">${entradas.length} transações</p>
-            </div>
-            <div class="bg-zinc-900 rounded-xl p-6">
-              <p class="text-sm text-gray-400 mb-2">💸 Saídas</p>
-              <p class="text-3xl font-black text-red-400">R$ ${totalSaidas.toFixed(2)}</p>
-              <p class="text-xs text-gray-500 mt-2">${saidas.length} transações</p>
-            </div>
-            <div class="bg-zinc-900 rounded-xl p-6">
-              <p class="text-sm text-gray-400 mb-2">💎 Saldo</p>
-              <p class="text-3xl font-black ${saldo >= 0 ? 'text-blue-400' : 'text-orange-400'}">R$ ${saldo.toFixed(2)}</p>
-              <p class="text-xs text-gray-500 mt-2">${saldo >= 0 ? 'Positivo' : 'Negativo'}</p>
-            </div>
-            <div class="bg-zinc-900 rounded-xl p-6">
-              <p class="text-sm text-gray-400 mb-2">📊 Ticket Médio</p>
-              <p class="text-3xl font-black text-purple-400">R$ ${entradas.length > 0 ? (totalEntradas / entradas.length).toFixed(2) : '0.00'}</p>
-              <p class="text-xs text-gray-500 mt-2">por entrada</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="card rounded-2xl p-6 mb-6">
-          <h3 class="text-2xl font-bold text-green-400 mb-6">👥 Por Profissional</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            ${Object.entries(profissionais)
-              .sort((a, b) => b[1].valor - a[1].valor)
-              .map(([nome, data]) => `
-                <div class="bg-zinc-900 rounded-xl p-4">
-                  <p class="font-bold text-lg mb-2">${nome}</p>
-                  <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <p class="text-gray-400">Atendimentos</p>
-                      <p class="font-bold text-white">${data.quantidade}</p>
-                    </div>
-                    <div>
-                      <p class="text-gray-400">Faturamento</p>
-                      <p class="font-bold text-green-400">R$ ${data.valor.toFixed(2)}</p>
-                    </div>
-                  </div>
-                </div>
-              `).join('')}
-          </div>
-        </div>
-
-        <div class="card rounded-2xl p-6">
-          <h3 class="text-2xl font-bold text-green-400 mb-6">✂️ Por Serviço/Categoria</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            ${Object.entries(categorias)
-              .sort((a, b) => b[1].valor - a[1].valor)
-              .map(([nome, data]) => `
-                <div class="bg-zinc-900 rounded-xl p-4">
-                  <p class="font-bold text-lg mb-2">${nome}</p>
-                  <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <p class="text-gray-400">Quantidade</p>
-                      <p class="font-bold text-white">${data.quantidade}x</p>
-                    </div>
-                    <div>
-                      <p class="text-gray-400">Faturamento</p>
-                      <p class="font-bold text-green-400">R$ ${data.valor.toFixed(2)}</p>
-                    </div>
-                  </div>
-                </div>
-              `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    document.getElementById('report-month').addEventListener('change', renderReports);
-    document.getElementById('report-year').addEventListener('change', renderReports);
-
-    // ====================================
-    // EXTRATO
-    // ====================================
-    function renderExtrato() {
-      const container = document.getElementById('extrato-container');
-      const year = document.getElementById('extrato-year').value;
-      const month = document.getElementById('extrato-month').value;
-
-      if (!year) {
-        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano</p>';
-        return;
-      }
-
-      let filteredTransacoes = state.transacoes.filter(t => {
-        const tDate = new Date(t.data);
-        return String(tDate.getFullYear()) === year;
-      });
-
-      if (month) {
-        filteredTransacoes = filteredTransacoes.filter(t => {
-          const tDate = new Date(t.data);
-          return String(tDate.getMonth() + 1).padStart(2, '0') === month;
-        });
-      }
-
-      const entradas = filteredTransacoes.filter(t => t.tipo === 'entrada');
-      const saidas = filteredTransacoes.filter(t => t.tipo === 'saida');
-
-      const totalEntradas = entradas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
-      const totalSaidas = saidas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
-      const saldo = totalEntradas - totalSaidas;
-
-      const periodo = month ? `${month}/${year}` : year;
-
-      container.innerHTML = `
-        <div class="card rounded-2xl p-6">
-          <h3 class="text-2xl font-bold text-green-400 mb-6">📅 Extrato ${periodo}</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="bg-zinc-900 rounded-xl p-6">
-              <p class="text-sm text-gray-400 mb-2">💰 Total Entradas</p>
-              <p class="text-3xl font-black text-green-400">R$ ${totalEntradas.toFixed(2)}</p>
-              <p class="text-sm text-gray-400 mt-4">${entradas.length} transações</p>
-            </div>
-            <div class="bg-zinc-900 rounded-xl p-6">
-              <p class="text-sm text-gray-400 mb-2">💸 Total Saídas</p>
-              <p class="text-3xl font-black text-red-400">R$ ${totalSaidas.toFixed(2)}</p>
-              <p class="text-sm text-gray-400 mt-4">${saidas.length} transações</p>
-            </div>
-            <div class="bg-zinc-900 rounded-xl p-6">
-              <p class="text-sm text-gray-400 mb-2">💎 Saldo Final</p>
-              <p class="text-3xl font-black ${saldo >= 0 ? 'text-blue-400' : 'text-orange-400'}">R$ ${saldo.toFixed(2)}</p>
-              <p class="text-sm text-gray-400 mt-4">${saldo >= 0 ? 'Lucro' : 'Prejuízo'}</p>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    document.getElementById('extrato-year').addEventListener('change', renderExtrato);
-    document.getElementById('extrato-month').addEventListener('change', renderExtrato);
-
-    // ====================================
-    // PROFISSIONAIS (LocalStorage)
-    // ====================================
-    document.getElementById('prof-form').addEventListener('submit', (e) => {
+    // ==========================================
+    // TAB: CUSTOS
+    // ==========================================
+    document.getElementById('form-custo').addEventListener('submit', async (e) => {
       e.preventDefault();
       
-      const name = document.getElementById('prof-name').value;
-      const commission = parseFloat(document.getElementById('prof-commission').value);
-
-      state.professionals.push({
-        id: Date.now().toString(),
-        name: name,
-        commission: commission
-      });
-
-      salvarLocalStorage();
-      toast('Colaborador adicionado!');
-      e.target.reset();
-      render();
-    });
-
-    function renderProfList() {
-      const list = document.getElementById('prof-list');
-      if (state.professionals.length === 0) {
-        list.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum colaborador cadastrado</p>';
-        return;
-      }
-
-      list.innerHTML = state.professionals.map(p => `
-        <div class="bg-zinc-900 rounded-xl p-4 flex items-center justify-between">
-          <div>
-            <p class="font-bold text-lg">${p.name}</p>
-            <p class="text-sm text-gray-400">Comissão: ${p.commission}%</p>
-          </div>
-          <button class="del-prof-btn bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold" data-id="${p.id}">Excluir</button>
-        </div>
-      `).join('');
-
-      list.querySelectorAll('.del-prof-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.id;
-          const prof = state.professionals.find(p => p.id === id);
-          
-          showModal(`Excluir ${prof.name}?`, () => {
-            state.professionals = state.professionals.filter(p => p.id !== id);
-            salvarLocalStorage();
-            toast('Profissional excluído!');
-            render();
-          });
-        });
-      });
-    }
-
-    // ====================================
-    // SERVIÇOS (LocalStorage)
-    // ====================================
-    document.getElementById('service-form').addEventListener('submit', (e) => {
-      e.preventDefault();
+      const data = document.getElementById('custo-data').value;
+      const desc = document.getElementById('custo-desc').value.trim();
+      const valor = parseFloat(document.getElementById('custo-valor').value);
       
-      const name = document.getElementById('service-name').value;
-      const value = parseFloat(document.getElementById('service-value').value);
-
-      state.services.push({
-        id: Date.now().toString(),
-        name: name,
-        value: value
-      });
-
-      salvarLocalStorage();
-      toast('✅ Serviço cadastrado!');
-      e.target.reset();
-      render();
-    });
-
-    function renderServiceList() {
-      const list = document.getElementById('service-list');
-      const count = document.getElementById('service-count');
-      count.textContent = state.services.length;
-
-      if (state.services.length === 0) {
-        list.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum serviço cadastrado</p>';
-        return;
-      }
-
-      list.innerHTML = state.services.map(s => `
-        <div class="service-item bg-zinc-900 rounded-lg p-3 flex items-center justify-between">
-          <div class="flex-1">
-            <p class="font-bold">${s.name}</p>
-            <p class="text-sm text-green-400">R$ ${s.value.toFixed(2)}</p>
-          </div>
-          <button class="del-service-btn bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${s.id}">Excluir</button>
-        </div>
-      `).join('');
-
-      list.querySelectorAll('.del-service-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.id;
-          const service = state.services.find(s => s.id === id);
-          
-          showModal(`Excluir ${service.name}?`, () => {
-            state.services = state.services.filter(s => s.id !== id);
-            salvarLocalStorage();
-            toast('Serviço excluído!');
-            render();
-          });
-        });
-      });
-    }
-
-    // Importar Serviços
-    document.getElementById('import-btn').addEventListener('click', () => {
-      const servicos = [
-        { name: 'CORTE', value: 40.00 },
-        { name: 'CABELO MÉDIO', value: 50.00 },
-        { name: 'CORTE CARECA', value: 30.00 },
-        { name: 'CORTE+SOBRANCELHA+BOTOX', value: 140.00 },
-        { name: 'CORTE+SOBRANCELHA', value: 50.00 },
-        { name: 'CORTE+BARBA', value: 80.00 },
-        { name: 'BARBA', value: 40.00 }
-      ];
-
-      servicos.forEach(s => {
-        const exists = state.services.find(existing => existing.name.toLowerCase() === s.name.toLowerCase());
-        if (!exists) {
-          state.services.push({
-            id: Date.now().toString() + Math.random(),
-            name: s.name,
-            value: s.value
-          });
-        }
-      });
-
-      salvarLocalStorage();
-      toast('✅ Serviços importados!');
-      render();
-    });
-
-    // ====================================
-    // CUSTOS
-    // ====================================
-    document.getElementById('cost-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const btn = e.target.querySelector('button');
+      const btn = e.target.querySelector('button[type="submit"]');
       btn.disabled = true;
       btn.innerHTML = '<div class="spinner mx-auto"></div>';
-
-      const date = document.getElementById('cost-date').value;
-      const desc = document.getElementById('cost-desc').value;
-      const value = parseFloat(document.getElementById('cost-value').value);
-
+      
       const transacao = {
-        data: date,
+        data: data,
         tipo: 'saida',
-        valor: value,
+        valor: valor,
         categoria: 'Custo Operacional',
         descricao: desc
       };
       
-      const result = await adicionarTransacao(transacao);
+      await apiAdicionar(transacao);
       
-      if (result.ok) {
-        toast('Custo registrado!');
-        e.target.reset();
-        document.getElementById('cost-date').value = new Date().toISOString().split('T')[0];
-        await carregarDados();
-      } else {
-        toast('Erro ao registrar custo!', 'error');
-      }
+      toast('✅ Custo registrado!');
+      e.target.reset();
+      document.getElementById('custo-data').value = new Date().toISOString().split('T')[0];
       
       btn.disabled = false;
-      btn.textContent = 'REGISTRAR CUSTO';
+      btn.innerHTML = 'REGISTRAR CUSTO';
+      
+      await carregarDados();
     });
 
-    function renderCostList() {
-      const list = document.getElementById('cost-list');
-      const costs = state.transacoes.filter(t => t.tipo === 'saida');
+    function renderizarCustos() {
+      const lista = document.getElementById('lista-custos');
+      const custos = state.transacoes.filter(t => t.tipo === 'saida');
       
-      if (costs.length === 0) {
-        list.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum custo registrado</p>';
+      if (custos.length === 0) {
+        lista.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum custo registrado</p>';
         return;
       }
-
-      const recent = costs.slice(-10).reverse();
-
-      list.innerHTML = recent.map(c => `
-        <div class="cost-item bg-zinc-900 rounded-lg p-3 flex items-center justify-between mb-2">
-          <div>
+      
+      const recentes = custos.slice(-10).reverse();
+      
+      lista.innerHTML = recentes.map(c => `
+        <div class="bg-zinc-900 rounded-lg p-3 flex items-center justify-between">
+          <div class="flex-1">
             <p class="font-bold">${c.descricao || 'N/A'}</p>
-            <p class="text-sm text-gray-400">${c.categoria || 'Custo'} • ${new Date(c.data).toLocaleDateString('pt-BR')}</p>
-            <p class="text-sm text-red-400 font-bold mt-1">R$ ${parseFloat(c.valor).toFixed(2)}</p>
+            <p class="text-sm text-gray-400">${new Date(c.data).toLocaleDateString('pt-BR')}</p>
+            <p class="text-red-400 font-bold mt-1">${formatarDinheiro(c.valor)}</p>
           </div>
-          <button class="del-cost-btn bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${c.id}">Excluir</button>
+          <button class="btn-del-custo bg-red-600 hover:bg-red-700 px-3 py-1 rounded-lg font-bold text-sm" data-id="${c.id}">
+            🗑️
+          </button>
         </div>
       `).join('');
-
-      list.querySelectorAll('.del-cost-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
+      
+      lista.querySelectorAll('.btn-del-custo').forEach(btn => {
+        btn.addEventListener('click', async () => {
           const id = btn.dataset.id;
           
           showModal('Excluir este custo?', async () => {
-            const result = await deletarTransacao(id);
-            
-            if (result.ok) {
-              toast('Custo excluído!');
-              await carregarDados();
-            } else {
-              toast('Erro ao excluir custo!', 'error');
-            }
+            await apiDeletar(id);
+            toast('Custo excluído!');
+            await carregarDados();
           });
         });
       });
     }
 
-    // ====================================
-    // SELECTS
-    // ====================================
-    function updateSelects() {
-      const quickProf = document.getElementById('quick-prof');
-      const profs = [{name: 'THIAGO'}, ...state.professionals];
+    // ==========================================
+    // TAB: HISTÓRICO
+    // ==========================================
+    const historicoState = {
+      modoSelecaoMultipla: false,
+      selecionados: new Set()
+    };
+
+    function renderizarHistorico() {
+      const lista = document.getElementById('lista-historico');
+      const count = document.getElementById('count-historico');
+      const filtroData = document.getElementById('filtro-data').value;
       
-      const quickValue = quickProf.value;
-      quickProf.innerHTML = '<option value="">Selecione o profissional</option>' + 
-        profs.map(p => `<option value="${p.name}">${p.name === 'THIAGO' ? '👑 ' : ''}${p.name}</option>`).join('');
-      if (quickValue) quickProf.value = quickValue;
+      let transacoesFiltradas = state.transacoes;
+      
+      if (filtroData) {
+        transacoesFiltradas = state.transacoes.filter(t => {
+          const tData = new Date(t.data).toISOString().split('T')[0];
+          return tData === filtroData;
+        });
+      }
+      
+      count.textContent = transacoesFiltradas.length;
+      
+      if (transacoesFiltradas.length === 0) {
+        lista.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhuma transação encontrada</p>';
+        return;
+      }
+      
+      const ordenadas = transacoesFiltradas.sort((a, b) => {
+        return new Date(b.data) - new Date(a.data);
+      });
+      
+      lista.innerHTML = ordenadas.map(t => {
+        const isEntrada = t.tipo === 'entrada';
+        const icon = isEntrada ? '💰' : '💸';
+        const cor = isEntrada ? 'text-green-400' : 'text-red-400';
+        const isSelecionado = historicoState.selecionados.has(t.id);
+        
+        return `
+          <div class="bg-zinc-900 border ${isSelecionado ? 'border-green-500' : 'border-zinc-800'} rounded-xl p-4">
+            <div class="flex items-center gap-3">
+              ${historicoState.modoSelecaoMultipla ? `
+                <input type="checkbox" class="checkbox-selecao w-5 h-5 rounded cursor-pointer" data-id="${t.id}" ${isSelecionado ? 'checked' : ''}>
+              ` : ''}
+              
+              <div class="flex-1 grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
+                <div>
+                  <p class="text-gray-400 text-xs mb-1">Tipo</p>
+                  <p class="font-bold">${icon} ${isEntrada ? 'ENTRADA' : 'SAÍDA'}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs mb-1">Categoria</p>
+                  <p class="font-bold">${t.categoria || 'N/A'}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs mb-1">Data</p>
+                  <p class="font-bold">${new Date(t.data).toLocaleDateString('pt-BR')}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs mb-1">Descrição</p>
+                  <p class="font-bold text-xs">${t.descricao || 'N/A'}</p>
+                </div>
+                <div>
+                  <p class="text-gray-400 text-xs mb-1">Valor</p>
+                  <p class="font-bold ${cor}">${formatarDinheiro(t.valor)}</p>
+                </div>
+              </div>
+
+              <div class="flex gap-2">
+                ${!historicoState.modoSelecaoMultipla ? `
+                  <button class="btn-edit-trans bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${t.id}">
+                    ✏️
+                  </button>
+                ` : ''}
+                <button class="btn-del-trans bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${t.id}">
+                  🗑️
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      // Checkboxes de seleção múltipla
+      if (historicoState.modoSelecaoMultipla) {
+        lista.querySelectorAll('.checkbox-selecao').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const id = cb.dataset.id;
+            if (cb.checked) {
+              historicoState.selecionados.add(id);
+            } else {
+              historicoState.selecionados.delete(id);
+            }
+            atualizarBotaoExcluirMultiplo();
+          });
+        });
+      }
+
+      // Botão editar
+      lista.querySelectorAll('.btn-edit-trans').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const transacao = state.transacoes.find(t => t.id === id);
+          abrirModalEdicao(transacao);
+        });
+      });
+      
+      // Botão deletar individual
+      lista.querySelectorAll('.btn-del-trans').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          
+          showModal('Excluir esta transação?', async () => {
+            await apiDeletar(id);
+            toast('Transação excluída!');
+            await carregarDados();
+          });
+        });
+      });
     }
 
-    // ====================================
+    function atualizarBotaoExcluirMultiplo() {
+      const btn = document.getElementById('btn-excluir-multiplos');
+      const count = historicoState.selecionados.size;
+      
+      if (count > 0) {
+        btn.textContent = `����️ EXCLUIR ${count} SELECIONADOS`;
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        btn.textContent = '🗑️ EXCLUIR SELECIONADOS';
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function abrirModalEdicao(transacao) {
+      const modal = document.getElementById('modal-editar-transacao');
+      
+      document.getElementById('edit-tipo').value = transacao.tipo;
+      document.getElementById('edit-data').value = transacao.data;
+      document.getElementById('edit-categoria').value = transacao.categoria || '';
+      document.getElementById('edit-descricao').value = transacao.descricao || '';
+      document.getElementById('edit-valor').value = transacao.valor;
+      
+      modal.dataset.transacaoId = transacao.id;
+      modal.classList.remove('hidden');
+    }
+
+    document.getElementById('filtro-data').addEventListener('change', renderizarHistorico);
+    
+    document.getElementById('btn-limpar-filtro').addEventListener('click', () => {
+      document.getElementById('filtro-data').value = '';
+      renderizarHistorico();
+      toast('Filtro limpo!');
+    });
+
+    document.getElementById('btn-modo-selecao').addEventListener('click', () => {
+      historicoState.modoSelecaoMultipla = !historicoState.modoSelecaoMultipla;
+      historicoState.selecionados.clear();
+      
+      const btn = document.getElementById('btn-modo-selecao');
+      const container = document.getElementById('container-excluir-multiplos');
+      
+      if (historicoState.modoSelecaoMultipla) {
+        btn.textContent = '❌ CANCELAR SELEÇÃO';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-zinc-700', 'hover:bg-zinc-600');
+        container.classList.remove('hidden');
+      } else {
+        btn.textContent = '✅ SELECIONAR MÚLTIPLOS';
+        btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
+        container.classList.add('hidden');
+      }
+      
+      renderizarHistorico();
+    });
+
+    document.getElementById('btn-selecionar-todos').addEventListener('click', () => {
+      const filtroData = document.getElementById('filtro-data').value;
+      let transacoesFiltradas = state.transacoes;
+      
+      if (filtroData) {
+        transacoesFiltradas = state.transacoes.filter(t => {
+          const tData = new Date(t.data).toISOString().split('T')[0];
+          return tData === filtroData;
+        });
+      }
+      
+      transacoesFiltradas.forEach(t => historicoState.selecionados.add(t.id));
+      renderizarHistorico();
+      atualizarBotaoExcluirMultiplo();
+    });
+
+    document.getElementById('btn-desselecionar-todos').addEventListener('click', () => {
+      historicoState.selecionados.clear();
+      renderizarHistorico();
+      atualizarBotaoExcluirMultiplo();
+    });
+
+    document.getElementById('btn-excluir-multiplos').addEventListener('click', () => {
+      const count = historicoState.selecionados.size;
+      
+      showModal(`Excluir ${count} transações selecionadas?`, async () => {
+        const btn = document.getElementById('btn-excluir-multiplos');
+        btn.disabled = true;
+        btn.innerHTML = '<div class="spinner mx-auto"></div>';
+        
+        for (const id of historicoState.selecionados) {
+          await apiDeletar(id);
+        }
+        
+        historicoState.selecionados.clear();
+        historicoState.modoSelecaoMultipla = false;
+        
+        const btnModo = document.getElementById('btn-modo-selecao');
+        btnModo.textContent = '☑️ SELECIONAR MÚLTIPLOS';
+        btnModo.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        btnModo.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
+        
+        document.getElementById('container-excluir-multiplos').classList.add('hidden');
+        
+        toast(`${count} transações excluídas!`);
+        await carregarDados();
+      });
+    });
+
+    // Modal de edição
+    document.getElementById('btn-cancelar-edicao').addEventListener('click', () => {
+      document.getElementById('modal-editar-transacao').classList.add('hidden');
+    });
+
+    document.getElementById('form-editar-transacao').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const modal = document.getElementById('modal-editar-transacao');
+      const idOriginal = modal.dataset.transacaoId;
+      
+      const novaTransacao = {
+        tipo: document.getElementById('edit-tipo').value,
+        data: document.getElementById('edit-data').value,
+        categoria: document.getElementById('edit-categoria').value,
+        descricao: document.getElementById('edit-descricao').value,
+        valor: parseFloat(document.getElementById('edit-valor').value)
+      };
+      
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner mx-auto"></div>';
+      
+      // Deletar registro antigo
+      await apiDeletar(idOriginal);
+      
+      // Adicionar novo registro
+      await apiAdicionar(novaTransacao);
+      
+      toast('✅ Transação atualizada!');
+      modal.classList.add('hidden');
+      
+      btn.disabled = false;
+      btn.innerHTML = '💾 SALVAR ALTERAÇÕES';
+      
+      await carregarDados();
+    });
+
+    // ==========================================
+    // TAB: RELATÓRIOS
+    // ==========================================
+    function renderizarRelatorios() {
+      const container = document.getElementById('container-relatorios');
+      const dataDia = document.getElementById('rel-data').value;
+      const mes = document.getElementById('rel-mes').value;
+      const ano = document.getElementById('rel-ano').value;
+      
+      if (!ano) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano</p>';
+        return;
+      }
+      
+      // Filtrar transações do mês
+      const transacoesMes = state.transacoes.filter(t => {
+        const tData = new Date(t.data);
+        return String(tData.getMonth() + 1).padStart(2, '0') === mes && 
+               String(tData.getFullYear()) === ano;
+      });
+      
+      const entradasMes = transacoesMes.filter(t => t.tipo === 'entrada');
+      const saidasMes = transacoesMes.filter(t => t.tipo === 'saida');
+      
+      // Calcular custos operacionais do mês
+      const custosMes = saidasMes.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      
+      // Calcular lucros do mês
+      let lucroBrutoProprietarioMes = 0;
+      let lucroLiquidoProprietarioMes = 0;
+      
+      entradasMes.forEach(t => {
+        const match = (t.descricao || '').match(/Profissional:\s*([^\-]+)/);
+        const profNome = match ? match[1].trim() : 'THIAGO';
+        const valor = parseFloat(t.valor);
+        
+        lucroBrutoProprietarioMes += valor;
+        
+        if (profNome === 'THIAGO') {
+          lucroLiquidoProprietarioMes += valor;
+        } else {
+          lucroLiquidoProprietarioMes += valor * 0.5;
+        }
+      });
+      
+      // Filtrar transações do dia
+      const dataAlvo = dataDia || new Date().toISOString().split('T')[0];
+      
+      const entradasDia = entradasMes.filter(t => {
+        const tData = new Date(t.data).toISOString().split('T')[0];
+        return tData === dataAlvo;
+      });
+      
+      const saidasDia = saidasMes.filter(t => {
+        const tData = new Date(t.data).toISOString().split('T')[0];
+        return tData === dataAlvo;
+      });
+      
+      const custosDia = saidasDia.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      
+      // Calcular lucros do dia
+      let lucroBrutoProprietarioDia = 0;
+      let lucroLiquidoProprietarioDia = 0;
+      
+      entradasDia.forEach(t => {
+        const match = (t.descricao || '').match(/Profissional:\s*([^\-]+)/);
+        const profNome = match ? match[1].trim() : 'THIAGO';
+        const valor = parseFloat(t.valor);
+        
+        lucroBrutoProprietarioDia += valor;
+        
+        if (profNome === 'THIAGO') {
+          lucroLiquidoProprietarioDia += valor;
+        } else {
+          lucroLiquidoProprietarioDia += valor * 0.5;
+        }
+      });
+      
+      // Dados por profissional
+      const profissionaisData = {};
+      
+      entradasMes.forEach(t => {
+        const match = (t.descricao || '').match(/Profissional:\s*([^\-]+)/);
+        const profNome = match ? match[1].trim() : 'THIAGO';
+        
+        if (!profissionaisData[profNome]) {
+          profissionaisData[profNome] = {
+            nome: profNome,
+            lucroBruto: 0,
+            lucroLiquido: 0,
+            atendimentos: 0
+          };
+        }
+        
+        const valor = parseFloat(t.valor);
+        profissionaisData[profNome].lucroBruto += valor;
+        profissionaisData[profNome].atendimentos++;
+        
+        if (profNome === 'THIAGO') {
+          profissionaisData[profNome].lucroLiquido += valor;
+        } else {
+          profissionaisData[profNome].lucroLiquido += valor * 0.5;
+        }
+      });
+      
+      const displayDate = (() => {
+        try {
+          const [y, m, d] = dataAlvo.split('-');
+          return `${d}/${m}/${y}`;
+        } catch (e) {
+          return dataAlvo;
+        }
+      })();
+      
+      container.innerHTML = `
+        <!-- Proprietário -->
+        <div class="bg-gradient-to-br from-yellow-900 to-yellow-800 border border-yellow-700 rounded-2xl p-6">
+          <h3 class="text-2xl font-bold text-yellow-300 mb-6 flex items-center gap-2">
+            👑 PROPRIETÁRIO (THIAGO)
+          </h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Lucros do Dia -->
+            <div class="bg-black/30 rounded-xl p-6">
+              <h4 class="text-lg font-bold text-yellow-200 mb-4">📅 Lucros do Dia (${displayDate})</h4>
+              <div class="space-y-3">
+                <div>
+                  <p class="text-xs text-yellow-200 mb-1">Lucro Líquido (o que você recebe)</p>
+                  <p class="text-3xl font-black text-yellow-300">${formatarDinheiro(lucroLiquidoProprietarioDia)}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-yellow-200 mb-1">Lucro Bruto (total de atendimentos)</p>
+                  <p class="text-2xl font-bold text-yellow-400">${formatarDinheiro(lucroBrutoProprietarioDia)}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Lucros do Mês -->
+            <div class="bg-black/30 rounded-xl p-6">
+              <h4 class="text-lg font-bold text-yellow-200 mb-4">📊 Lucros do Mês</h4>
+              <div class="space-y-3">
+                <div>
+                  <p class="text-xs text-yellow-200 mb-1">Lucro Líquido (o que você recebe)</p>
+                  <p class="text-3xl font-black text-yellow-300">${formatarDinheiro(lucroLiquidoProprietarioMes)}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-yellow-200 mb-1">Lucro Bruto (total de atendimentos)</p>
+                  <p class="text-2xl font-bold text-yellow-400">${formatarDinheiro(lucroBrutoProprietarioMes)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Colaboradores -->
+        ${Object.values(profissionaisData)
+          .filter(prof => prof.nome !== 'THIAGO')
+          .map(prof => `
+            <div class="bg-gradient-to-br from-blue-900 to-blue-800 border border-blue-700 rounded-2xl p-6">
+              <h3 class="text-2xl font-bold text-blue-300 mb-4">👤 COLABORADOR: ${prof.nome}</h3>
+              
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-black/30 rounded-xl p-4">
+                  <p class="text-xs text-blue-200 mb-1">Atendimentos</p>
+                  <p class="text-2xl font-black text-white">${prof.atendimentos}</p>
+                </div>
+                <div class="bg-black/30 rounded-xl p-4">
+                  <p class="text-xs text-blue-200 mb-1">Lucro Líquido (50%)</p>
+                  <p class="text-2xl font-black text-blue-300">${formatarDinheiro(prof.lucroLiquido)}</p>
+                </div>
+                <div class="bg-black/30 rounded-xl p-4">
+                  <p class="text-xs text-blue-200 mb-1">Lucro Bruto (100%)</p>
+                  <p class="text-2xl font-black text-green-400">${formatarDinheiro(prof.lucroBruto)}</p>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+
+        <!-- Custos Operacionais -->
+        <div class="bg-gradient-to-br from-red-900 to-red-800 border border-red-700 rounded-2xl p-6">
+          <h3 class="text-2xl font-bold text-red-300 mb-4">💸 Custos Operacionais</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-black/30 rounded-xl p-4">
+              <p class="text-xs text-red-200 mb-1">Custos do Dia (${displayDate})</p>
+              <p class="text-2xl font-black text-red-300">${formatarDinheiro(custosDia)}</p>
+            </div>
+            <div class="bg-black/30 rounded-xl p-4">
+              <p class="text-xs text-red-200 mb-1">Custos do Mês</p>
+              <p class="text-2xl font-black text-red-300">${formatarDinheiro(custosMes)}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById('rel-data').addEventListener('change', renderizarRelatorios);
+    document.getElementById('rel-mes').addEventListener('change', renderizarRelatorios);
+    document.getElementById('rel-ano').addEventListener('change', renderizarRelatorios);
+
+    // ==========================================
+    // TAB: FATURAMENTO
+    // ==========================================
+    function calcularDadosMes(mes, ano) {
+      const transacoesMes = state.transacoes.filter(t => {
+        const tData = new Date(t.data);
+        return String(tData.getMonth() + 1).padStart(2, '0') === mes && 
+               String(tData.getFullYear()) === ano;
+      });
+      
+      const entradas = transacoesMes.filter(t => t.tipo === 'entrada');
+      const saidas = transacoesMes.filter(t => t.tipo === 'saida');
+      
+      const faturamentoBruto = entradas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      const custos = saidas.reduce((sum, t) => sum + parseFloat(t.valor), 0);
+      const faturamentoLiquido = faturamentoBruto - custos;
+      const totalAtendimentos = entradas.length;
+      
+      // Contar serviços realizados
+      const servicosRealizados = {};
+      entradas.forEach(t => {
+        const categoria = t.categoria || 'Sem categoria';
+        servicosRealizados[categoria] = (servicosRealizados[categoria] || 0) + 1;
+      });
+      
+      // Ticket médio
+      const ticketMedio = totalAtendimentos > 0 ? faturamentoBruto / totalAtendimentos : 0;
+      
+      // Taxa de ocupação (assumindo 22 dias úteis, 10h/dia, 30min por atendimento = 440 slots)
+      const diasUteis = 22;
+      const horasPorDia = 10;
+      const minutosPorAtendimento = 30;
+      const slotsDisponiveis = diasUteis * (horasPorDia * 60 / minutosPorAtendimento);
+      const taxaOcupacao = (totalAtendimentos / slotsDisponiveis) * 100;
+      
+      return {
+        faturamentoBruto,
+        faturamentoLiquido,
+        custos,
+        totalAtendimentos,
+        servicosRealizados,
+        ticketMedio,
+        taxaOcupacao
+      };
+    }
+
+    function renderizarFaturamentoMensal() {
+      const container = document.getElementById('container-faturamento-mensal');
+      const mes = document.getElementById('fat-mes').value;
+      const ano = document.getElementById('fat-ano').value;
+      
+      if (!ano) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano</p>';
+        return;
+      }
+      
+      const dados = calcularDadosMes(mes, ano);
+      const mesNome = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][parseInt(mes) - 1];
+      
+      container.innerHTML = `
+        <!-- Balanço Mensal -->
+        <div class="bg-gradient-to-br from-purple-900 to-purple-800 border border-purple-700 rounded-2xl p-6">
+          <h3 class="text-2xl font-bold text-purple-300 mb-6">📊 Balanço de ${mesNome}/${ano}</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-black/30 rounded-xl p-6">
+              <p class="text-sm text-purple-200 mb-2">💰 Faturamento Bruto</p>
+              <p class="text-4xl font-black text-green-400">${formatarDinheiro(dados.faturamentoBruto)}</p>
+            </div>
+            
+            <div class="bg-black/30 rounded-xl p-6">
+              <p class="text-sm text-purple-200 mb-2">💸 Custos Operacionais</p>
+              <p class="text-4xl font-black text-red-400">${formatarDinheiro(dados.custos)}</p>
+            </div>
+            
+            <div class="bg-black/30 rounded-xl p-6">
+              <p class="text-sm text-purple-200 mb-2">💵 Faturamento Líquido</p>
+              <p class="text-4xl font-black text-yellow-400">${formatarDinheiro(dados.faturamentoLiquido)}</p>
+            </div>
+          </div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div class="bg-black/30 rounded-xl p-6">
+              <p class="text-sm text-purple-200 mb-2">✂️ Total de Atendimentos</p>
+              <p class="text-4xl font-black text-white">${dados.totalAtendimentos}</p>
+            </div>
+            
+            <div class="bg-black/30 rounded-xl p-6">
+              <p class="text-sm text-purple-200 mb-2">📈 Ticket Médio</p>
+              <p class="text-4xl font-black text-blue-400">${formatarDinheiro(dados.ticketMedio)}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Serviços Realizados -->
+        <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
+          <h3 class="text-2xl font-bold text-green-400 mb-6">✂️ Serviços Realizados</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            ${Object.entries(dados.servicosRealizados)
+              .sort((a, b) => b[1] - a[1])
+              .map(([servico, qtd]) => `
+                <div class="bg-zinc-900 rounded-xl p-5 border border-zinc-700">
+                  <p class="text-sm text-gray-400 mb-2">${servico}</p>
+                  <p class="text-3xl font-black text-green-400">${qtd}</p>
+                  <p class="text-xs text-gray-500 mt-1">atendimentos</p>
+                </div>
+              `).join('')}
+          </div>
+        </div>
+
+        <!-- Indicadores de Performance -->
+        <div class="bg-gradient-to-br from-blue-900 to-blue-800 border border-blue-700 rounded-2xl p-6">
+          <h3 class="text-2xl font-bold text-blue-300 mb-6">📊 Indicadores de Performance</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-black/30 rounded-xl p-6">
+              <p class="text-sm text-blue-200 mb-3">🎯 Taxa de Ocupação</p>
+              <div class="flex items-end gap-3">
+                <p class="text-5xl font-black text-blue-300">${dados.taxaOcupacao.toFixed(1)}%</p>
+              </div>
+              <div class="mt-4 bg-zinc-900 rounded-full h-4 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-400 h-full rounded-full transition-all duration-500" 
+                     style="width: ${Math.min(dados.taxaOcupacao, 100)}%"></div>
+              </div>
+              <p class="text-xs text-gray-400 mt-2">Base: 22 dias úteis × 10h/dia × 2 atendimentos/hora</p>
+            </div>
+            
+            <div class="bg-black/30 rounded-xl p-6">
+              <p class="text-sm text-blue-200 mb-3">💰 Margem Líquida</p>
+              <div class="flex items-end gap-3">
+                <p class="text-5xl font-black text-yellow-300">
+                  ${dados.faturamentoBruto > 0 ? ((dados.faturamentoLiquido / dados.faturamentoBruto) * 100).toFixed(1) : 0}%
+                </p>
+              </div>
+              <div class="mt-4 bg-zinc-900 rounded-full h-4 overflow-hidden">
+                <div class="bg-gradient-to-r from-yellow-500 to-yellow-400 h-full rounded-full transition-all duration-500" 
+                     style="width: ${dados.faturamentoBruto > 0 ? Math.min((dados.faturamentoLiquido / dados.faturamentoBruto) * 100, 100) : 0}%"></div>
+              </div>
+              <p class="text-xs text-gray-400 mt-2">Lucro líquido / Faturamento bruto</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderizarExtratoAnual() {
+      const container = document.getElementById('container-extrato-anual');
+      const ano = document.getElementById('fat-ano').value;
+      
+      if (!ano) {
+        container.innerHTML = '<p class="text-gray-400 text-center py-8">Selecione um ano</p>';
+        return;
+      }
+      
+      const meses = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+      const nomeMeses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+      
+      let totalFaturamentoBrutoAnual = 0;
+      let totalCustosAnual = 0;
+      let totalAtendimentosAnual = 0;
+      
+      const dadosMensais = meses.map((mes, idx) => {
+        const dados = calcularDadosMes(mes, ano);
+        totalFaturamentoBrutoAnual += dados.faturamentoBruto;
+        totalCustosAnual += dados.custos;
+        totalAtendimentosAnual += dados.totalAtendimentos;
+        
+        return {
+          mes: nomeMeses[idx],
+          mesCompleto: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][idx],
+          ...dados
+        };
+      });
+      
+      const totalLiquidoAnual = totalFaturamentoBrutoAnual - totalCustosAnual;
+      const ticketMedioAnual = totalAtendimentosAnual > 0 ? totalFaturamentoBrutoAnual / totalAtendimentosAnual : 0;
+      
+      container.innerHTML = `
+        <!-- Resumo Anual -->
+        <div class="bg-gradient-to-br from-orange-900 to-orange-800 border border-orange-700 rounded-2xl p-8 mb-6">
+          <div class="flex items-center justify-between mb-8">
+            <div>
+              <h3 class="text-4xl font-bold text-orange-300 title-font mb-2">RESUMO FISCAL ${ano}</h3>
+              <p class="text-orange-200 text-sm">TTBN BARBERSHOP - CNPJ: 32.554.785/0001-30</p>
+            </div>
+            <div class="text-6xl">📊</div>
+          </div>
+          
+          <!-- Cards Principais em Grid 2x2 -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Receita Bruta -->
+            <div class="bg-gradient-to-br from-green-600 to-green-500 rounded-2xl p-6 shadow-xl">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <p class="text-green-100 text-sm font-bold mb-1">RECEITA BRUTA ANUAL</p>
+                  <p class="text-5xl font-black text-white">${formatarDinheiro(totalFaturamentoBrutoAnual)}</p>
+                </div>
+                <div class="text-4xl">💰</div>
+              </div>
+              <div class="bg-white/20 rounded-lg p-3 mt-4">
+                <p class="text-xs text-green-50">Total de faturamento antes das deduções</p>
+              </div>
+            </div>
+
+            <!-- Custos Totais -->
+            <div class="bg-gradient-to-br from-red-600 to-red-500 rounded-2xl p-6 shadow-xl">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <p class="text-red-100 text-sm font-bold mb-1">DESPESAS DEDUTÍVEIS</p>
+                  <p class="text-5xl font-black text-white">${formatarDinheiro(totalCustosAnual)}</p>
+                </div>
+                <div class="text-4xl">💸</div>
+              </div>
+              <div class="bg-white/20 rounded-lg p-3 mt-4">
+                <p class="text-xs text-red-50">Custos operacionais do ano</p>
+              </div>
+            </div>
+
+            <!-- Lucro Líquido -->
+            <div class="bg-gradient-to-br from-yellow-600 to-yellow-500 rounded-2xl p-6 shadow-xl">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <p class="text-yellow-100 text-sm font-bold mb-1">LUCRO REAL</p>
+                  <p class="text-5xl font-black text-white">${formatarDinheiro(totalLiquidoAnual)}</p>
+                </div>
+                <div class="text-4xl">💵</div>
+              </div>
+              <div class="bg-white/20 rounded-lg p-3 mt-4">
+                <p class="text-xs text-yellow-50">Receita bruta menos despesas dedutíveis</p>
+              </div>
+            </div>
+
+            <!-- Margem Líquida -->
+            <div class="bg-gradient-to-br from-purple-600 to-purple-500 rounded-2xl p-6 shadow-xl">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <p class="text-purple-100 text-sm font-bold mb-1">MARGEM LÍQUIDA</p>
+                  <p class="text-5xl font-black text-white">
+                    ${totalFaturamentoBrutoAnual > 0 ? ((totalLiquidoAnual / totalFaturamentoBrutoAnual) * 100).toFixed(1) : 0}%
+                  </p>
+                </div>
+                <div class="text-4xl">📈</div>
+              </div>
+              <div class="bg-white/20 rounded-lg p-3 mt-4">
+                <p class="text-xs text-purple-50">Percentual de lucro sobre receita</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cards Secundários -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-black/40 rounded-xl p-5 border border-white/20">
+              <p class="text-orange-200 text-xs font-bold mb-2">✂️ TOTAL DE ATENDIMENTOS</p>
+              <p class="text-3xl font-black text-white">${totalAtendimentosAnual}</p>
+            </div>
+            
+            <div class="bg-black/40 rounded-xl p-5 border border-white/20">
+              <p class="text-orange-200 text-xs font-bold mb-2">🎯 TICKET MÉDIO ANUAL</p>
+              <p class="text-3xl font-black text-blue-400">${formatarDinheiro(ticketMedioAnual)}</p>
+            </div>
+
+            <div class="bg-black/40 rounded-xl p-5 border border-white/20">
+              <p class="text-orange-200 text-xs font-bold mb-2">📅 PERÍODO FISCAL</p>
+              <p class="text-3xl font-black text-orange-300">${ano}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabela Mês a Mês -->
+        <div class="bg-zinc-900 rounded-2xl p-6 overflow-x-auto">
+          <h4 class="text-xl font-bold text-white mb-4">📅 Detalhamento Mensal ${ano}</h4>
+          
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-zinc-700">
+                <th class="text-left py-3 px-2 text-gray-400 font-bold">MÊS</th>
+                <th class="text-right py-3 px-2 text-gray-400 font-bold">ATENDIMENTOS</th>
+                <th class="text-right py-3 px-2 text-gray-400 font-bold">RECEITA BRUTA</th>
+                <th class="text-right py-3 px-2 text-gray-400 font-bold">CUSTOS</th>
+                <th class="text-right py-3 px-2 text-gray-400 font-bold">LUCRO LÍQUIDO</th>
+                <th class="text-right py-3 px-2 text-gray-400 font-bold">TICKET MÉDIO</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${dadosMensais.map(d => `
+                <tr class="border-b border-zinc-800 hover:bg-zinc-800 transition-colors">
+                  <td class="py-3 px-2 font-bold text-white">${d.mesCompleto}</td>
+                  <td class="py-3 px-2 text-right text-blue-400 font-bold">${d.totalAtendimentos}</td>
+                  <td class="py-3 px-2 text-right text-green-400 font-bold">${formatarDinheiro(d.faturamentoBruto)}</td>
+                  <td class="py-3 px-2 text-right text-red-400 font-bold">${formatarDinheiro(d.custos)}</td>
+                  <td class="py-3 px-2 text-right text-yellow-400 font-bold">${formatarDinheiro(d.faturamentoLiquido)}</td>
+                  <td class="py-3 px-2 text-right text-purple-400 font-bold">${formatarDinheiro(d.ticketMedio)}</td>
+                </tr>
+              `).join('')}
+              
+              <tr class="bg-zinc-800 font-black text-lg">
+                <td class="py-4 px-2 text-orange-400">TOTAL ${ano}</td>
+                <td class="py-4 px-2 text-right text-blue-400">${totalAtendimentosAnual}</td>
+                <td class="py-4 px-2 text-right text-green-400">${formatarDinheiro(totalFaturamentoBrutoAnual)}</td>
+                <td class="py-4 px-2 text-right text-red-400">${formatarDinheiro(totalCustosAnual)}</td>
+                <td class="py-4 px-2 text-right text-yellow-400">${formatarDinheiro(totalLiquidoAnual)}</td>
+                <td class="py-4 px-2 text-right text-purple-400">${formatarDinheiro(ticketMedioAnual)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function gerarPDFMensal() {
+      const mes = document.getElementById('fat-mes').value;
+      const ano = document.getElementById('fat-ano').value;
+      
+      if (!ano) {
+        toast('Selecione o ano!', 'error');
+        return;
+      }
+      
+      const dados = calcularDadosMes(mes, ano);
+      const mesNome = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][parseInt(mes) - 1];
+      
+      let conteudo = `
+        ====================================
+        TTBN BARBERSHOP
+        RELATÓRIO DE FATURAMENTO MENSAL
+        ${mesNome}/${ano}
+        CNPJ: 32.554.785/0001-30
+        ====================================
+
+        BALANÇO FINANCEIRO
+        ----------------------------------
+        Faturamento Bruto: ${formatarDinheiro(dados.faturamentoBruto)}
+        Custos Operacionais: ${formatarDinheiro(dados.custos)}
+        Faturamento Líquido: ${formatarDinheiro(dados.faturamentoLiquido)}
+
+        ATENDIMENTOS
+        ----------------------------------
+        Total de Atendimentos: ${dados.totalAtendimentos}
+        Ticket Médio: ${formatarDinheiro(dados.ticketMedio)}
+        Taxa de Ocupação: ${dados.taxaOcupacao.toFixed(1)}%
+
+        SERVIÇOS REALIZADOS
+        ----------------------------------
+      `;
+      
+      Object.entries(dados.servicosRealizados)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([servico, qtd]) => {
+          conteudo += `${servico}: ${qtd} atendimentos\n`;
+        });
+      
+      conteudo += `
+        ----------------------------------
+        Gerado em: ${new Date().toLocaleString('pt-BR')}
+        ====================================
+      `;
+      
+      const blob = new Blob([conteudo], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `faturamento_${mesNome}_${ano}_TTBN.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      toast('📄 Relatório mensal gerado!');
+    }
+
+    function gerarPDFAnual() {
+      const ano = document.getElementById('fat-ano').value;
+      
+      if (!ano) {
+        toast('Selecione o ano!', 'error');
+        return;
+      }
+      
+      const meses = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+      const nomeMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+      
+      let totalFaturamentoBrutoAnual = 0;
+      let totalCustosAnual = 0;
+      let totalAtendimentosAnual = 0;
+      
+      let conteudo = `
+        ====================================
+        TTBN BARBERSHOP
+        EXTRATO ANUAL FISCAL
+        ANO ${ano}
+        CNPJ: 32.554.785/0001-30
+        ====================================
+
+        DETALHAMENTO MENSAL
+        ----------------------------------
+      `;
+      
+      meses.forEach((mes, idx) => {
+        const dados = calcularDadosMes(mes, ano);
+        totalFaturamentoBrutoAnual += dados.faturamentoBruto;
+        totalCustosAnual += dados.custos;
+        totalAtendimentosAnual += dados.totalAtendimentos;
+        
+        conteudo += `
+        ${nomeMeses[idx]}/${ano}
+        Atendimentos: ${dados.totalAtendimentos}
+        Receita Bruta: ${formatarDinheiro(dados.faturamentoBruto)}
+        Custos: ${formatarDinheiro(dados.custos)}
+        Lucro Líquido: ${formatarDinheiro(dados.faturamentoLiquido)}
+        Ticket Médio: ${formatarDinheiro(dados.ticketMedio)}
+        ----------------------------------
+        `;
+      });
+      
+      const totalLiquidoAnual = totalFaturamentoBrutoAnual - totalCustosAnual;
+      const ticketMedioAnual = totalAtendimentosAnual > 0 ? totalFaturamentoBrutoAnual / totalAtendimentosAnual : 0;
+      const margemLiquidaAnual = totalFaturamentoBrutoAnual > 0 ? ((totalLiquidoAnual / totalFaturamentoBrutoAnual) * 100).toFixed(1) : 0;
+      
+      conteudo += `
+        RESUMO FISCAL ANUAL ${ano}
+        ==================================
+        Receita Bruta Anual: ${formatarDinheiro(totalFaturamentoBrutoAnual)}
+        Custos Totais: ${formatarDinheiro(totalCustosAnual)}
+        Lucro Líquido Anual: ${formatarDinheiro(totalLiquidoAnual)}
+        Total de Atendimentos: ${totalAtendimentosAnual}
+        Ticket Médio Anual: ${formatarDinheiro(ticketMedioAnual)}
+        Margem Líquida: ${margemLiquidaAnual}%
+        ==================================
+
+        INFORMAÇÕES PARA DECLARAÇÃO
+        ----------------------------------
+        Razão Social: TTBN BARBERSHOP
+        CNPJ: 32.554.785/0001-30
+        Regime Tributário: [Verificar]
+        Natureza Jurídica: [Verificar]
+
+        Receita Bruta Total: ${formatarDinheiro(totalFaturamentoBrutoAnual)}
+        Despesas Dedutíveis: ${formatarDinheiro(totalCustosAnual)}
+        Lucro Real: ${formatarDinheiro(totalLiquidoAnual)}
+
+        ----------------------------------
+        Gerado em: ${new Date().toLocaleString('pt-BR')}
+        ====================================
+      `;
+      
+      const blob = new Blob([conteudo], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `extrato_anual_${ano}_TTBN_fiscal.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      toast('📄 Extrato anual gerado!');
+    }
+
+    document.getElementById('fat-mes').addEventListener('change', () => {
+      renderizarFaturamentoMensal();
+      renderizarExtratoAnual();
+    });
+    
+    document.getElementById('fat-ano').addEventListener('change', () => {
+      renderizarFaturamentoMensal();
+      renderizarExtratoAnual();
+    });
+
+    document.getElementById('btn-gerar-pdf-mensal').addEventListener('click', gerarPDFMensal);
+    document.getElementById('btn-gerar-pdf-anual').addEventListener('click', gerarPDFAnual);
+
+    // ==========================================
     // TABS
-    // ====================================
+    // ==========================================
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => {
           b.classList.remove('active', 'text-green-400', 'border-b-2', 'border-green-400');
           b.classList.add('text-gray-400');
         });
+        
         btn.classList.add('active', 'text-green-400', 'border-b-2', 'border-green-400');
         btn.classList.remove('text-gray-400');
 
         document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
         document.getElementById(`tab-${btn.dataset.tab}`).classList.remove('hidden');
 
-        if (btn.dataset.tab === 'historico') renderHistory();
-        if (btn.dataset.tab === 'relatorios') renderReports();
-        if (btn.dataset.tab === 'extrato') renderExtrato();
-        if (btn.dataset.tab === 'custos') renderCostList();
+        if (btn.dataset.tab === 'custos') renderizarCustos();
+        if (btn.dataset.tab === 'historico') renderizarHistorico();
+        if (btn.dataset.tab === 'relatorios') renderizarRelatorios();
+        if (btn.dataset.tab === 'faturamento') {
+          renderizarFaturamentoMensal();
+          renderizarExtratoAnual();
+        }
       });
     });
 
-    // ====================================
-    // EDITOR DE CÓDIGO
-    // ====================================
-    document.getElementById('floating-editor-btn').addEventListener('click', () => {
-      document.getElementById('editor-modal').classList.remove('hidden');
-      if (!editorInstance) {
-        initEditor();
-      }
-    });
-
-    document.getElementById('close-editor-btn').addEventListener('click', () => {
-      document.getElementById('editor-modal').classList.add('hidden');
-    });
-
-    function initEditor() {
-      if (editorInstance) return;
-
-      editorInstance = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
-        mode: 'javascript',
-        theme: 'dracula',
-        lineNumbers: true,
-        autoCloseBrackets: true,
-        matchBrackets: true,
-        styleActiveLine: true,
-        indentUnit: 2,
-        tabSize: 2,
-        lineWrapping: true
-      });
-
-      editorInstance.setSize('100%', '600px');
-
-      editorInstance.on('change', () => {
-        const content = editorInstance.getValue();
-        const lines = content.split('\n').length;
-        const chars = content.length;
-        document.getElementById('editor-lines').textContent = lines;
-        document.getElementById('editor-chars').textContent = chars;
-      });
-
-      document.getElementById('editor-language').addEventListener('change', (e) => {
-        editorInstance.setOption('mode', e.target.value);
-      });
-
-      document.getElementById('editor-theme').addEventListener('change', (e) => {
-        editorInstance.setOption('theme', e.target.value);
-      });
-
-      document.getElementById('editor-fontsize').addEventListener('change', (e) => {
-        document.querySelector('.CodeMirror').style.fontSize = e.target.value + 'px';
-        editorInstance.refresh();
-      });
-
-      let lineNumbersEnabled = true;
-      document.getElementById('toggle-linenumbers-btn').addEventListener('click', () => {
-        lineNumbersEnabled = !lineNumbersEnabled;
-        editorInstance.setOption('lineNumbers', lineNumbersEnabled);
-        document.getElementById('toggle-linenumbers-btn').textContent = 
-          lineNumbersEnabled ? '📄 Linhas: ON' : '📄 Linhas: OFF';
-      });
-
-      document.getElementById('clear-editor-btn').addEventListener('click', () => {
-        if (editorInstance.getValue().trim() !== '') {
-          showModal('Limpar todo o conteúdo do editor?', () => {
-            editorInstance.setValue('');
-            addConsoleMessage('Editor limpo!', 'info');
-          });
-        }
-      });
-
-      document.getElementById('format-code-btn').addEventListener('click', () => {
-        try {
-          const code = editorInstance.getValue();
-          const mode = editorInstance.getOption('mode');
-          
-          if (mode === 'application/json') {
-            const formatted = JSON.stringify(JSON.parse(code), null, 2);
-            editorInstance.setValue(formatted);
-            addConsoleMessage('✅ JSON formatado com sucesso!', 'success');
-          } else {
-            addConsoleMessage('⚠️ Formatação automática disponível apenas para JSON', 'warning');
-          }
-        } catch (e) {
-          addConsoleMessage('❌ Erro ao formatar: ' + e.message, 'error');
-        }
-      });
-
-      document.getElementById('export-code-btn').addEventListener('click', () => {
-        const code = editorInstance.getValue();
-        const blob = new Blob([code], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'code-export.txt';
-        a.click();
-        URL.revokeObjectURL(url);
-        addConsoleMessage('📥 Código exportado com sucesso!', 'success');
-      });
-
-      document.getElementById('run-code-btn').addEventListener('click', () => {
-        const code = editorInstance.getValue();
-        const mode = editorInstance.getOption('mode');
-        
-        clearConsole();
-        
-        if (mode === 'javascript') {
-          executeJavaScript(code);
-        } else {
-          addConsoleMessage(`⚠️ Execução disponível apenas para JavaScript. Modo atual: ${mode}`, 'warning');
-        }
-      });
-
-      document.getElementById('clear-console-btn').addEventListener('click', clearConsole);
-
-      document.getElementById('load-page-code-btn').addEventListener('click', () => {
-        const pageHTML = document.documentElement.outerHTML;
-        editorInstance.setValue(pageHTML);
-        editorInstance.setOption('mode', 'htmlmixed');
-        document.getElementById('editor-language').value = 'htmlmixed';
-        addConsoleMessage('📄 Código completo da página carregado no editor!', 'success');
-        addConsoleMessage(`Total de ${pageHTML.length} caracteres carregados`, 'info');
-      });
-
-      document.getElementById('save-snippet-btn').addEventListener('click', () => {
-        const code = editorInstance.getValue();
-        if (!code.trim()) {
-          toast('Escreva algum código antes de salvar!', 'error');
-          return;
-        }
-        document.getElementById('snippet-modal').classList.remove('hidden');
-      });
-
-      document.getElementById('snippet-modal-cancel').addEventListener('click', () => {
-        document.getElementById('snippet-modal').classList.add('hidden');
-        document.getElementById('snippet-name').value = '';
-      });
-
-      document.getElementById('snippet-modal-save').addEventListener('click', () => {
-        const name = document.getElementById('snippet-name').value.trim();
-        if (!name) {
-          toast('Digite um nome para o snippet!', 'error');
-          return;
-        }
-
-        const code = editorInstance.getValue();
-        const language = editorInstance.getOption('mode');
-
-        state.snippets.push({
-          id: Date.now().toString(),
-          name: name,
-          code: code,
-          language: language,
-          created: new Date().toISOString()
-        });
-
-        salvarLocalStorage();
-        toast('💾 Snippet salvo com sucesso!');
-        document.getElementById('snippet-modal').classList.add('hidden');
-        document.getElementById('snippet-name').value = '';
-        renderSnippets();
-      });
-
-      renderSnippets();
-    }
-
-    function addConsoleMessage(msg, type = 'log') {
-      const console = document.getElementById('console-output');
-      const colors = {
-        log: 'text-gray-300',
-        info: 'text-blue-400',
-        success: 'text-green-400',
-        warning: 'text-yellow-400',
-        error: 'text-red-400'
-      };
-
-      const div = document.createElement('div');
-      div.className = `${colors[type]} mb-2`;
-      div.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
-      console.appendChild(div);
-      console.scrollTop = console.scrollHeight;
-    }
-
-    function clearConsole() {
-      document.getElementById('console-output').innerHTML = '';
-      addConsoleMessage('Console limpo!', 'info');
-    }
-
-    function executeJavaScript(code) {
-      const originalConsoleLog = console.log;
-      const originalConsoleError = console.error;
-      const originalConsoleWarn = console.warn;
-
-      console.log = (...args) => {
-        addConsoleMessage(args.join(' '), 'log');
-        originalConsoleLog.apply(console, args);
-      };
-
-      console.error = (...args) => {
-        addConsoleMessage('ERROR: ' + args.join(' '), 'error');
-        originalConsoleError.apply(console, args);
-      };
-
-      console.warn = (...args) => {
-        addConsoleMessage('WARN: ' + args.join(' '), 'warning');
-        originalConsoleWarn.apply(console, args);
-      };
-
-      try {
-        addConsoleMessage('▶️ Executando código...', 'info');
-        const result = eval(code);
-        if (result !== undefined) {
-          addConsoleMessage('Resultado: ' + JSON.stringify(result), 'success');
-        }
-        addConsoleMessage('✅ Execução concluída!', 'success');
-      } catch (e) {
-        addConsoleMessage('❌ Erro: ' + e.message, 'error');
-      } finally {
-        console.log = originalConsoleLog;
-        console.error = originalConsoleError;
-        console.warn = originalConsoleWarn;
-      }
-    }
-
-    function renderSnippets() {
-      const list = document.getElementById('snippets-list');
-      
-      if (state.snippets.length === 0) {
-        list.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum snippet salvo</p>';
-        return;
-      }
-
-      const sorted = state.snippets.sort((a, b) => new Date(b.created) - new Date(a.created));
-
-      list.innerHTML = sorted.map(s => `
-        <div class="bg-zinc-900 rounded-lg p-4 flex items-center justify-between">
-          <div class="flex-1">
-            <p class="font-bold text-lg">${s.name}</p>
-            <p class="text-sm text-gray-400">${s.language} • ${new Date(s.created).toLocaleString('pt-BR')}</p>
-          </div>
-          <div class="flex gap-2">
-            <button class="load-snippet-btn bg-blue-600 hover:bg-blue-700 px-3 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">📂 Carregar</button>
-            <button class="del-snippet-btn bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">Excluir</button>
-          </div>
-        </div>
-      `).join('');
-
-      list.querySelectorAll('.load-snippet-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.id;
-          const snippet = state.snippets.find(s => s.id === id);
-          if (editorInstance && snippet) {
-            editorInstance.setValue(snippet.code);
-            editorInstance.setOption('mode', snippet.language);
-            document.getElementById('editor-language').value = snippet.language;
-            toast(`📂 Snippet "${snippet.name}" carregado!`);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }
-        });
-      });
-
-      list.querySelectorAll('.del-snippet-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.id;
-          const snippet = state.snippets.find(s => s.id === id);
-          
-          showModal(`Excluir snippet "${snippet.name}"?`, () => {
-            state.snippets = state.snippets.filter(s => s.id !== id);
-            salvarLocalStorage();
-            toast('Snippet excluído!');
-            renderSnippets();
-          });
-        });
-      });
-    }
-
-    // ====================================
-    // DATA/HORA NO HEADER
-    // ====================================
-    function updateHeaderDateTime() {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('pt-BR', { 
+    // ==========================================
+    // HEADER DATA/HORA
+    // ==========================================
+    function atualizarHeaderDataHora() {
+      const agora = new Date();
+      const dataStr = agora.toLocaleDateString('pt-BR', { 
         weekday: 'long', 
         year: 'numeric', 
         month: 'long', 
         day: 'numeric' 
       });
-      const timeStr = now.toLocaleTimeString('pt-BR', { 
+      const horaStr = agora.toLocaleTimeString('pt-BR', { 
         hour: '2-digit', 
         minute: '2-digit',
         second: '2-digit'
       });
       
-      document.getElementById('header-date').textContent = dateStr.toUpperCase();
-      document.getElementById('header-time').textContent = timeStr;
+      document.getElementById('header-date').textContent = dataStr.toUpperCase();
+      document.getElementById('header-time').textContent = horaStr;
     }
 
-    // ====================================
-    // INICIALIZAÇÃO
-    // ====================================
-    async function initApp() {
-      console.log('🚀 Iniciando aplicação...');
+    function atualizarDataHoraAtendimento() {
+      const agora = new Date();
+      const hoje = agora.toISOString().split('T')[0];
+      const horaAtual = agora.toTimeString().slice(0, 5);
       
-      const today = new Date().toISOString().split('T')[0];
-      const now = new Date().toTimeString().slice(0, 5);
-      
-      document.getElementById('quick-date').value = today;
-      document.getElementById('quick-time').value = now;
-      document.getElementById('report-month').value = String(new Date().getMonth() + 1).padStart(2, '0');
-      document.getElementById('report-year').value = new Date().getFullYear();
-      document.getElementById('extrato-year').value = new Date().getFullYear();
-      document.getElementById('cost-date').value = today;
-      
-      document.getElementById('filter-date').value = today;
-      state.filterDate = today;
+      document.getElementById('atend-data').value = hoje;
+      document.getElementById('atend-hora').value = horaAtual;
+    }
 
-      updateHeaderDateTime();
-      setInterval(updateHeaderDateTime, 1000);
+    // ==========================================
+    // INICIALIZAÇÃO
+    // ==========================================
+    async function iniciar() {
+      const hoje = new Date().toISOString().split('T')[0];
+      const agora = new Date().toTimeString().slice(0, 5);
+      
+      document.getElementById('atend-data').value = hoje;
+      document.getElementById('atend-hora').value = agora;
+      document.getElementById('custo-data').value = hoje;
+      document.getElementById('rel-data').value = hoje;
+      document.getElementById('rel-mes').value = String(new Date().getMonth() + 1).padStart(2, '0');
+      document.getElementById('rel-ano').value = new Date().getFullYear();
+      
+      document.getElementById('fat-mes').value = String(new Date().getMonth() + 1).padStart(2, '0');
+      document.getElementById('fat-ano').value = new Date().getFullYear();
+      
+      atualizarHeaderDataHora();
+      setInterval(atualizarHeaderDataHora, 1000);
+      
+      // Atualizar data e hora do atendimento a cada minuto
+      atualizarDataHoraAtendimento();
+      setInterval(atualizarDataHoraAtendimento, 60000);
 
       await carregarDados();
-      
-      console.log('✅ Sistema iniciado com sucesso!');
     }
 
-    initApp();
+    iniciar();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bd68f03937e5f28',t:'MTc2ODMyNDc2Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bdd4595e608da2d',t:'MTc2ODM5NTE2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
