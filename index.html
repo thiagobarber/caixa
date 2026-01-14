@@ -138,7 +138,7 @@
    </header><!-- Tabs -->
    <nav class="bg-zinc-950 border-b border-zinc-800">
     <div class="max-w-7xl mx-auto px-4">
-     <div class="flex gap-1 overflow-x-auto"><button class="tab-btn active px-6 py-4 font-bold text-sm text-green-400 border-b-2 border-green-400" data-tab="registro">📝 REGISTRO</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="servicos">✂️ SERVIÇOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="profissionais">👤 PROFISSIONAIS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="custos">💵 CUSTOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="historico">📋 HISTÓRICO</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="relatorios">📊 RELATÓRIOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="faturamento">💼 FATURAMENTO</button>
+     <div class="flex gap-1 overflow-x-auto"><button class="tab-btn active px-6 py-4 font-bold text-sm text-green-400 border-b-2 border-green-400" data-tab="registro">📝 REGISTRO</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="servicos">✂️ SERVICOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="profissionais">👤 PROFISSIONAIS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="custos">💵 CUSTOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="historico">📋 HISTORICO</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="relatorios">📊 RELATORIOS</button> <button class="tab-btn px-6 py-4 font-bold text-sm text-gray-400" data-tab="faturamento">💼 FATURAMENTO</button>
      </div>
     </div>
    </nav><!-- Main Content -->
@@ -148,18 +148,18 @@
       <h2 class="text-2xl font-bold text-green-400 mb-6">📝 Novo Atendimento</h2>
       <form id="form-atendimento" class="space-y-6"><!-- Profissional, Data e Horário -->
        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div><label for="atend-prof" class="block text-sm font-bold mb-2 text-gray-300">PROFISSIONAL:</label> <select id="atend-prof" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione</option> <option value="THIAGO">👑 THIAGO (Proprietário)</option> </select>
+        <div><label for="atend-prof" class="block text-sm font-bold mb-2 text-gray-300">PROFISSIONAL:</label> <select id="atend-prof" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione</option> <option value="THIAGO">👑 THIAGO (Proprietario)</option> </select>
         </div>
         <div><label for="atend-data" class="block text-sm font-bold mb-2 text-gray-300">DATA:</label> <input type="date" id="atend-data" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
         </div>
-        <div><label for="atend-hora" class="block text-sm font-bold mb-2 text-gray-300">HORÁRIO:</label> <input type="time" id="atend-hora" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        <div><label for="atend-hora" class="block text-sm font-bold mb-2 text-gray-300">HORARIO:</label> <input type="time" id="atend-hora" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
         </div>
        </div><!-- Selecionar Serviço -->
-       <div><label for="atend-servico" class="block text-sm font-bold mb-2 text-gray-300">SERVIÇO:</label>
-        <div class="flex gap-3"><select id="atend-servico" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione um serviço</option> </select> <button type="button" id="btn-add-servico" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black px-8 py-3 rounded-xl"> ➕ ADICIONAR </button>
+       <div><label for="atend-servico" class="block text-sm font-bold mb-2 text-gray-300">SERVICO:</label>
+        <div class="flex gap-3"><select id="atend-servico" class="flex-1 bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="">Selecione um servico</option> </select> <button type="button" id="btn-add-servico" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black px-8 py-3 rounded-xl"> ➕ ADICIONAR </button>
         </div>
        </div><!-- Lista de Serviços Selecionados -->
-       <div id="servicos-selecionados-container" class="hidden"><label class="block text-sm font-bold mb-2 text-gray-300">SERVIÇOS SELECIONADOS:</label>
+       <div id="servicos-selecionados-container" class="hidden"><label class="block text-sm font-bold mb-2 text-gray-300">SERVICOS SELECIONADOS:</label>
         <div id="servicos-selecionados-lista" class="bg-zinc-900 rounded-xl p-4 space-y-2 mb-4"></div>
         <div class="bg-gradient-to-r from-green-900 to-green-800 rounded-xl p-4 flex items-center justify-between"><span class="text-lg font-bold text-white">TOTAL:</span> <span id="total-atendimento" class="text-3xl font-black text-green-300">R$ 0,00</span>
         </div>
@@ -172,19 +172,19 @@
     <div id="tab-servicos" class="tab-content hidden">
      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><!-- Cadastrar Serviço -->
       <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-6">✂️ Cadastrar Serviço</h2>
+       <h2 class="text-2xl font-bold text-green-400 mb-6">✂️ Cadastrar Servico</h2>
        <form id="form-servico" class="space-y-4">
         <div><label for="servico-nome" class="block text-sm font-bold mb-2 text-gray-300">NOME:</label> <input type="text" id="servico-nome" required placeholder="Ex: Corte Masculino" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
         </div>
         <div><label for="servico-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="servico-valor" required step="0.01" min="0" placeholder="Ex: 40.00" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
         </div><button type="submit" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black py-3 rounded-xl"> CADASTRAR </button>
        </form>
-       <div class="mt-6 pt-6 border-t border-zinc-700"><button id="btn-importar-servicos" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-black py-3 rounded-xl"> 📥 IMPORTAR SERVIÇOS PADRÃO </button>
+       <div class="mt-6 pt-6 border-t border-zinc-700"><button id="btn-importar-servicos" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-black py-3 rounded-xl"> 📥 IMPORTAR SERVICOS PADRAO </button>
        </div>
       </div><!-- Lista de Serviços -->
       <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
        <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-green-400">Lista de Serviços (<span id="count-servicos">0</span>)</h2><button id="btn-modo-selecao-servicos" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-sm"> ✅ SELECIONAR MÚLTIPLOS </button>
+        <h2 class="text-2xl font-bold text-green-400">Lista de Servicos (<span id="count-servicos">0</span>)</h2><button id="btn-modo-selecao-servicos" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-sm"> ✅ SELECIONAR MULTIPLOS </button>
        </div><!-- Container de Seleção Múltipla -->
        <div id="container-excluir-multiplos-servicos" class="bg-gradient-to-br from-red-900 to-red-800 border border-red-700 rounded-xl p-4 mb-4 hidden">
         <div class="flex flex-wrap items-center gap-3"><button id="btn-selecionar-todos-servicos" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg text-sm"> ✅ TODOS </button> <button id="btn-desselecionar-todos-servicos" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-4 py-2 rounded-lg text-sm"> ❌ NENHUM </button> <button id="btn-excluir-multiplos-servicos" disabled class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-sm opacity-50 cursor-not-allowed"> 🗑️ EXCLUIR SELECIONADOS </button>
@@ -196,7 +196,7 @@
     </div><!-- TAB: PROFISSIONAIS -->
     <div id="tab-profissionais" class="tab-content hidden">
      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-yellow-400 mb-4">👑 Proprietário</h2>
+      <h2 class="text-2xl font-bold text-yellow-400 mb-4">👑 Proprietario</h2>
       <div class="bg-zinc-900 rounded-xl p-6">
        <p class="text-3xl font-black text-yellow-400">THIAGO</p>
        <p class="text-gray-400 mt-2">Recebe 50% dos atendimentos dos colaboradores</p>
@@ -204,7 +204,7 @@
      </div>
      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
       <h2 class="text-2xl font-bold text-green-400 mb-6">👤 Colaboradores</h2>
-      <form id="form-profissional" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><input type="text" id="prof-nome" required placeholder="Nome do colaborador" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <input type="number" id="prof-comissao" required placeholder="Comissão %" min="0" max="100" value="50" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <button type="submit" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black py-3 rounded-xl"> ADICIONAR </button>
+      <form id="form-profissional" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"><input type="text" id="prof-nome" required placeholder="Nome do colaborador" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <input type="number" id="prof-comissao" required placeholder="Comissao %" min="0" max="100" value="50" class="bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <button type="submit" class="bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-black py-3 rounded-xl"> ADICIONAR </button>
       </form>
       <div id="lista-profissionais" class="space-y-3"></div>
      </div>
@@ -216,7 +216,7 @@
        <form id="form-custo" class="space-y-4">
         <div><label for="custo-data" class="block text-sm font-bold mb-2 text-gray-300">DATA:</label> <input type="date" id="custo-data" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
         </div>
-        <div><label for="custo-desc" class="block text-sm font-bold mb-2 text-gray-300">DESCRIÇÃO:</label> <input type="text" id="custo-desc" required placeholder="Ex: Energia elétrica" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+        <div><label for="custo-desc" class="block text-sm font-bold mb-2 text-gray-300">DESCRICAO:</label> <input type="text" id="custo-desc" required placeholder="Ex: Energia eletrica" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
         </div>
         <div><label for="custo-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="custo-valor" required step="0.01" min="0" placeholder="Ex: 150.00" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
         </div><button type="submit" class="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-black py-3 rounded-xl"> REGISTRAR CUSTO </button>
@@ -230,13 +230,13 @@
     </div><!-- TAB: HISTÓRICO -->
     <div id="tab-historico" class="tab-content hidden">
      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-4">🔍 Filtros e Ações</h2>
+      <h2 class="text-2xl font-bold text-green-400 mb-4">🔍 Filtros e Acoes</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
        <div><label for="filtro-data" class="block text-sm font-bold mb-2 text-gray-300">FILTRAR POR DATA:</label> <input type="date" id="filtro-data" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
        </div>
        <div class="flex items-end"><button id="btn-limpar-filtro" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-3 rounded-xl"> 🗑️ LIMPAR FILTRO </button>
        </div>
-       <div class="flex items-end"><button id="btn-modo-selecao" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"> ✅ SELECIONAR MÚLTIPLOS </button>
+       <div class="flex items-end"><button id="btn-modo-selecao" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"> ✅ SELECIONAR MULTIPLOS </button>
        </div>
       </div>
      </div><!-- Container de Seleção Múltipla -->
@@ -246,7 +246,7 @@
      </div>
      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
       <div class="flex items-center justify-between mb-6">
-       <h2 class="text-2xl font-bold text-green-400">📋 Histórico de Transações</h2>
+       <h2 class="text-2xl font-bold text-green-400">📋 Historico de Transacoes</h2>
        <p class="text-sm text-gray-400"><span id="count-historico">0</span> registros</p>
       </div>
       <div id="lista-historico" class="space-y-3"></div>
@@ -254,11 +254,11 @@
     </div><!-- TAB: RELATÓRIOS -->
     <div id="tab-relatorios" class="tab-content hidden">
      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-green-400 mb-6">📊 Selecionar Período</h2>
+      <h2 class="text-2xl font-bold text-green-400 mb-6">📊 Selecionar Periodo</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
        <div><label for="rel-data" class="block text-sm font-bold mb-2 text-gray-300">📅 VER LUCRO DO DIA:</label> <input type="date" id="rel-data" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
        </div>
-       <div><label for="rel-mes" class="block text-sm font-bold mb-2 text-gray-300">MÊS:</label> <select id="rel-mes" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
+       <div><label for="rel-mes" class="block text-sm font-bold mb-2 text-gray-300">MES:</label> <select id="rel-mes" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Marco</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
        </div>
        <div><label for="rel-ano" class="block text-sm font-bold mb-2 text-gray-300">ANO:</label> <input type="number" id="rel-ano" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
        </div>
@@ -268,9 +268,9 @@
     </div><!-- TAB: FATURAMENTO -->
     <div id="tab-faturamento" class="tab-content hidden"><!-- Filtros -->
      <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6 mb-6">
-      <h2 class="text-2xl font-bold text-purple-400 mb-6">💼 Análise de Faturamento - TTBN BARBERSHOP</h2>
+      <h2 class="text-2xl font-bold text-purple-400 mb-6">💼 Analise de Faturamento - TTBN BARBERSHOP</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-       <div><label for="fat-mes" class="block text-sm font-bold mb-2 text-gray-300">MÊS:</label> <select id="fat-mes" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-purple-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Março</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
+       <div><label for="fat-mes" class="block text-sm font-bold mb-2 text-gray-300">MES:</label> <select id="fat-mes" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-purple-500 focus:outline-none"> <option value="01">Janeiro</option> <option value="02">Fevereiro</option> <option value="03">Marco</option> <option value="04">Abril</option> <option value="05">Maio</option> <option value="06">Junho</option> <option value="07">Julho</option> <option value="08">Agosto</option> <option value="09">Setembro</option> <option value="10">Outubro</option> <option value="11">Novembro</option> <option value="12">Dezembro</option> </select>
        </div>
        <div><label for="fat-ano" class="block text-sm font-bold mb-2 text-gray-300">ANO:</label> <input type="number" id="fat-ano" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-purple-500 focus:outline-none">
        </div>
@@ -290,7 +290,7 @@
   </div><!-- Modal de Confirmação -->
   <div id="modal-confirmar" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
    <div class="bg-zinc-900 rounded-2xl p-6 max-w-md w-full mx-4 border border-zinc-700">
-    <h3 class="text-xl font-bold text-red-400 mb-4">⚠️ Confirmar Exclusão</h3>
+    <h3 class="text-xl font-bold text-red-400 mb-4">⚠️ Confirmar Exclusao</h3>
     <p id="modal-texto" class="text-gray-300 mb-6"></p>
     <div class="flex gap-3"><button id="modal-cancelar" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="modal-confirmar-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl">EXCLUIR</button>
     </div>
@@ -298,32 +298,32 @@
   </div><!-- Modal de Edição de Transação -->
   <div id="modal-editar-transacao" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
    <div class="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full mx-4 border border-zinc-700">
-    <h3 class="text-xl font-bold text-blue-400 mb-4">✏️ Editar Transação</h3>
+    <h3 class="text-xl font-bold text-blue-400 mb-4">✏️ Editar Transacao</h3>
     <form id="form-editar-transacao" class="space-y-4">
-     <div><label for="edit-tipo" class="block text-sm font-bold mb-2 text-gray-300">TIPO:</label> <select id="edit-tipo" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="entrada">💰 Entrada</option> <option value="saida">💸 Saída</option> </select>
+     <div><label for="edit-tipo" class="block text-sm font-bold mb-2 text-gray-300">TIPO:</label> <select id="edit-tipo" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="entrada">💰 Entrada</option> <option value="saida">💸 Saida</option> </select>
      </div>
      <div><label for="edit-data" class="block text-sm font-bold mb-2 text-gray-300">DATA:</label> <input type="date" id="edit-data" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
      <div><label for="edit-categoria" class="block text-sm font-bold mb-2 text-gray-300">CATEGORIA:</label> <input type="text" id="edit-categoria" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
-     <div><label for="edit-descricao" class="block text-sm font-bold mb-2 text-gray-300">DESCRIÇÃO:</label> <input type="text" id="edit-descricao" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+     <div><label for="edit-descricao" class="block text-sm font-bold mb-2 text-gray-300">DESCRICAO:</label> <input type="text" id="edit-descricao" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
      <div><label for="edit-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="edit-valor" required step="0.01" min="0" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
-     <div class="flex gap-3 pt-4"><button type="button" id="btn-cancelar-edicao" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">💾 SALVAR ALTERAÇÕES</button>
+     <div class="flex gap-3 pt-4"><button type="button" id="btn-cancelar-edicao" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">💾 SALVAR ALTERACOES</button>
      </div>
     </form>
    </div>
   </div><!-- Modal de Edição de Serviço -->
   <div id="modal-editar-servico" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
    <div class="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full mx-4 border border-zinc-700">
-    <h3 class="text-xl font-bold text-blue-400 mb-4">✏️ Editar Serviço</h3>
+    <h3 class="text-xl font-bold text-blue-400 mb-4">✏️ Editar Servico</h3>
     <form id="form-editar-servico" class="space-y-4">
      <div><label for="edit-servico-nome" class="block text-sm font-bold mb-2 text-gray-300">NOME:</label> <input type="text" id="edit-servico-nome" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
      <div><label for="edit-servico-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="edit-servico-valor" required step="0.01" min="0" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
-     <div class="flex gap-3 pt-4"><button type="button" id="btn-cancelar-edicao-servico" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">💾 SALVAR ALTERAÇÕES</button>
+     <div class="flex gap-3 pt-4"><button type="button" id="btn-cancelar-edicao-servico" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">💾 SALVAR ALTERACOES</button>
      </div>
     </form>
    </div>
@@ -456,6 +456,15 @@
       renderizar();
     }
 
+    async function carregarDadosBackground() {
+      // Recarrega dados sem mostrar loading (para não interromper usuário)
+      const result = await apiListar();
+      if (result.ok) {
+        state.transacoes = result.items;
+      }
+      renderizar();
+    }
+
     function salvarLocalStorage() {
       localStorage.setItem('barbeariaServicos', JSON.stringify(state.servicos));
       localStorage.setItem('barbeariaProfissionais', JSON.stringify(state.profissionais));
@@ -464,16 +473,25 @@
     // ==========================================
     // RENDERIZAR
     // ==========================================
+    
+    // Debounce para evitar renderizações excessivas
+    let renderTimeout;
     function renderizar() {
-      renderizarServicos();
-      renderizarProfissionais();
-      renderizarSelectServico();
-      renderizarSelectProfissional();
-      
-      const tabAtiva = document.querySelector('.tab-btn.active')?.dataset.tab;
-      if (tabAtiva === 'custos') renderizarCustos();
-      if (tabAtiva === 'historico') renderizarHistorico();
-      if (tabAtiva === 'relatorios') renderizarRelatorios();
+      clearTimeout(renderTimeout);
+      renderTimeout = setTimeout(() => {
+        // Limpar cache quando dados mudam
+        state.cacheRelatorios = {};
+        
+        renderizarServicos();
+        renderizarProfissionais();
+        renderizarSelectServico();
+        renderizarSelectProfissional();
+        
+        const tabAtiva = document.querySelector('.tab-btn.active')?.dataset.tab;
+        if (tabAtiva === 'custos') renderizarCustos();
+        if (tabAtiva === 'historico') renderizarHistorico();
+        if (tabAtiva === 'relatorios') renderizarRelatorios();
+      }, 50);
     }
 
     // ==========================================
@@ -492,7 +510,7 @@
       });
       
       salvarLocalStorage();
-      toast('✅ Serviço cadastrado!');
+      toast('✅ Servico cadastrado!');
       e.target.reset();
       renderizar();
     });
@@ -500,7 +518,7 @@
     document.getElementById('btn-importar-servicos').addEventListener('click', () => {
       const servicosPadrao = [
         { nome: 'CORTE', valor: 40.00 },
-        { nome: 'CABELO MÉDIO', valor: 50.00 },
+        { nome: 'CABELO MEDIO', valor: 50.00 },
         { nome: 'CORTE CARECA', valor: 30.00 },
         { nome: 'CORTE+SOBRANCELHA+BOTOX', valor: 140.00 },
         { nome: 'CORTE+SOBRANCELHA', valor: 50.00 },
@@ -547,7 +565,7 @@
         { nome: 'COMBO CABELO', valor: 150.00 },
         { nome: 'COMBO SOBRANCELHA', valor: 150.00 },
         { nome: 'CORTE+BOTOX+SOBRANCELHA', valor: 130.00 },
-        { nome: 'DESCOLORAÇÃO NEVOU', valor: 130.00 },
+        { nome: 'DESCOLORACAO NEVOU', valor: 130.00 },
         { nome: 'COMBO ANDERSON', valor: 70.00 },
         { nome: 'COMBO NALDO', valor: 140.00 },
         { nome: 'EDMILSON', valor: 110.00 },
@@ -559,7 +577,7 @@
         { nome: 'CORTE 15 "TEMPORARIO"', valor: 15.00 },
         { nome: 'GORDO', valor: 100.00 },
         { nome: 'PENDENCIA JULIO', valor: 100.00 },
-        { nome: 'DESCOLORAÇÃO NEVOU', valor: 100.00 },
+        { nome: 'DESCOLORACAO NEVOU', valor: 100.00 },
         { nome: 'COMBO DE CABELO+BARBA+SOB', valor: 230.00 },
         { nome: 'COMBO 2 CORTES', valor: 50.00 },
         { nome: 'COMBO 3 CORTES', valor: 110.00 },
@@ -578,7 +596,7 @@
       });
       
       salvarLocalStorage();
-      toast('✅ Serviços importados!');
+      toast('✅ Servicos importados!');
       renderizar();
     });
 
@@ -589,7 +607,7 @@
       count.textContent = state.servicos.length;
       
       if (state.servicos.length === 0) {
-        lista.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum serviço cadastrado</p>';
+        lista.innerHTML = '<p class="text-gray-400 text-center py-4">Nenhum servico cadastrado</p>';
         return;
       }
       
@@ -658,7 +676,7 @@
           showModal(`Excluir "${servico.nome}"?`, () => {
             state.servicos = state.servicos.filter(s => s.id !== id);
             salvarLocalStorage();
-            toast('Serviço excluído!');
+            toast('Servico excluido!');
             renderizar();
           });
         });
@@ -699,12 +717,12 @@
       const container = document.getElementById('container-excluir-multiplos-servicos');
       
       if (servicosState.modoSelecaoMultipla) {
-        btn.textContent = '❌ CANCELAR SELEÇÃO';
+        btn.textContent = '❌ CANCELAR SELECAO';
         btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
         btn.classList.add('bg-zinc-700', 'hover:bg-zinc-600');
         container.classList.remove('hidden');
       } else {
-        btn.textContent = '✅ SELECIONAR MÚLTIPLOS';
+        btn.textContent = '✅ SELECIONAR MULTIPLOS';
         btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
         btn.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
         container.classList.add('hidden');
@@ -728,7 +746,7 @@
     document.getElementById('btn-excluir-multiplos-servicos').addEventListener('click', () => {
       const count = servicosState.selecionados.size;
       
-      showModal(`Excluir ${count} serviços selecionados?`, () => {
+      showModal(`Excluir ${count} servicos selecionados?`, () => {
         servicosState.selecionados.forEach(id => {
           state.servicos = state.servicos.filter(s => s.id !== id);
         });
@@ -737,14 +755,14 @@
         servicosState.modoSelecaoMultipla = false;
         
         const btnModo = document.getElementById('btn-modo-selecao-servicos');
-        btnModo.textContent = '✅ SELECIONAR MÚLTIPLOS';
+        btnModo.textContent = '✅ SELECIONAR MULTIPLOS';
         btnModo.classList.add('bg-blue-600', 'hover:bg-blue-700');
         btnModo.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
         
         document.getElementById('container-excluir-multiplos-servicos').classList.add('hidden');
         
         salvarLocalStorage();
-        toast(`${count} serviços excluídos!`);
+        toast(`${count} servicos excluidos!`);
         renderizar();
       });
     });
@@ -770,7 +788,7 @@
       }
       
       salvarLocalStorage();
-      toast('✅ Serviço atualizado!');
+      toast('✅ Servico atualizado!');
       modal.classList.add('hidden');
       renderizar();
     });
@@ -779,13 +797,14 @@
       const select = document.getElementById('atend-servico');
       
       if (state.servicos.length === 0) {
-        select.innerHTML = '<option value="">Nenhum serviço cadastrado</option>';
+        select.innerHTML = '<option value="">Nenhum servico cadastrado</option>';
         return;
       }
       
-      select.innerHTML = '<option value="">Selecione um serviço</option>' +
-        state.servicos
-          .sort((a, b) => a.nome.localeCompare(b.nome))
+      const servicosOrdenados = state.servicos.sort((a, b) => a.nome.localeCompare(b.nome));
+      
+      select.innerHTML = '<option value="">Selecione um servico</option>' +
+        servicosOrdenados
           .map(s => `<option value="${s.id}">${s.nome} - ${formatarDinheiro(s.valor)}</option>`)
           .join('');
     }
@@ -824,7 +843,7 @@
         <div class="bg-zinc-900 rounded-xl p-4 flex items-center justify-between">
           <div>
             <p class="font-bold text-lg">${p.nome}</p>
-            <p class="text-sm text-gray-400">Comissão: ${p.comissao}%</p>
+            <p class="text-sm text-gray-400">Comissao: ${p.comissao}%</p>
           </div>
           <button class="btn-del-prof bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${p.id}">
             🗑️ Excluir
@@ -840,7 +859,7 @@
           showModal(`Excluir "${prof.nome}"?`, () => {
             state.profissionais = state.profissionais.filter(p => p.id !== id);
             salvarLocalStorage();
-            toast('Profissional excluído!');
+            toast('Profissional excluido!');
             renderizar();
           });
         });
@@ -852,7 +871,7 @@
       const valorAtual = select.value;
       
       select.innerHTML = '<option value="">Selecione</option>' +
-        '<option value="THIAGO">👑 THIAGO (Proprietário)</option>' +
+        '<option value="THIAGO">👑 THIAGO (Proprietario)</option>' +
         state.profissionais.map(p => `<option value="${p.nome}">${p.nome}</option>`).join('');
       
       if (valorAtual) select.value = valorAtual;
@@ -866,7 +885,7 @@
       const servicoId = select.value;
       
       if (!servicoId) {
-        toast('Selecione um serviço!', 'error');
+        toast('Selecione um servico!', 'error');
         return;
       }
       
@@ -883,7 +902,6 @@
         });
       }
       
-      select.value = '';
       renderizarServicosSelecionados();
     });
 
@@ -969,6 +987,8 @@
       btn.disabled = true;
       btn.innerHTML = '<div class="spinner mx-auto"></div>';
       
+      // Criar array de transações para salvar em paralelo
+      const transacoes = [];
       for (const servico of state.servicosSelecionados) {
         for (let i = 0; i < servico.quantidade; i++) {
           const transacao = {
@@ -976,22 +996,34 @@
             tipo: 'entrada',
             valor: servico.valor,
             categoria: servico.nome,
-            descricao: `Profissional: ${prof} - Horário: ${hora}`
+            descricao: `Profissional: ${prof} - Horario: ${hora}`,
+            id: Date.now().toString() + Math.random()
           };
-          
-          await apiAdicionar(transacao);
+          transacoes.push(transacao);
         }
       }
       
-      toast('✅ Atendimento(s) salvo(s)!');
+      // Adicionar instantaneamente ao state (otimista)
+      state.transacoes = [...state.transacoes, ...transacoes];
+      
+      // Limpar formulário IMEDIATAMENTE
       state.servicosSelecionados = [];
       renderizarServicosSelecionados();
       e.target.reset();
+      atualizarDataHoraAtendimento();
+      
+      toast('✅ Atendimento salvo!');
       
       btn.disabled = false;
       btn.innerHTML = '💾 SALVAR ATENDIMENTO';
       
-      await carregarDados();
+      // Salvar em paralelo no background (sem bloquear UI)
+      Promise.all(transacoes.map(t => apiAdicionar(t))).then(() => {
+        // Recarregar apenas se necessário
+        carregarDadosBackground();
+      }).catch(() => {
+        toast('⚠️ Erro ao sincronizar', 'error');
+      });
     });
 
     // ==========================================
@@ -1013,10 +1045,12 @@
         tipo: 'saida',
         valor: valor,
         categoria: 'Custo Operacional',
-        descricao: desc
+        descricao: desc,
+        id: Date.now().toString() + Math.random()
       };
       
-      await apiAdicionar(transacao);
+      // Adicionar instantaneamente
+      state.transacoes.push(transacao);
       
       toast('✅ Custo registrado!');
       e.target.reset();
@@ -1025,7 +1059,12 @@
       btn.disabled = false;
       btn.innerHTML = 'REGISTRAR CUSTO';
       
-      await carregarDados();
+      renderizar();
+      
+      // Salvar no background
+      apiAdicionar(transacao).catch(() => {
+        toast('⚠️ Erro ao sincronizar', 'error');
+      });
     });
 
     function renderizarCustos() {
@@ -1057,9 +1096,15 @@
           const id = btn.dataset.id;
           
           showModal('Excluir este custo?', async () => {
-            await apiDeletar(id);
-            toast('Custo excluído!');
-            await carregarDados();
+            // Remover instantaneamente
+            state.transacoes = state.transacoes.filter(t => t.id !== id);
+            toast('Custo excluido!');
+            renderizar();
+            
+            // Deletar no background
+            apiDeletar(id).catch(() => {
+              toast('⚠️ Erro ao sincronizar', 'error');
+            });
           });
         });
       });
@@ -1090,7 +1135,7 @@
       count.textContent = transacoesFiltradas.length;
       
       if (transacoesFiltradas.length === 0) {
-        lista.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhuma transação encontrada</p>';
+        lista.innerHTML = '<p class="text-gray-400 text-center py-8">Nenhuma transacao encontrada</p>';
         return;
       }
       
@@ -1114,7 +1159,7 @@
               <div class="flex-1 grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
                 <div>
                   <p class="text-gray-400 text-xs mb-1">Tipo</p>
-                  <p class="font-bold">${icon} ${isEntrada ? 'ENTRADA' : 'SAÍDA'}</p>
+                  <p class="font-bold">${icon} ${isEntrada ? 'ENTRADA' : 'SAIDA'}</p>
                 </div>
                 <div>
                   <p class="text-gray-400 text-xs mb-1">Categoria</p>
@@ -1125,7 +1170,7 @@
                   <p class="font-bold">${new Date(t.data).toLocaleDateString('pt-BR')}</p>
                 </div>
                 <div>
-                  <p class="text-gray-400 text-xs mb-1">Descrição</p>
+                  <p class="text-gray-400 text-xs mb-1">Descricao</p>
                   <p class="font-bold text-xs">${t.descricao || 'N/A'}</p>
                 </div>
                 <div>
@@ -1178,10 +1223,16 @@
         btn.addEventListener('click', async () => {
           const id = btn.dataset.id;
           
-          showModal('Excluir esta transação?', async () => {
-            await apiDeletar(id);
-            toast('Transação excluída!');
-            await carregarDados();
+          showModal('Excluir esta transacao?', async () => {
+            // Remover instantaneamente
+            state.transacoes = state.transacoes.filter(t => t.id !== id);
+            toast('Transacao excluida!');
+            renderizar();
+            
+            // Deletar no background
+            apiDeletar(id).catch(() => {
+              toast('⚠️ Erro ao sincronizar', 'error');
+            });
           });
         });
       });
@@ -1231,12 +1282,12 @@
       const container = document.getElementById('container-excluir-multiplos');
       
       if (historicoState.modoSelecaoMultipla) {
-        btn.textContent = '❌ CANCELAR SELEÇÃO';
+        btn.textContent = '❌ CANCELAR SELECAO';
         btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
         btn.classList.add('bg-zinc-700', 'hover:bg-zinc-600');
         container.classList.remove('hidden');
       } else {
-        btn.textContent = '✅ SELECIONAR MÚLTIPLOS';
+        btn.textContent = '✅ SELECIONAR MULTIPLOS';
         btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
         btn.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
         container.classList.add('hidden');
@@ -1270,27 +1321,32 @@
     document.getElementById('btn-excluir-multiplos').addEventListener('click', () => {
       const count = historicoState.selecionados.size;
       
-      showModal(`Excluir ${count} transações selecionadas?`, async () => {
+      showModal(`Excluir ${count} transacoes selecionadas?`, async () => {
         const btn = document.getElementById('btn-excluir-multiplos');
         btn.disabled = true;
         btn.innerHTML = '<div class="spinner mx-auto"></div>';
         
-        for (const id of historicoState.selecionados) {
-          await apiDeletar(id);
-        }
+        // Remover instantaneamente
+        const idsParaDeletar = Array.from(historicoState.selecionados);
+        state.transacoes = state.transacoes.filter(t => !historicoState.selecionados.has(t.id));
         
         historicoState.selecionados.clear();
         historicoState.modoSelecaoMultipla = false;
         
         const btnModo = document.getElementById('btn-modo-selecao');
-        btnModo.textContent = '✅ SELECIONAR MÚLTIPLOS';
+        btnModo.textContent = '✅ SELECIONAR MULTIPLOS';
         btnModo.classList.add('bg-blue-600', 'hover:bg-blue-700');
         btnModo.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
         
         document.getElementById('container-excluir-multiplos').classList.add('hidden');
         
-        toast(`${count} transações excluídas!`);
-        await carregarDados();
+        toast(`${count} transacoes excluidas!`);
+        renderizar();
+        
+        // Deletar no background em paralelo
+        Promise.all(idsParaDeletar.map(id => apiDeletar(id))).catch(() => {
+          toast('⚠️ Erro ao sincronizar', 'error');
+        });
       });
     });
 
@@ -1310,26 +1366,35 @@
         data: document.getElementById('edit-data').value,
         categoria: document.getElementById('edit-categoria').value,
         descricao: document.getElementById('edit-descricao').value,
-        valor: parseFloat(document.getElementById('edit-valor').value)
+        valor: parseFloat(document.getElementById('edit-valor').value),
+        id: Date.now().toString() + Math.random()
       };
       
       const btn = e.target.querySelector('button[type="submit"]');
       btn.disabled = true;
       btn.innerHTML = '<div class="spinner mx-auto"></div>';
       
-      // Deletar registro antigo
-      await apiDeletar(idOriginal);
+      // Atualizar instantaneamente
+      const index = state.transacoes.findIndex(t => t.id === idOriginal);
+      if (index !== -1) {
+        state.transacoes[index] = novaTransacao;
+      }
       
-      // Adicionar novo registro
-      await apiAdicionar(novaTransacao);
-      
-      toast('✅ Transação atualizada!');
+      toast('✅ Transacao atualizada!');
       modal.classList.add('hidden');
       
       btn.disabled = false;
-      btn.innerHTML = '💾 SALVAR ALTERAÇÕES';
+      btn.innerHTML = '💾 SALVAR ALTERACOES';
       
-      await carregarDados();
+      renderizar();
+      
+      // Salvar no background
+      Promise.all([
+        apiDeletar(idOriginal),
+        apiAdicionar(novaTransacao)
+      ]).catch(() => {
+        toast('⚠️ Erro ao sincronizar', 'error');
+      });
     });
 
     // ==========================================
@@ -1450,7 +1515,7 @@
         <!-- Proprietário -->
         <div class="bg-gradient-to-br from-yellow-900 to-yellow-800 border border-yellow-700 rounded-2xl p-6">
           <h3 class="text-2xl font-bold text-yellow-300 mb-6 flex items-center gap-2">
-            👑 PROPRIETÁRIO (THIAGO)
+            👑 PROPRIETARIO (THIAGO)
           </h3>
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1459,7 +1524,7 @@
               <h4 class="text-lg font-bold text-yellow-200 mb-4">📅 Lucros do Dia (${displayDate})</h4>
               <div class="space-y-3">
                 <div>
-                  <p class="text-xs text-yellow-200 mb-1">Lucro Líquido (o que você recebe)</p>
+                  <p class="text-xs text-yellow-200 mb-1">Lucro Liquido (o que voce recebe)</p>
                   <p class="text-3xl font-black text-yellow-300">${formatarDinheiro(lucroLiquidoProprietarioDia)}</p>
                 </div>
                 <div>
@@ -1471,10 +1536,10 @@
 
             <!-- Lucros do Mês -->
             <div class="bg-black/30 rounded-xl p-6">
-              <h4 class="text-lg font-bold text-yellow-200 mb-4">📊 Lucros do Mês</h4>
+              <h4 class="text-lg font-bold text-yellow-200 mb-4">📊 Lucros do Mes</h4>
               <div class="space-y-3">
                 <div>
-                  <p class="text-xs text-yellow-200 mb-1">Lucro Líquido (o que você recebe)</p>
+                  <p class="text-xs text-yellow-200 mb-1">Lucro Liquido (o que voce recebe)</p>
                   <p class="text-3xl font-black text-yellow-300">${formatarDinheiro(lucroLiquidoProprietarioMes)}</p>
                 </div>
                 <div>
@@ -1499,7 +1564,7 @@
                   <p class="text-2xl font-black text-white">${prof.atendimentos}</p>
                 </div>
                 <div class="bg-black/30 rounded-xl p-4">
-                  <p class="text-xs text-blue-200 mb-1">Lucro Líquido (50%)</p>
+                  <p class="text-xs text-blue-200 mb-1">Lucro Liquido (50%)</p>
                   <p class="text-2xl font-black text-blue-300">${formatarDinheiro(prof.lucroLiquido)}</p>
                 </div>
                 <div class="bg-black/30 rounded-xl p-4">
@@ -1519,7 +1584,7 @@
               <p class="text-2xl font-black text-red-300">${formatarDinheiro(custosDia)}</p>
             </div>
             <div class="bg-black/30 rounded-xl p-4">
-              <p class="text-xs text-red-200 mb-1">Custos do Mês</p>
+              <p class="text-xs text-red-200 mb-1">Custos do Mes</p>
               <p class="text-2xl font-black text-red-300">${formatarDinheiro(custosMes)}</p>
             </div>
           </div>
@@ -1535,6 +1600,12 @@
     // TAB: FATURAMENTO
     // ==========================================
     function calcularDadosMes(mes, ano) {
+      // Cache para evitar recálculos desnecessários
+      const cacheKey = `${mes}-${ano}`;
+      if (state.cacheRelatorios && state.cacheRelatorios[cacheKey]) {
+        return state.cacheRelatorios[cacheKey];
+      }
+
       const transacoesMes = state.transacoes.filter(t => {
         const tData = new Date(t.data);
         return String(tData.getMonth() + 1).padStart(2, '0') === mes && 
@@ -1566,7 +1637,7 @@
       const slotsDisponiveis = diasUteis * (horasPorDia * 60 / minutosPorAtendimento);
       const taxaOcupacao = (totalAtendimentos / slotsDisponiveis) * 100;
       
-      return {
+      const resultado = {
         faturamentoBruto,
         faturamentoLiquido,
         custos,
@@ -1575,6 +1646,12 @@
         ticketMedio,
         taxaOcupacao
       };
+
+      // Salvar no cache
+      if (!state.cacheRelatorios) state.cacheRelatorios = {};
+      state.cacheRelatorios[cacheKey] = resultado;
+
+      return resultado;
     }
 
     function renderizarFaturamentoMensal() {
@@ -1588,13 +1665,13 @@
       }
       
       const dados = calcularDadosMes(mes, ano);
-      const mesNome = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+      const mesNome = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 
                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][parseInt(mes) - 1];
       
       container.innerHTML = `
         <!-- Balanço Mensal -->
         <div class="bg-gradient-to-br from-purple-900 to-purple-800 border border-purple-700 rounded-2xl p-6">
-          <h3 class="text-2xl font-bold text-purple-300 mb-6">📊 Balanço de ${mesNome}/${ano}</h3>
+          <h3 class="text-2xl font-bold text-purple-300 mb-6">📊 Balanco de ${mesNome}/${ano}</h3>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="bg-black/30 rounded-xl p-6">
@@ -1608,7 +1685,7 @@
             </div>
             
             <div class="bg-black/30 rounded-xl p-6">
-              <p class="text-sm text-purple-200 mb-2">💵 Faturamento Líquido</p>
+              <p class="text-sm text-purple-200 mb-2">💵 Faturamento Liquido</p>
               <p class="text-4xl font-black text-yellow-400">${formatarDinheiro(dados.faturamentoLiquido)}</p>
             </div>
           </div>
@@ -1620,7 +1697,7 @@
             </div>
             
             <div class="bg-black/30 rounded-xl p-6">
-              <p class="text-sm text-purple-200 mb-2">📈 Ticket Médio</p>
+              <p class="text-sm text-purple-200 mb-2">📈 Ticket Medio</p>
               <p class="text-4xl font-black text-blue-400">${formatarDinheiro(dados.ticketMedio)}</p>
             </div>
           </div>
@@ -1628,7 +1705,7 @@
 
         <!-- Serviços Realizados -->
         <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
-          <h3 class="text-2xl font-bold text-green-400 mb-6">✂️ Serviços Realizados</h3>
+          <h3 class="text-2xl font-bold text-green-400 mb-6">✂️ Servicos Realizados</h3>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             ${Object.entries(dados.servicosRealizados)
@@ -1649,7 +1726,7 @@
           
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="bg-black/30 rounded-xl p-6">
-              <p class="text-sm text-blue-200 mb-3">🎯 Taxa de Ocupação</p>
+              <p class="text-sm text-blue-200 mb-3">🎯 Taxa de Ocupacao</p>
               <div class="flex items-end gap-3">
                 <p class="text-5xl font-black text-blue-300">${dados.taxaOcupacao.toFixed(1)}%</p>
               </div>
@@ -1657,11 +1734,11 @@
                 <div class="bg-gradient-to-r from-blue-500 to-blue-400 h-full rounded-full transition-all duration-500" 
                      style="width: ${Math.min(dados.taxaOcupacao, 100)}%"></div>
               </div>
-              <p class="text-xs text-gray-400 mt-2">Base: 22 dias úteis × 10h/dia × 2 atendimentos/hora</p>
+              <p class="text-xs text-gray-400 mt-2">Base: 22 dias uteis x 10h/dia x 2 atendimentos/hora</p>
             </div>
             
             <div class="bg-black/30 rounded-xl p-6">
-              <p class="text-sm text-blue-200 mb-3">💰 Margem Líquida</p>
+              <p class="text-sm text-blue-200 mb-3">💰 Margem Liquida</p>
               <div class="flex items-end gap-3">
                 <p class="text-5xl font-black text-yellow-300">
                   ${dados.faturamentoBruto > 0 ? ((dados.faturamentoLiquido / dados.faturamentoBruto) * 100).toFixed(1) : 0}%
@@ -1671,7 +1748,7 @@
                 <div class="bg-gradient-to-r from-yellow-500 to-yellow-400 h-full rounded-full transition-all duration-500" 
                      style="width: ${dados.faturamentoBruto > 0 ? Math.min((dados.faturamentoLiquido / dados.faturamentoBruto) * 100, 100) : 0}%"></div>
               </div>
-              <p class="text-xs text-gray-400 mt-2">Lucro líquido / Faturamento bruto</p>
+              <p class="text-xs text-gray-400 mt-2">Lucro liquido / Faturamento bruto</p>
             </div>
           </div>
         </div>
@@ -1702,7 +1779,7 @@
         
         return {
           mes: nomeMeses[idx],
-          mesCompleto: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+          mesCompleto: ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 
                         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][idx],
           ...dados
         };
@@ -1734,7 +1811,7 @@
                 <div class="text-4xl">💰</div>
               </div>
               <div class="bg-white/20 rounded-lg p-3 mt-4">
-                <p class="text-xs text-green-50">Total de faturamento antes das deduções</p>
+                <p class="text-xs text-green-50">Total de faturamento antes das deducoes</p>
               </div>
             </div>
 
@@ -1742,7 +1819,7 @@
             <div class="bg-gradient-to-br from-red-600 to-red-500 rounded-2xl p-6 shadow-xl">
               <div class="flex items-start justify-between mb-3">
                 <div>
-                  <p class="text-red-100 text-sm font-bold mb-1">DESPESAS DEDUTÍVEIS</p>
+                  <p class="text-red-100 text-sm font-bold mb-1">DESPESAS DEDUTIVEIS</p>
                   <p class="text-5xl font-black text-white">${formatarDinheiro(totalCustosAnual)}</p>
                 </div>
                 <div class="text-4xl">💸</div>
@@ -1762,7 +1839,7 @@
                 <div class="text-4xl">💵</div>
               </div>
               <div class="bg-white/20 rounded-lg p-3 mt-4">
-                <p class="text-xs text-yellow-50">Receita bruta menos despesas dedutíveis</p>
+                <p class="text-xs text-yellow-50">Receita bruta menos despesas dedutiveis</p>
               </div>
             </div>
 
@@ -1770,7 +1847,7 @@
             <div class="bg-gradient-to-br from-purple-600 to-purple-500 rounded-2xl p-6 shadow-xl">
               <div class="flex items-start justify-between mb-3">
                 <div>
-                  <p class="text-purple-100 text-sm font-bold mb-1">MARGEM LÍQUIDA</p>
+                  <p class="text-purple-100 text-sm font-bold mb-1">MARGEM LIQUIDA</p>
                   <p class="text-5xl font-black text-white">
                     ${totalFaturamentoBrutoAnual > 0 ? ((totalLiquidoAnual / totalFaturamentoBrutoAnual) * 100).toFixed(1) : 0}%
                   </p>
@@ -1791,12 +1868,12 @@
             </div>
             
             <div class="bg-black/40 rounded-xl p-5 border border-white/20">
-              <p class="text-orange-200 text-xs font-bold mb-2">🎯 TICKET MÉDIO ANUAL</p>
+              <p class="text-orange-200 text-xs font-bold mb-2">🎯 TICKET MEDIO ANUAL</p>
               <p class="text-3xl font-black text-blue-400">${formatarDinheiro(ticketMedioAnual)}</p>
             </div>
 
             <div class="bg-black/40 rounded-xl p-5 border border-white/20">
-              <p class="text-orange-200 text-xs font-bold mb-2">📅 PERÍODO FISCAL</p>
+              <p class="text-orange-200 text-xs font-bold mb-2">📅 PERIODO FISCAL</p>
               <p class="text-3xl font-black text-orange-300">${ano}</p>
             </div>
           </div>
@@ -1809,12 +1886,12 @@
           <table class="w-full text-sm">
             <thead>
               <tr class="border-b border-zinc-700">
-                <th class="text-left py-3 px-2 text-gray-400 font-bold">MÊS</th>
+                <th class="text-left py-3 px-2 text-gray-400 font-bold">MES</th>
                 <th class="text-right py-3 px-2 text-gray-400 font-bold">ATENDIMENTOS</th>
                 <th class="text-right py-3 px-2 text-gray-400 font-bold">RECEITA BRUTA</th>
                 <th class="text-right py-3 px-2 text-gray-400 font-bold">CUSTOS</th>
-                <th class="text-right py-3 px-2 text-gray-400 font-bold">LUCRO LÍQUIDO</th>
-                <th class="text-right py-3 px-2 text-gray-400 font-bold">TICKET MÉDIO</th>
+                <th class="text-right py-3 px-2 text-gray-400 font-bold">LUCRO LIQUIDO</th>
+                <th class="text-right py-3 px-2 text-gray-400 font-bold">TICKET MEDIO</th>
               </tr>
             </thead>
             <tbody>
@@ -1853,30 +1930,30 @@
       }
       
       const dados = calcularDadosMes(mes, ano);
-      const mesNome = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+      const mesNome = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 
                        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][parseInt(mes) - 1];
       
       let conteudo = `
         ====================================
         TTBN BARBERSHOP
-        RELATÓRIO DE FATURAMENTO MENSAL
+        RELATORIO DE FATURAMENTO MENSAL
         ${mesNome}/${ano}
         CNPJ: 32.554.785/0001-30
         ====================================
 
-        BALANÇO FINANCEIRO
+        BALANCO FINANCEIRO
         ----------------------------------
         Faturamento Bruto: ${formatarDinheiro(dados.faturamentoBruto)}
         Custos Operacionais: ${formatarDinheiro(dados.custos)}
-        Faturamento Líquido: ${formatarDinheiro(dados.faturamentoLiquido)}
+        Faturamento Liquido: ${formatarDinheiro(dados.faturamentoLiquido)}
 
         ATENDIMENTOS
         ----------------------------------
         Total de Atendimentos: ${dados.totalAtendimentos}
-        Ticket Médio: ${formatarDinheiro(dados.ticketMedio)}
-        Taxa de Ocupação: ${dados.taxaOcupacao.toFixed(1)}%
+        Ticket Medio: ${formatarDinheiro(dados.ticketMedio)}
+        Taxa de Ocupacao: ${dados.taxaOcupacao.toFixed(1)}%
 
-        SERVIÇOS REALIZADOS
+        SERVICOS REALIZADOS
         ----------------------------------
       `;
       
@@ -1900,7 +1977,7 @@
       a.click();
       URL.revokeObjectURL(url);
       
-      toast('📄 Relatório mensal gerado!');
+      toast('📄 Relatorio mensal gerado!');
     }
 
     function gerarPDFAnual() {
@@ -1912,7 +1989,7 @@
       }
       
       const meses = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-      const nomeMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+      const nomeMeses = ['Janeiro', 'Fevereiro', 'Marco', 'Abril', 'Maio', 'Junho', 
                         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
       
       let totalFaturamentoBrutoAnual = 0;
@@ -1942,8 +2019,8 @@
         Atendimentos: ${dados.totalAtendimentos}
         Receita Bruta: ${formatarDinheiro(dados.faturamentoBruto)}
         Custos: ${formatarDinheiro(dados.custos)}
-        Lucro Líquido: ${formatarDinheiro(dados.faturamentoLiquido)}
-        Ticket Médio: ${formatarDinheiro(dados.ticketMedio)}
+        Lucro Liquido: ${formatarDinheiro(dados.faturamentoLiquido)}
+        Ticket Medio: ${formatarDinheiro(dados.ticketMedio)}
         ----------------------------------
         `;
       });
@@ -1957,21 +2034,21 @@
         ==================================
         Receita Bruta Anual: ${formatarDinheiro(totalFaturamentoBrutoAnual)}
         Custos Totais: ${formatarDinheiro(totalCustosAnual)}
-        Lucro Líquido Anual: ${formatarDinheiro(totalLiquidoAnual)}
+        Lucro Liquido Anual: ${formatarDinheiro(totalLiquidoAnual)}
         Total de Atendimentos: ${totalAtendimentosAnual}
-        Ticket Médio Anual: ${formatarDinheiro(ticketMedioAnual)}
-        Margem Líquida: ${margemLiquidaAnual}%
+        Ticket Medio Anual: ${formatarDinheiro(ticketMedioAnual)}
+        Margem Liquida: ${margemLiquidaAnual}%
         ==================================
 
-        INFORMAÇÕES PARA DECLARAÇÃO
+        INFORMACOES PARA DECLARACAO
         ----------------------------------
-        Razão Social: TTBN BARBERSHOP
+        Razao Social: TTBN BARBERSHOP
         CNPJ: 32.554.785/0001-30
-        Regime Tributário: [Verificar]
-        Natureza Jurídica: [Verificar]
+        Regime Tributario: [Verificar]
+        Natureza Juridica: [Verificar]
 
         Receita Bruta Total: ${formatarDinheiro(totalFaturamentoBrutoAnual)}
-        Despesas Dedutíveis: ${formatarDinheiro(totalCustosAnual)}
+        Despesas Dedutiveis: ${formatarDinheiro(totalCustosAnual)}
         Lucro Real: ${formatarDinheiro(totalLiquidoAnual)}
 
         ----------------------------------
@@ -2088,5 +2165,5 @@
 
     iniciar();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bdd5de892a94c86',t:'MTc2ODM5NjE1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bddcd91f31e8762',t:'MTc2ODQwMDczMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
