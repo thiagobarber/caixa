@@ -183,7 +183,13 @@
        </div>
       </div><!-- Lista de Serviços -->
       <div class="bg-gradient-to-br from-zinc-900 to-black border border-zinc-800 rounded-2xl p-6">
-       <h2 class="text-2xl font-bold text-green-400 mb-6">Lista de Serviços (<span id="count-servicos">0</span>)</h2>
+       <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-green-400">Lista de Serviços (<span id="count-servicos">0</span>)</h2><button id="btn-modo-selecao-servicos" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-xl text-sm"> ✅ SELECIONAR MÚLTIPLOS </button>
+       </div><!-- Container de Seleção Múltipla -->
+       <div id="container-excluir-multiplos-servicos" class="bg-gradient-to-br from-red-900 to-red-800 border border-red-700 rounded-xl p-4 mb-4 hidden">
+        <div class="flex flex-wrap items-center gap-3"><button id="btn-selecionar-todos-servicos" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg text-sm"> ✅ TODOS </button> <button id="btn-desselecionar-todos-servicos" class="bg-zinc-700 hover:bg-zinc-600 text-white font-bold px-4 py-2 rounded-lg text-sm"> ❌ NENHUM </button> <button id="btn-excluir-multiplos-servicos" disabled class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded-lg text-sm opacity-50 cursor-not-allowed"> 🗑️ EXCLUIR SELECIONADOS </button>
+        </div>
+       </div>
        <div id="lista-servicos" class="space-y-2 max-h-96 overflow-y-auto"></div>
       </div>
      </div>
@@ -230,7 +236,7 @@
        </div>
        <div class="flex items-end"><button id="btn-limpar-filtro" class="w-full bg-zinc-800 hover:bg-zinc-700 text-white font-bold px-6 py-3 rounded-xl"> 🗑️ LIMPAR FILTRO </button>
        </div>
-       <div class="flex items-end"><button id="btn-modo-selecao" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"> ☑ SELECIONAR MÚLTIPLOS </button>
+       <div class="flex items-end"><button id="btn-modo-selecao" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl"> ✅ SELECIONAR MÚLTIPLOS </button>
        </div>
       </div>
      </div><!-- Container de Seleção Múltipla -->
@@ -284,17 +290,17 @@
   </div><!-- Modal de Confirmação -->
   <div id="modal-confirmar" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
    <div class="bg-zinc-900 rounded-2xl p-6 max-w-md w-full mx-4 border border-zinc-700">
-    <h3 class="text-xl font-bold text-red-400 mb-4">⚠��� Confirmar Exclusão</h3>
+    <h3 class="text-xl font-bold text-red-400 mb-4">⚠️ Confirmar Exclusão</h3>
     <p id="modal-texto" class="text-gray-300 mb-6"></p>
     <div class="flex gap-3"><button id="modal-cancelar" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button id="modal-confirmar-btn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl">EXCLUIR</button>
     </div>
    </div>
-  </div><!-- Modal de Edição -->
+  </div><!-- Modal de Edição de Transação -->
   <div id="modal-editar-transacao" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
    <div class="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full mx-4 border border-zinc-700">
     <h3 class="text-xl font-bold text-blue-400 mb-4">✏️ Editar Transação</h3>
     <form id="form-editar-transacao" class="space-y-4">
-     <div><label for="edit-tipo" class="block text-sm font-bold mb-2 text-gray-300">TIPO:</label> <select id="edit-tipo" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="entrada">���� Entrada</option> <option value="saida">💸 Saída</option> </select>
+     <div><label for="edit-tipo" class="block text-sm font-bold mb-2 text-gray-300">TIPO:</label> <select id="edit-tipo" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none"> <option value="entrada">💰 Entrada</option> <option value="saida">💸 Saída</option> </select>
      </div>
      <div><label for="edit-data" class="block text-sm font-bold mb-2 text-gray-300">DATA:</label> <input type="date" id="edit-data" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
@@ -305,6 +311,19 @@
      <div><label for="edit-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="edit-valor" required step="0.01" min="0" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
      </div>
      <div class="flex gap-3 pt-4"><button type="button" id="btn-cancelar-edicao" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">💾 SALVAR ALTERAÇÕES</button>
+     </div>
+    </form>
+   </div>
+  </div><!-- Modal de Edição de Serviço -->
+  <div id="modal-editar-servico" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+   <div class="bg-zinc-900 rounded-2xl p-6 max-w-lg w-full mx-4 border border-zinc-700">
+    <h3 class="text-xl font-bold text-blue-400 mb-4">✏️ Editar Serviço</h3>
+    <form id="form-editar-servico" class="space-y-4">
+     <div><label for="edit-servico-nome" class="block text-sm font-bold mb-2 text-gray-300">NOME:</label> <input type="text" id="edit-servico-nome" required class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+     </div>
+     <div><label for="edit-servico-valor" class="block text-sm font-bold mb-2 text-gray-300">VALOR (R$):</label> <input type="number" id="edit-servico-valor" required step="0.01" min="0" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white font-semibold focus:border-green-500 focus:outline-none">
+     </div>
+     <div class="flex gap-3 pt-4"><button type="button" id="btn-cancelar-edicao-servico" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 rounded-xl">CANCELAR</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl">💾 SALVAR ALTERAÇÕES</button>
      </div>
     </form>
    </div>
@@ -325,6 +344,12 @@
       transacoes: [],
       servicosSelecionados: [],
       modalCallback: null
+    };
+
+    // Estado para seleção múltipla de serviços
+    const servicosState = {
+      modoSelecaoMultipla: false,
+      selecionados: new Set()
     };
 
     // ==========================================
@@ -479,8 +504,66 @@
         { nome: 'CORTE CARECA', valor: 30.00 },
         { nome: 'CORTE+SOBRANCELHA+BOTOX', valor: 140.00 },
         { nome: 'CORTE+SOBRANCELHA', valor: 50.00 },
+        { nome: 'CORTE+PIGMENTO', valor: 50.00 },
+        { nome: 'CORTE+PENTEADO+SOMB...', valor: 80.00 },
+        { nome: 'CORTE+PENTEADO', valor: 70.00 },
+        { nome: 'CORTE+BARBA+SOBRANCELHA+PIG', valor: 100.00 },
+        { nome: 'CORTE+BARBA+PIGMENTO', valor: 90.00 },
         { nome: 'CORTE+BARBA', valor: 80.00 },
-        { nome: 'BARBA', valor: 40.00 }
+        { nome: 'CORTE+BARBA+SOBRANCELHA', valor: 90.00 },
+        { nome: 'CORTE+BARBA+PENTEADO', valor: 110.00 },
+        { nome: 'CORTE+BARBA+SOMB+PENTEADO', valor: 120.00 },
+        { nome: 'CORTE+SOMBRANCELHA+BIGODE', valor: 60.00 },
+        { nome: 'CORTE+SOMB+BIGODE+CAVANHA', valor: 80.00 },
+        { nome: 'CORTE+SOMBR+PENTEADO', valor: 80.00 },
+        { nome: 'BARBA+PEZINHO', valor: 50.00 },
+        { nome: 'BARBA+SOBRANCELHA', valor: 50.00 },
+        { nome: 'CORTE+PLATINADO', valor: 130.00 },
+        { nome: 'CORTE+LUZES', valor: 120.00 },
+        { nome: 'CORTE+ALIZANTE', valor: 80.00 },
+        { nome: 'CORTE+ALIZANTE+SOBRANCELHA', valor: 90.00 },
+        { nome: 'CORTE+ALIZANTE+PENTEADO', valor: 110.00 },
+        { nome: 'CORTE+ALIZANTE+SOMBR...', valor: 90.00 },
+        { nome: 'ALIZANTE+PEZINHO', valor: 50.00 },
+        { nome: 'CORTE+BOTOX', valor: 120.00 },
+        { nome: 'CORTE+PROGRESSIVA', valor: 160.00 },
+        { nome: 'PEZINHO+SOMBRANCELHA', valor: 20.00 },
+        { nome: 'CORTE+CAVANHAQUE', valor: 70.00 },
+        { nome: 'PENTEADO+BARBA', valor: 70.00 },
+        { nome: 'SOBRANCELHA+PIGMENTO', valor: 20.00 },
+        { nome: 'SOBRANCELHA', valor: 10.00 },
+        { nome: 'GEL', valor: 15.00 },
+        { nome: 'POMADA', valor: 20.00 },
+        { nome: 'PLATINADO', valor: 130.00 },
+        { nome: 'PIGMENTO', valor: 10.00 },
+        { nome: 'LUZES', valor: 80.00 },
+        { nome: 'ALIZANTE', valor: 40.00 },
+        { nome: 'PEZINHO', valor: 10.00 },
+        { nome: 'PENTEADO', valor: 30.00 },
+        { nome: 'BARBA', valor: 40.00 },
+        { nome: 'CAVANHAQUE', valor: 30.00 },
+        { nome: 'GUSTAVO FREITAS 120', valor: 140.00 },
+        { nome: 'COMBO DE BARBA', valor: 150.00 },
+        { nome: 'COMBO CABELO', valor: 150.00 },
+        { nome: 'COMBO SOBRANCELHA', valor: 150.00 },
+        { nome: 'CORTE+BOTOX+SOBRANCELHA', valor: 130.00 },
+        { nome: 'DESCOLORAÇÃO NEVOU', valor: 130.00 },
+        { nome: 'COMBO ANDERSON', valor: 70.00 },
+        { nome: 'COMBO NALDO', valor: 140.00 },
+        { nome: 'EDMILSON', valor: 110.00 },
+        { nome: 'COMBO CABELO', valor: 140.00 },
+        { nome: 'COMBO SOBRANCELHA', valor: 150.00 },
+        { nome: 'COMBO BARBA', valor: 190.00 },
+        { nome: 'CORTE+BARBA+PIGMENTO1', valor: 60.00 },
+        { nome: 'CORTE+BOTOX+SOBRANCELHA', valor: 100.00 },
+        { nome: 'CORTE 15 "TEMPORARIO"', valor: 15.00 },
+        { nome: 'GORDO', valor: 100.00 },
+        { nome: 'PENDENCIA JULIO', valor: 100.00 },
+        { nome: 'DESCOLORAÇÃO NEVOU', valor: 100.00 },
+        { nome: 'COMBO DE CABELO+BARBA+SOB', valor: 230.00 },
+        { nome: 'COMBO 2 CORTES', valor: 50.00 },
+        { nome: 'COMBO 3 CORTES', valor: 110.00 },
+        { nome: 'COMO ANDERSON 100', valor: 100.00 }
       ];
       
       servicosPadrao.forEach(s => {
@@ -512,18 +595,61 @@
       
       lista.innerHTML = state.servicos
         .sort((a, b) => a.nome.localeCompare(b.nome))
-        .map(s => `
-          <div class="bg-zinc-900 rounded-lg p-4 flex items-center justify-between">
-            <div>
-              <p class="font-bold text-lg">${s.nome}</p>
-              <p class="text-green-400 font-bold">${formatarDinheiro(s.valor)}</p>
+        .map(s => {
+          const isSelecionado = servicosState.selecionados.has(s.id);
+          
+          return `
+            <div class="bg-zinc-900 border ${isSelecionado ? 'border-green-500' : 'border-zinc-800'} rounded-lg p-4">
+              <div class="flex items-center gap-3">
+                ${servicosState.modoSelecaoMultipla ? `
+                  <input type="checkbox" class="checkbox-selecao-servico w-5 h-5 rounded cursor-pointer" data-id="${s.id}" ${isSelecionado ? 'checked' : ''}>
+                ` : ''}
+                
+                <div class="flex-1">
+                  <p class="font-bold text-lg">${s.nome}</p>
+                  <p class="text-green-400 font-bold">${formatarDinheiro(s.valor)}</p>
+                </div>
+                
+                <div class="flex gap-2">
+                  ${!servicosState.modoSelecaoMultipla ? `
+                    <button class="btn-edit-servico bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">
+                      ✏️
+                    </button>
+                  ` : ''}
+                  <button class="btn-del-servico bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">
+                    🗑️
+                  </button>
+                </div>
+              </div>
             </div>
-            <button class="btn-del-servico bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg font-bold text-sm" data-id="${s.id}">
-              🗑️ Excluir
-            </button>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       
+      // Checkboxes de seleção múltipla
+      if (servicosState.modoSelecaoMultipla) {
+        lista.querySelectorAll('.checkbox-selecao-servico').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const id = cb.dataset.id;
+            if (cb.checked) {
+              servicosState.selecionados.add(id);
+            } else {
+              servicosState.selecionados.delete(id);
+            }
+            atualizarBotaoExcluirMultiploServicos();
+          });
+        });
+      }
+
+      // Botão editar
+      lista.querySelectorAll('.btn-edit-servico').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.id;
+          const servico = state.servicos.find(s => s.id === id);
+          abrirModalEdicaoServico(servico);
+        });
+      });
+      
+      // Botão deletar individual
       lista.querySelectorAll('.btn-del-servico').forEach(btn => {
         btn.addEventListener('click', () => {
           const id = btn.dataset.id;
@@ -538,6 +664,116 @@
         });
       });
     }
+
+    function atualizarBotaoExcluirMultiploServicos() {
+      const btn = document.getElementById('btn-excluir-multiplos-servicos');
+      const count = servicosState.selecionados.size;
+      
+      if (count > 0) {
+        btn.textContent = `🗑️ EXCLUIR ${count} SELECIONADOS`;
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      } else {
+        btn.textContent = '🗑️ EXCLUIR SELECIONADOS';
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function abrirModalEdicaoServico(servico) {
+      const modal = document.getElementById('modal-editar-servico');
+      
+      document.getElementById('edit-servico-nome').value = servico.nome;
+      document.getElementById('edit-servico-valor').value = servico.valor;
+      
+      modal.dataset.servicoId = servico.id;
+      modal.classList.remove('hidden');
+    }
+
+    // Modo de seleção múltipla de serviços
+    document.getElementById('btn-modo-selecao-servicos').addEventListener('click', () => {
+      servicosState.modoSelecaoMultipla = !servicosState.modoSelecaoMultipla;
+      servicosState.selecionados.clear();
+      
+      const btn = document.getElementById('btn-modo-selecao-servicos');
+      const container = document.getElementById('container-excluir-multiplos-servicos');
+      
+      if (servicosState.modoSelecaoMultipla) {
+        btn.textContent = '❌ CANCELAR SELEÇÃO';
+        btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.add('bg-zinc-700', 'hover:bg-zinc-600');
+        container.classList.remove('hidden');
+      } else {
+        btn.textContent = '✅ SELECIONAR MÚLTIPLOS';
+        btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        btn.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
+        container.classList.add('hidden');
+      }
+      
+      renderizarServicos();
+    });
+
+    document.getElementById('btn-selecionar-todos-servicos').addEventListener('click', () => {
+      state.servicos.forEach(s => servicosState.selecionados.add(s.id));
+      renderizarServicos();
+      atualizarBotaoExcluirMultiploServicos();
+    });
+
+    document.getElementById('btn-desselecionar-todos-servicos').addEventListener('click', () => {
+      servicosState.selecionados.clear();
+      renderizarServicos();
+      atualizarBotaoExcluirMultiploServicos();
+    });
+
+    document.getElementById('btn-excluir-multiplos-servicos').addEventListener('click', () => {
+      const count = servicosState.selecionados.size;
+      
+      showModal(`Excluir ${count} serviços selecionados?`, () => {
+        servicosState.selecionados.forEach(id => {
+          state.servicos = state.servicos.filter(s => s.id !== id);
+        });
+        
+        servicosState.selecionados.clear();
+        servicosState.modoSelecaoMultipla = false;
+        
+        const btnModo = document.getElementById('btn-modo-selecao-servicos');
+        btnModo.textContent = '✅ SELECIONAR MÚLTIPLOS';
+        btnModo.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        btnModo.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
+        
+        document.getElementById('container-excluir-multiplos-servicos').classList.add('hidden');
+        
+        salvarLocalStorage();
+        toast(`${count} serviços excluídos!`);
+        renderizar();
+      });
+    });
+
+    // Modal de edição de serviço
+    document.getElementById('btn-cancelar-edicao-servico').addEventListener('click', () => {
+      document.getElementById('modal-editar-servico').classList.add('hidden');
+    });
+
+    document.getElementById('form-editar-servico').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const modal = document.getElementById('modal-editar-servico');
+      const idOriginal = modal.dataset.servicoId;
+      
+      const nome = document.getElementById('edit-servico-nome').value.trim();
+      const valor = parseFloat(document.getElementById('edit-servico-valor').value);
+      
+      const servico = state.servicos.find(s => s.id === idOriginal);
+      if (servico) {
+        servico.nome = nome;
+        servico.valor = valor;
+      }
+      
+      salvarLocalStorage();
+      toast('✅ Serviço atualizado!');
+      modal.classList.add('hidden');
+      renderizar();
+    });
 
     function renderizarSelectServico() {
       const select = document.getElementById('atend-servico');
@@ -956,7 +1192,7 @@
       const count = historicoState.selecionados.size;
       
       if (count > 0) {
-        btn.textContent = `����️ EXCLUIR ${count} SELECIONADOS`;
+        btn.textContent = `🗑️ EXCLUIR ${count} SELECIONADOS`;
         btn.disabled = false;
         btn.classList.remove('opacity-50', 'cursor-not-allowed');
       } else {
@@ -1047,7 +1283,7 @@
         historicoState.modoSelecaoMultipla = false;
         
         const btnModo = document.getElementById('btn-modo-selecao');
-        btnModo.textContent = '☑️ SELECIONAR MÚLTIPLOS';
+        btnModo.textContent = '✅ SELECIONAR MÚLTIPLOS';
         btnModo.classList.add('bg-blue-600', 'hover:bg-blue-700');
         btnModo.classList.remove('bg-zinc-700', 'hover:bg-zinc-600');
         
@@ -1852,5 +2088,5 @@
 
     iniciar();
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bdd4595e608da2d',t:'MTc2ODM5NTE2MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bdd5de892a94c86',t:'MTc2ODM5NjE1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
