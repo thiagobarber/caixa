@@ -117,7 +117,7 @@
        </div>
       </div>
       <p class="text-sm text-gray-500"><strong>47,892</strong> people took this quiz today</p>
-     </div><!-- CTA Button --> <button id="start-btn" onclick="startQuiz()" class="pulse-btn w-full bg-[#007953] hover:bg-[#006644] text-white font-bold py-4 px-8 rounded-full text-lg transition-all transform hover:scale-105"> 🔍 Discover My Solution </button>
+     </div><!-- CTA Button --> <button id="start-btn" class="pulse-btn w-full bg-[#007953] hover:bg-[#006644] text-white font-bold py-4 px-8 rounded-full text-lg transition-all transform hover:scale-105"> 🔍 Discover My Solution </button>
      <p class="text-xs text-gray-400 mt-4">Takes only 30 seconds • 100% Free • Science-backed</p>
     </div>
    </div><!-- Quiz Section -->
@@ -222,14 +222,6 @@
       document.getElementById('quiz').classList.remove('hidden');
       showQuestion();
     }
-
-    // Initialize button on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      const startBtn = document.getElementById('start-btn');
-      if (startBtn) {
-        startBtn.addEventListener('click', startQuiz);
-      }
-    });
 
     function showQuestion() {
       const q = questions[currentQuestion];
@@ -377,6 +369,14 @@
         mapToEditPanelValues
       });
     }
+
+    // Add event listener when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      const startBtn = document.getElementById('start-btn');
+      if (startBtn) {
+        startBtn.addEventListener('click', startQuiz);
+      }
+    });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d41bb3f17d77d48',t:'MTc3MjEzMjkxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d41c43590287d48',t:'MTc3MjEzMzI3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
